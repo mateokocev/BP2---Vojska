@@ -1,3 +1,4 @@
+-- SQLBook: Code
 -- Active: 1665427321001@@127.0.0.1@3306@vojskajna
 DROP DATABASE IF EXISTS vojska;
 
@@ -23,15 +24,14 @@ CREATE TABLE sektor(
 DROP TABLE sektor;
 
 
-
 CREATE TABLE lokacija(
     id INTEGER PRIMARY KEY,
     id_sektor INTEGER,
-    naziv VARCHAR(60) NOT NULL
+    naziv VARCHAR(60) NOT NULL,
+    allegiance VARCHAR(50) NOT NULL,
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 DROP TABLE lokacija;
-
 
 
 CREATE TABLE vozila(
@@ -60,8 +60,6 @@ CREATE TABLE proracun(
 DROP TABLE proracun;
 
 
-
-
 CREATE TABLE trening(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
@@ -80,3 +78,61 @@ CREATE TABLE misija(
     ishod TEXT NOT NULL
 );
 DROP TABLE misija;
+
+
+--OSOBLJE NA MISIJI
+CREATE TABLE onm(
+    id INTEGER PRIMARY KEY,
+    id_osoblje INTEGER,
+    id_misija INTEGER,
+    rating INTEGER,
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
+    FOREIGN KEY (id_misija) REFERENCES misija(id)
+);
+DROP TABLE onm;
+
+
+-- OSOBLJE NA TRENINGU
+CREATE TABLE ont(
+    id INTEGER PRIMARY KEY,
+    id_osoblje INTEGER,
+    id_trening INTEGER,
+    rating INTEGER,
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
+    FOREIGN KEY (id_trening) REFERENCES trening(id)
+);
+DROP TABLE ont;
+
+
+-- VOZILO NA MISIJI
+CREATE TABLE vnm(
+    id INTEGER PRIMARY KEY,
+    id_vozilo INTEGER,
+    id_misija INTEGER,
+    FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
+    FOREIGN KEY (id_misija) REFERENCES misija(id)
+);
+DROP TABLE vnm;
+
+
+CREATE TABLE vnt(
+    id INTEGER PRIMARY KEY,
+    id_vozilo INTEGER,
+    id_trening INTEGER,
+    FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
+    FOREIGN KEY (id_trening) REFERENCES trening(id)
+);
+DROP TABLE vnt;
+
+
+CREATE TABLE popravak(
+    id INTEGER PRIMARY KEY,
+    id_vnm INTEGER,
+    id_vnt INTEGER,
+    opis_stete TEXT NOT NULL,
+    ishod TEXT NOT NULL,
+    datum DATE NOT NULL,
+    FOREIGN KEY (id_vnm) REFERENCES vnm(id),
+    FOREIGN KEY (id_vnt) REFERENCES vnt(id)
+);
+DROP TABLE popravak;
