@@ -75,7 +75,10 @@ CREATE TABLE misija(
     vrijeme_pocetka DATE NOT NULL,
     vrijeme_kraja DATE NOT NULL,
     lokacija_misije VARCHAR(50) NOT NULL,
-    ishod TEXT NOT NULL
+    ishod TEXT NOT NULL,
+    trosak_misije NUMERIC(15, 2) NOT NULL,
+    trosak_popravka NUMERIC(15, 2) NOT NULL,
+    trosak_lijecenja NUMERIC(15, 2) NOT NULL
 );
 DROP TABLE misija;
 
@@ -136,3 +139,14 @@ CREATE TABLE popravak(
     FOREIGN KEY (id_vnt) REFERENCES vnt(id)
 );
 DROP TABLE popravak;
+
+
+CREATE TABLE rat(
+    id INTEGER PRIMARY KEY,
+    naziv VARCHAR(60) NOT NULL,
+    lokacije_sukoba TEXT NOT NULL,
+    sudionici TEXT NOT NULL,
+    trajanje_u_danima INTEGER NOT NULL,
+    ishod TEXT NOT NULL,
+);
+DROP TABLE rat;
