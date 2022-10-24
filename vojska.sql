@@ -17,6 +17,16 @@ CREATE TABLE osoblje(
 DROP TABLE osoblje;
 
 
+CREATE TABLE rat(
+    id INTEGER PRIMARY KEY,
+    naziv VARCHAR(60) NOT NULL,
+    datum_pocetka DATETIME NOT NULL,
+    datum_kraja DATETIME NOT NULL,
+    ishod TEXT NOT NULL,
+);
+DROP TABLE rat;
+
+
 CREATE TABLE sektor(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(60) NOT NULL
@@ -52,14 +62,6 @@ CREATE TABLE oprema(
 DROP TABLE oprema;
 
 
-CREATE TABLE proracun(
-    id INTEGER PRIMARY KEY,
-    iznos NUMERIC(9, 2) NOT NULL,
-    namjena TEXT NOT NULL
-);
-DROP TABLE proracun;
-
-
 CREATE TABLE trening(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
@@ -76,9 +78,7 @@ CREATE TABLE misija(
     vrijeme_kraja DATE NOT NULL,
     lokacija_misije VARCHAR(50) NOT NULL,
     ishod TEXT NOT NULL,
-    trosak_misije NUMERIC(15, 2) NOT NULL,
-    trosak_popravka NUMERIC(15, 2) NOT NULL,
-    trosak_lijecenja NUMERIC(15, 2) NOT NULL
+    trosak_misije NUMERIC(15, 2) NOT NULL
 );
 DROP TABLE misija;
 
@@ -118,6 +118,7 @@ CREATE TABLE vnm(
 DROP TABLE vnm;
 
 
+-- VOZILO NA TRENINGU
 CREATE TABLE vnt(
     id INTEGER PRIMARY KEY,
     id_vozilo INTEGER,
@@ -141,56 +142,45 @@ CREATE TABLE popravak(
 DROP TABLE popravak;
 
 
-CREATE TABLE rat(
-    id INTEGER PRIMARY KEY,
-    naziv VARCHAR(60) NOT NULL,
-    lokacije_sukoba TEXT NOT NULL,
-    sudionici TEXT NOT NULL,
-    trajanje_u_danima INTEGER NOT NULL,
-    ishod TEXT NOT NULL,
-);
-DROP TABLE rat;
-
-
 
 INSERT INTO osoblje VALUES 
-( 1, 'Niko', 'Franjić', '', , , ''),
-( 2, 'Izidor', 'Sekicki', '', , , ''),
-( 3, 'Lejla', 'Klabot', '', , , ''),
-( 4, 'Toni', 'Kolar', '', , , ''),
-( 5, 'Neo', 'Zufić', '', , , ''),
-( 6, 'Momčilo', 'Petrović', '', , , ''),
-( 7, 'Suzana', 'Lantana', '', , , ''),
-( 8, 'Vjekoslav', 'Galović', '', , , ''),
-( 9, 'Neo', 'Hercog', '', , , ''),
-( 10, 'Leonardo', 'Lorenzijan', '', , , ''),
-( 11, 'Trpimir', 'Kolar', '', , , ''),
-( 12, 'Leo', 'Schewerc', '', , , ''),
-( 13, 'Filip', 'Grozlak', '', , , ''),
-( 14, 'Dean', 'Mirković', '', , , ''),
-( 15, 'Lena', 'Orak', '', , , ''),
-( 16, 'Marko', 'Selenberg', '', , , ''),
-( 17, 'Petra Ursato', '', '', , , ''),
-( 18, 'Robert', 'Kovačević', '', , , ''),
-( 19, 'Hrvoje', 'Natašević', '', , , ''),
-( 20, 'Mirko', 'Regan', '', , , ''),
-( 21, 'Francesco', 'Rossi', '', , , ''),
-( 22, 'Nino', 'Fratimirović', '', , , ''),
-( 23, 'Ines', 'Mijarkalec', '', , , ''),
-( 24, 'Vedran', 'Hercog', '', , , ''),
-( 25, 'Saša', 'Nikel', '', , , ''),
-( 26, 'Otto', 'Nikel', '', , , ''),
-( 27, 'Anes', 'Celić', '', , , ''),
-( 28, 'Borna', 'Fratarić', '', , , ''),
-( 29, 'Ugo', 'Nestle', '', , , ''),
-( 30, 'Jani', 'Zelkovčić', '', , , ''),
-( 31, 'Mateo', 'Hereg', '', , , ''),
-( 32, 'Lidija', 'Bafrić', '', , , ''),
-( 33, 'Greta', 'Nikša', '', , , ''),
-( 34, 'Hektor', 'Persa', '', , , ''),
-( 35, 'Zoran', 'Juko', '', , , ''),
-( 36, 'Milan', 'Bersan', '', , , ''),
-( 37, 'Leo', 'Krelović', '', , , ''),
-( 38, 'Marko', 'Katalin', '', , , ''),
-( 39, 'Orto', 'Muker', '', , , ''),
-( 40, 'David', 'Kovačević', '', , , '');
+(1, 'Niko', 'Franjić', '', , , ''),
+(2, 'Izidor', 'Sekicki', '', , , ''),
+(3, 'Lejla', 'Klabot', '', , , ''),
+(4, 'Toni', 'Kolar', '', , , ''),
+(5, 'Neo', 'Zufić', '', , , ''),
+(6, 'Momčilo', 'Petrović', '', , , ''),
+(7, 'Suzana', 'Lantana', '', , , ''),
+(8, 'Vjekoslav', 'Galović', '', , , ''),
+(9, 'Neo', 'Hercog', '', , , ''),
+(10, 'Leonardo', 'Lorenzijan', '', , , ''),
+(11, 'Trpimir', 'Kolar', '', , , ''),
+(12, 'Leo', 'Schewerc', '', , , ''),
+(13, 'Filip', 'Grozlak', '', , , ''),
+(14, 'Dean', 'Mirković', '', , , ''),
+(15, 'Lena', 'Orak', '', , , ''),
+(16, 'Marko', 'Selenberg', '', , , ''),
+(17, 'Petra Ursato', '', '', , , ''),
+(18, 'Robert', 'Kovačević', '', , , ''),
+(19, 'Hrvoje', 'Natašević', '', , , ''),
+(20, 'Mirko', 'Regan', '', , , ''),
+(21, 'Francesco', 'Rossi', '', , , ''),
+(22, 'Nino', 'Fratimirović', '', , , ''),
+(23, 'Ines', 'Mijarkalec', '', , , ''),
+(24, 'Vedran', 'Hercog', '', , , ''),
+(25, 'Saša', 'Nikel', '', , , ''),
+(26, 'Otto', 'Nikel', '', , , ''),
+(27, 'Anes', 'Celić', '', , , ''),
+(28, 'Borna', 'Fratarić', '', , , ''),
+(29, 'Ugo', 'Nestle', '', , , ''),
+(30, 'Jani', 'Zelkovčić', '', , , ''),
+(31, 'Mateo', 'Hereg', '', , , ''),
+(32, 'Lidija', 'Bafrić', '', , , ''),
+(33, 'Greta', 'Nikša', '', , , ''),
+(34, 'Hektor', 'Persa', '', , , ''),
+(35, 'Zoran', 'Juko', '', , , ''),
+(36, 'Milan', 'Bersan', '', , , ''),
+(37, 'Leo', 'Krelović', '', , , ''),
+(38, 'Marko', 'Katalin', '', , , ''),
+(39, 'Orto', 'Muker', '', , , ''),
+(40, 'David', 'Kovačević', '', , , '');
