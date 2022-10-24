@@ -2,6 +2,12 @@
 ## Baze Podataka 2
 Baza podataka za projekt BP2
 
-Proracun maknuti i napraviti financijska sredstva te dodati kolone u misijama za trosak misije, popravka, liječenja
+eliminirati treninge
 
-dodati tablicu ratza dodatnu razinu tezine
+dodati osoblje na misiji oprema i trigger
+
+obracun troskova i placa preko veza
+
+bonus i place bazirano na mjesecnom periodu
+
+trigger: racunanje datuma rata preko datuma misija
