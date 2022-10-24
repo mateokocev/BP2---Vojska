@@ -38,7 +38,7 @@ CREATE TABLE lokacija(
     id INTEGER PRIMARY KEY,
     id_sektor INTEGER,
     naziv VARCHAR(60) NOT NULL,
-    allegiance VARCHAR(50) NOT NULL,
+    pripadnost VARCHAR(50) NOT NULL,
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 DROP TABLE lokacija;
@@ -62,71 +62,46 @@ CREATE TABLE oprema(
 DROP TABLE oprema;
 
 
-CREATE TABLE trening(
-    id INTEGER PRIMARY KEY,
-    naziv VARCHAR(50) NOT NULL,
-    vrijeme_pocetka DATETIME NOT NULL,
-    vrijeme_kraja DATETIME NOT NULL
-);
-DROP TABLE trening;
 
 
 CREATE TABLE misija(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
-    vrijeme_pocetka DATE NOT NULL,
-    vrijeme_kraja DATE NOT NULL,
-    lokacija_misije VARCHAR(50) NOT NULL,
+    vrijeme_pocetka DATETIME NOT NULL,
+    vrijeme_kraja DATETIME NOT NULL,
+    id_lokacija INTEGER NOT NULL,
     ishod TEXT NOT NULL,
-    trosak_misije NUMERIC(15, 2) NOT NULL
+    trosak_misije NUMERIC(15, 2) NOT NULL,
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
 );
 DROP TABLE misija;
 
 
 -- OSOBLJE NA MISIJI
-CREATE TABLE onm(
+CREATE TABLE osoblje_na_misiji(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER,
     id_misija INTEGER,
-    rating INTEGER,
     FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
     FOREIGN KEY (id_misija) REFERENCES misija(id)
 );
-DROP TABLE onm;
+DROP TABLE osoblje_na_misiji;
 
 
--- OSOBLJE NA TRENINGU
-CREATE TABLE ont(
-    id INTEGER PRIMARY KEY,
-    id_osoblje INTEGER,
-    id_trening INTEGER,
-    rating INTEGER,
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-    FOREIGN KEY (id_trening) REFERENCES trening(id)
-);
-DROP TABLE ont;
 
 
 -- VOZILO NA MISIJI
-CREATE TABLE vnm(
+CREATE TABLE vozilo_na_misiji(
     id INTEGER PRIMARY KEY,
     id_vozilo INTEGER,
+    kolicina INTEGER,
     id_misija INTEGER,
     FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
     FOREIGN KEY (id_misija) REFERENCES misija(id)
 );
-DROP TABLE vnm;
+DROP TABLE vozilo_na_misiji;
 
 
--- VOZILO NA TRENINGU
-CREATE TABLE vnt(
-    id INTEGER PRIMARY KEY,
-    id_vozilo INTEGER,
-    id_trening INTEGER,
-    FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
-    FOREIGN KEY (id_trening) REFERENCES trening(id)
-);
-DROP TABLE vnt;
 
 
 CREATE TABLE popravak(
@@ -140,6 +115,19 @@ CREATE TABLE popravak(
     FOREIGN KEY (id_vnt) REFERENCES vnt(id)
 );
 DROP TABLE popravak;
+
+
+
+CREATE TABLE tura(
+    id INTEGER PRIMARY KEY,
+    naziv VARCHAR(50) NOT NULL,
+    vrijeme_pocetka DATETIME NOT NULL,
+    vrijeme_kraja DATETIME NOT NULL,
+    id_baza INTEGER NOT NULL,
+    trosak_ture NUMERIC(15, 2) NOT NULL,
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
+);
+DROP TABLE tura;
 
 
 
