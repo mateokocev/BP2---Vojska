@@ -77,7 +77,7 @@ CREATE TABLE misija(
 DROP TABLE misija;
 
 
--- OSOBLJE NA MISIJI
+
 CREATE TABLE osoblje_na_misiji(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER,
@@ -90,7 +90,6 @@ DROP TABLE osoblje_na_misiji;
 
 
 
--- VOZILO NA MISIJI
 CREATE TABLE vozilo_na_misiji(
     id INTEGER PRIMARY KEY,
     id_vozilo INTEGER,
@@ -126,6 +125,31 @@ CREATE TABLE tura(
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
 );
 DROP TABLE tura;
+
+
+CREATE TABLE vozilo_na_turi(
+    id INTEGER PRIMARY KEY,
+    id_vozilo INTEGER,
+    kolicina INTEGER,
+    id_tura INTEGER,
+    FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
+    FOREIGN KEY (id_tura) REFERENCES tura(id)
+);
+DROP TABLE vozilo_na_turi;
+
+
+
+
+CREATE TABLE osoblje_na_turi(
+    id INTEGER PRIMARY KEY,
+    id_osoblje INTEGER,
+    id_tura INTEGER,
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
+    FOREIGN KEY (id_tura) REFERENCES tura(id)
+);
+DROP TABLE osoblje_na_turi;
+
+
 
 
 
