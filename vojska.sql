@@ -106,13 +106,11 @@ DROP TABLE vozilo_na_misiji;
 
 CREATE TABLE popravak(
     id INTEGER PRIMARY KEY,
-    id_vnm INTEGER,
-    id_vnt INTEGER,
+    id_vozilo_na_misiji INTEGER,
     opis_stete TEXT NOT NULL,
     ishod TEXT NOT NULL,
     datum DATE NOT NULL,
-    FOREIGN KEY (id_vnm) REFERENCES vnm(id),
-    FOREIGN KEY (id_vnt) REFERENCES vnt(id)
+    FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id)
 );
 DROP TABLE popravak;
 
