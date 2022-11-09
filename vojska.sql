@@ -31,11 +31,9 @@ CREATE TABLE lokacija(
     id INTEGER PRIMARY KEY,
     id_sektor INTEGER,
     naziv VARCHAR(60) NOT NULL,
-    pripadnost VARCHAR(50) NOT NULL,
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 DROP TABLE lokacija;
--- Ako je pripadnost enemy onda id_sektor je null
 
 
 CREATE TABLE vozila(
@@ -43,7 +41,7 @@ CREATE TABLE vozila(
     naziv VARCHAR(60) NOT NULL,
     vrsta VARCHAR(50) NOT NULL,
     kolicina INTEGER NOT NULL,
-    kapacitet INTEGER NOT NULL
+    kapacitet INTEGER NOT NULL -- yohniu se ne dopada
 );
 DROP TABLE vozila;
 
@@ -73,7 +71,7 @@ DROP TABLE misija;
 -- potencijalni ljudski gubitci
 
 
-CREATE TABLE osoblje_na_misiji(
+CREATE TABLE osoblje_na_misiji( -- potencijalno dodati jos atributa
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER,
     id_misija INTEGER,
@@ -87,7 +85,7 @@ CREATE TABLE vozilo_na_misiji(
     id INTEGER PRIMARY KEY,
     id_vozilo INTEGER,
     kolicina INTEGER,
-    id_misija INTEGER,
+    id_misija INTEGER, -- paziti na kolicinu
     FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
     FOREIGN KEY (id_misija) REFERENCES misija(id)
 );
@@ -100,7 +98,7 @@ CREATE TABLE popravak(
     opis_stete TEXT NOT NULL,
     pocetak_popravka DATE NOT NULL,
     kraj_popravka DATE NOT NULL,
-    trosak_popravka NUMERIC(15,2)
+    trosak_popravka NUMERIC(15,2),
     FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id)
 );
 DROP TABLE popravak;
@@ -109,6 +107,7 @@ DROP TABLE popravak;
 CREATE TABLE tura(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
+    vrsta_ture VARCHAR(69) NOT NULL,
     vrijeme_pocetka DATETIME NOT NULL,
     vrijeme_kraja DATETIME NOT NULL,
     trosak_ture NUMERIC(15, 2) NOT NULL
@@ -133,10 +132,9 @@ DROP TABLE osoblje_na_turi;
 CREATE TABLE vozilo_na_turi(
     id INTEGER PRIMARY KEY,
     id_vozilo INTEGER,
-    kolicina INTEGER,
     id_tura INTEGER,
-    datum_pocetka DATETIME NOT NULL,
-    datum_kraja DATETIME NOT NULL,
+    kolicina INTEGER,
+    -- dodat jos atributa
     id_odgovorni INTEGER NOT NULL,
     FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id),
@@ -169,9 +167,9 @@ DROP TABLE trening;
 
 CREATE TABLE vojna_bolnica(
     id INTEGER PRIMARY KEY,
-    id_medicinsko_osoblje INTEGER NOT NULL,
-    id_lokacija INTEGER NOT NULL,
-    
+    id_medicinsko_osoblje INTEGER,
+    id_lokacija INTEGER,
+    kapacitet INTEGER,
     FOREIGN KEY (id_medicinsko_osoblje) REFERENCES osoblje(id),
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
 );
