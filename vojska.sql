@@ -1,25 +1,22 @@
 -- SQLBook: Code
 -- Active: 1665427321001@@127.0.0.1@3306@vojskajna
+
 DROP DATABASE IF EXISTS vojska;
 
 CREATE DATABASE vojska;
 USE vojska;
 
 
-
-
 CREATE TABLE osoblje(
     id INTEGER PRIMARY KEY,
-    ime VARCHAR(50) NOT NULL,
-    prezime VARCHAR(50) NOT NULL,
-    cin VARCHAR(50) NOT NULL,
+    ime VARCHAR(30) NOT NULL,
+    prezime VARCHAR(30) NOT NULL,
+    cin VARCHAR(20) NOT NULL,
     datum_rodenja DATE NOT NULL,
     datum_uclanjenja DATE NOT NULL,
-    status VARCHAR(50) NOT NULL
+    status_osoblja VARCHAR(50) NOT NULL
 );
 DROP TABLE osoblje;
-
-
 
 
 CREATE TABLE rat(
@@ -32,15 +29,11 @@ CREATE TABLE rat(
 DROP TABLE rat;
 
 
-
-
 CREATE TABLE sektor(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(60) NOT NULL
 );
 DROP TABLE sektor;
-
-
 
 
 CREATE TABLE lokacija(
@@ -51,9 +44,7 @@ CREATE TABLE lokacija(
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 DROP TABLE lokacija;
--- ako je pripadnost enemy onda id_sektor je null
-
-
+-- Ako je pripadnost enemy onda id_sektor je null
 
 
 CREATE TABLE vozila(
@@ -65,8 +56,6 @@ CREATE TABLE vozila(
 DROP TABLE vozila;
 
 
-
-
 CREATE TABLE oprema(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
@@ -74,8 +63,6 @@ CREATE TABLE oprema(
     vrsta VARCHAR(50) NOT NULL
 );
 DROP TABLE oprema;
-
-
 
 
 CREATE TABLE misija(
@@ -93,8 +80,6 @@ CREATE TABLE misija(
 DROP TABLE misija;
 
 
-
-
 CREATE TABLE osoblje_na_misiji(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER,
@@ -103,8 +88,6 @@ CREATE TABLE osoblje_na_misiji(
     FOREIGN KEY (id_misija) REFERENCES misija(id)
 );
 DROP TABLE osoblje_na_misiji;
-
-
 
 
 CREATE TABLE vozilo_na_misiji(
@@ -116,8 +99,6 @@ CREATE TABLE vozilo_na_misiji(
     FOREIGN KEY (id_misija) REFERENCES misija(id)
 );
 DROP TABLE vozilo_na_misiji;
-
-
 
 
 CREATE TABLE popravak(
@@ -132,21 +113,17 @@ CREATE TABLE popravak(
 DROP TABLE popravak;
 
 
-
-
 CREATE TABLE tura(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
     vrijeme_pocetka DATETIME NOT NULL,
     vrijeme_kraja DATETIME NOT NULL,
     trosak_ture NUMERIC(15, 2) NOT NULL,
-    id_rat NTEGER NOT NULL,
+    id_rat INTEGER NOT NULL,
     FOREIGN KEY (id_rat) REFERENCES rat(id)
 );
 DROP TABLE tura;
--- vrijeme oznacava koliko traje
-
-
+-- Vrijeme oznacava koliko traje
 
 
 CREATE TABLE osoblje_na_turi(
@@ -159,9 +136,7 @@ CREATE TABLE osoblje_na_turi(
     FOREIGN KEY (id_tura) REFERENCES tura(id)
 );
 DROP TABLE osoblje_na_turi;
--- vrijeme oznacava koliko je dugo osoba sudjelovala na turi, osoba ne mora sujelovat na cijeloj turi!
-
-
+-- Brijeme oznacava koliko je dugo osoba sudjelovala na turi, osoba ne mora sujelovat na cijeloj turi!
 
 
 CREATE TABLE vozilo_na_turi(
@@ -179,8 +154,6 @@ CREATE TABLE vozilo_na_turi(
 DROP TABLE vozilo_na_turi;
 
 
-
-
 CREATE TABLE izdana_oprema(
     id INTEGER PRIMARY KEY,
     id_oprema INTEGER,
@@ -189,7 +162,7 @@ CREATE TABLE izdana_oprema(
     FOREIGN KEY (id_oprema) REFERENCES oprema(id),
     FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
 );
-
+DROP TABLE izdana_oprema;
 
 
 
