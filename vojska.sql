@@ -9,13 +9,15 @@ USE vojska;
 
 CREATE TABLE osoblje(
     id INTEGER PRIMARY KEY,
+    id_vojna_bolnica INTEGERE,
     ime VARCHAR(30) NOT NULL,
     prezime VARCHAR(30) NOT NULL,
     cin VARCHAR(20) NOT NULL,
     datum_rodenja DATE NOT NULL,
     datum_uclanjenja DATE NOT NULL,
     status_osoblja VARCHAR(50) NOT NULL,
-    krvna_grupa CHAR(3) NOT NULL
+    krvna_grupa CHAR(3) NOT NULL,
+    FOREIGN KEY (id_vojna_bolnica) REFERENCES vojna_bolnica(id)
 );
 DROP TABLE osoblje;
 
@@ -160,18 +162,16 @@ CREATE TABLE trening(
     vrijeme_kraja DATETIME NOT NULL,
     id_lokacija INTEGER NOT NULL,
     opis VARCHAR(80) NOT NULL,
-    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
 );
 DROP TABLE trening;
 
 
 CREATE TABLE vojna_bolnica(
     id INTEGER PRIMARY KEY,
-    id_medicinsko_osoblje INTEGER,
     id_lokacija INTEGER,
     kapacitet INTEGER,
-    FOREIGN KEY (id_medicinsko_osoblje) REFERENCES osoblje(id),
-    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
 );
 DROP TABLE vojna_bolnica;
 
