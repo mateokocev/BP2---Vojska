@@ -169,6 +169,7 @@ DROP TABLE trening;
 
 CREATE TABLE vojna_bolnica(
     id INTEGER PRIMARY KEY,
+    naziv VARCHAR(80) NOT NULL,
     id_lokacija INTEGER,
     kapacitet INTEGER,
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
