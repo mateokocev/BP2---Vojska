@@ -1,0 +1,51 @@
+*
+{
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+topbar{
+position: absolute;
+width: auto;
+height: 57px;
+left: 0px;
+right: 0px;
+top: 0px;
+background: #353535;
+
+}
+
+topMainbar{
+    display: grid;
+    grid-template-columns: auto auto 60px 50px;
+    background-color: #2196F3;
+    padding: 10px;
+    position: fixed;
+    width: auto;
+    margin-top: 49px;
+    left: 0px;
+    right: 0px;
+    color: white;
+    font-size: 10px;
+    background: #AF997F;
+    border-radius: 0px;
+    }
+
+imggit{
+   
+   /*image of github*/
+    
+}
+
+
+ /* Kopnena Vojska*/
+ kopnenavojska
+ {
+   position: relative;
+   width: auto;
+   
+    background-color: aqua;
+
+ }
+
+
