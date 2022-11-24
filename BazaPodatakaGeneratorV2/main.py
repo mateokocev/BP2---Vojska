@@ -33,7 +33,7 @@ def RandNumb(brFrom, brTo):
 def Customrandname(custom=[]):
     return random.choice(custom)
 
-
+            #needs to be fixed STR_TO_DATE("22.03.1991.", "%d.%m.%Y.")
 def Date(Dfrom, Dto, addTime=True, addDate=False):
     #2020-01-01 15:10:10
     if addTime and not addDate:
@@ -60,7 +60,7 @@ def Date(Dfrom, Dto, addTime=True, addDate=False):
 
 
 # Start program
-print("Dostupni atributi: \n [id] [ime] [prezime] [datum[nummber (max 2)]] [customname[number(max 5)]] [bool [randnum[number(max 5)]] \n Exmaple: id ime date2 customname4"
+print("Dostupni atributi: \n [id] [ime] [prezime] [datum[nummber (max 2)]] [customname[number(max 5)]] [bool [randnum[number(max 5)]] [foreignkey[nummber] \n Exmaple: id ime date2 customname4"
 )
 
 lista = list(map(str, input().split()))
@@ -141,60 +141,65 @@ rj = []
 rj.append("INSERT INTO " + input("Naziv Tablice? ") + " VALUES \n")
 
 for y in range(int(input("Velicina tablice? "))):
+    rj.append("(")
     for x in lista:
+        
         if x == "id":
             id += 1
-            rj.append(str(id) + ", ")
+            rj.append(str(id) )
                 #ime prezime
         elif x == "ime":
-            rj.append(str(randname()) + ", ")
+            rj.append(str('"'+randname())+'"' )
         elif x == "prezime":
-            rj.append(str(randprezime()) + ", ")
+            rj.append(str('"'+randprezime())+'"' )
                 #datum - vrijeme
         elif x == "datum1":
-            rj.append(str(Date(0, 0, Vrijeme1, Datum1)) + ", ")  
+            rj.append(str(Date(0, 0, Vrijeme1, Datum1)) )  
         elif x == "datum2":
-            rj.append(str(Date(0, 0, Vrijeme2, Datum2)) + ", ")
+            rj.append(str(Date(0, 0, Vrijeme2, Datum2)) )
                 #custom name
         elif x == "customname1":
-            rj.append(str(Customrandname(custom1)) + ", ")
+            rj.append(str('"'+ Customrandname(custom1)+'"') )
         elif x == "customname2":
-            rj.append(str(Customrandname(custom2)) + ", ")
+            rj.append(str('"'+Customrandname(custom2))+'"' )
         elif x == "customname3":
-            rj.append(str(Customrandname(custom3)) + ", ")
+            rj.append(str('"'+Customrandname(custom3))+'"' )
         elif x == "customname4":
-            rj.append(str(Customrandname(custom4)) + ", ")
+            rj.append(str('"'+Customrandname(custom4))+'"' )
         elif x == "customname5":
-            rj.append(str(Customrandname(custom5)) + ", ")
+            rj.append(str('"'+Customrandname(custom5))+'"' )
                 #foreign keys
         elif x == "foreignkey1":
             foreignkey1 += 1
-            rj.append(str(foreignkey1) + ", ")
+            rj.append(str(foreignkey1) )
         elif x == "foreignkey2":
             foreignkey2 += 1
-            rj.append(str(foreignkey2) + ", ")
+            rj.append(str(foreignkey2) )
         elif x == "foreignkey3":
             foreignkey3 += 1
-            rj.append(str(foreignkey3) + ", ")
+            rj.append(str(foreignkey3) )
         elif x == "foreignkey4":
             foreignkey4 += 1
-            rj.append(str(foreignkey4) + ", ")
+            rj.append(str(foreignkey4) )
         elif x == "foreignkey5":
             foreignkey5 += 1
-            rj.append(str(foreignkey5) + ", ")
+            rj.append(str(foreignkey5) )
                 #bool
         elif x == "bool":
-            rj.append(str(randbool()) + ", ")
+            rj.append(str(randbool()) )
                 #random nummbers
         elif x == "randnum1":
-            rj.append(str(RandNumb(int(start1), int(end1))) + ", ")
+            rj.append(str(RandNumb(int(start1), int(end1))) )
         elif x == "randnum2":
-            rj.append(str(RandNumb(int(start2), int(end2))) + ", ")
+            rj.append(str(RandNumb(int(start2), int(end2))) )
         elif x == "randnum3":
-            rj.append(str(RandNumb(int(start3), int(end3))) + ", ")
+            rj.append(str(RandNumb(int(start3), int(end3))) )
         elif x == "randnum4":
-            rj.append(str(RandNumb(int(start4), int(end4))) + ", ")
+            rj.append(str(RandNumb(int(start4), int(end4))) )
         elif x == "randnum5":
-            rj.append(str(RandNumb(int(start5), int(end5))) + ", ")
-    rj.append("\n")
+            rj.append(str(RandNumb(int(start5), int(end5))) )
+        
+        rj.append(",")
+    rj=rj[:-1]
+    rj.append("),\n")
 print(*rj, end=");")
