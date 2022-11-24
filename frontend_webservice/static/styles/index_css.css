@@ -1,51 +1,195 @@
 *
 {
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 }
 
-
+body
+{
+   background-color: #353535;
+   
+}
 topbar{
 position: absolute;
 width: auto;
 height: 57px;
 left: 0px;
+
 right: 0px;
 top: 0px;
 background: #353535;
 
 }
+topbar img
+{
+  margin-left: 30px;
+}
+
+
 
 topMainbar{
     display: grid;
     grid-template-columns: auto auto 60px 50px;
     background-color: #2196F3;
     padding: 10px;
-    position: fixed;
+    position: static;
     width: auto;
     margin-top: 49px;
-    left: 0px;
-    right: 0px;
+    margin-left: -10px;
+    margin-right: -10px;
     color: white;
     font-size: 10px;
     background: #AF997F;
-    border-radius: 0px;
+ 
     }
 
-imggit{
-   
-   /*image of github*/
+
+
+    imageCover
+    {
+      position: absolute;
+      background-image: url("../img/kopnena_back.png");
+      background-repeat: no-repeat;
+      background-color: #cccccc;
+      background-size:     cover;                     
+      background-repeat:   no-repeat;
+      background-attachment: fixed;
+      margin-left: -10px;
+      text-align: center;
     
-}
+    
+      height: 800px;
+      width: 100%;
+      color: white;
+    }
+    imageCoverZrakoplovna
+    {
+      position: absolute;
+      background-image: url("../img/zrakoplovna_back.png");
+      background-repeat: no-repeat;
+      background-color: #cccccc;
+      background-size:     cover;
+      background-attachment: fixed;    
+      background-repeat:   no-repeat;
+      margin-left: -10px;
+      text-align: center;
+    
+      height: 800px;
+      width: 100%;
+      color: white;
+    }
+    imageCoverPomorksa
+    {
+      position: absolute;
+      background-image: url("../img/pomorska_back.png");
+      background-repeat: no-repeat;
+      background-color: #cccccc;
+      background-attachment: fixed;
+      background-size:     cover;                     
+      background-repeat:   no-repeat;
+      margin-left: -10px;
+      text-align: center;
+    
+      height: 888px;
+      width: 100%;
+      color: white;
+    }
 
 
- /* Kopnena Vojska*/
- kopnenavojska
- {
-   position: relative;
-   width: auto;
+    imageCover h1
+    {
+         font-size: 4vw;
+    }
+    imageCover div
+    {
+      text-align: right;
+
+      margin-right:200px;
+      margin-top: 300px;
+    }
+
+     
+    imageCoverZrakoplovna h1
+    {
+         font-size: 4vw;
+    }
+    imageCoverZrakoplovna div
+    {
+      text-align: left;
+      margin-left:200px;
+      margin-top: 280px;
+    }
+
+
+    imageCoverPomorksa h1
+    {
+         font-size: 4vw;
+         color: #353535;
+    }
+    imageCoverPomorksa div
+    {
+      text-align: left;
+      color: #000000;
+      margin-right:90%;
+     
+      width: 100%;
+    
+      text-align: center;
+      margin-top: 300px;
+    }
+
+
+
+    podstranica1
+   {  position: absolute;
+      width: 100%;
+      margin-top: 730px;
+
+   }
+   podstranica2
+   {  position: absolute;
+      width: 100%;
+      margin-top: 1540px;
+     
+
+   }
+
+
+  
    
-    background-color: aqua;
 
- }
-
-
+   .button-24 {
+     background: #FF4742;
+     border: 1px solid #FF4742;
+     border-radius: 6px;
+     box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+     box-sizing: border-box;
+     color: #FFFFFF;
+     cursor: pointer;
+     display: inline-block;
+     font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+     font-size: 16px;
+     font-weight: 800;
+     line-height: 16px;
+     min-height: 40px;
+     outline: 0;
+     padding: 12px 14px;
+     text-align: center;
+     text-rendering: geometricprecision;
+     text-transform: none;
+     user-select: none;
+     -webkit-user-select: none;
+     touch-action: manipulation;
+     vertical-align: middle;
+   }
+   
+   .button-24:hover,
+   .button-24:active {
+     background-color: initial;
+     background-position: 0 0;
+     color: #FF4742;
+   }
+   
+   .button-24:active {
+     opacity: .5;
+   }
