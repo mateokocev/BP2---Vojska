@@ -1,6 +1,3 @@
--- SQLBook: Code
--- Active: 1665427321001@@127.0.0.1@3306@vojskajna
-
 DROP DATABASE IF EXISTS vojska;
 
 CREATE DATABASE vojska;
@@ -9,7 +6,7 @@ USE vojska;
 
 CREATE TABLE osoblje(
     id INTEGER PRIMARY KEY,
-    id_vojna_bolnica INTEGERE,
+    id_vojna_bolnica INTEGER,
     ime VARCHAR(30) NOT NULL,
     prezime VARCHAR(30) NOT NULL,
     cin VARCHAR(20) NOT NULL,
@@ -176,46 +173,44 @@ CREATE TABLE vojna_bolnica(
 );
 DROP TABLE vojna_bolnica;
 
-
-
-INSERT INTO osoblje VALUES 
-(1, 'Niko', 'Franjić', '', , , ''),
-(2, 'Izidor', 'Sekicki', '', , , ''),
-(3, 'Lejla', 'Klabot', '', , , ''),
-(4, 'Toni', 'Kolar', '', , , ''),
-(5, 'Neo', 'Zufić', '', , , ''),
-(6, 'Momčilo', 'Petrović', '', , , ''),
-(7, 'Suzana', 'Lantana', '', , , ''),
-(8, 'Vjekoslav', 'Galović', '', , , ''),
-(9, 'Neo', 'Hercog', '', , , ''),
-(10, 'Leonardo', 'Lorenzijan', '', , , ''),
-(11, 'Trpimir', 'Kolar', '', , , ''),
-(12, 'Leo', 'Schewerc', '', , , ''),
-(13, 'Filip', 'Grozlak', '', , , ''),
-(14, 'Dean', 'Mirković', '', , , ''),
-(15, 'Lena', 'Orak', '', , , ''),
-(16, 'Marko', 'Selenberg', '', , , ''),
-(17, 'Petra Ursato', '', '', , , ''),
-(18, 'Robert', 'Kovačević', '', , , ''),
-(19, 'Hrvoje', 'Natašević', '', , , ''),
-(20, 'Mirko', 'Regan', '', , , ''),
-(21, 'Francesco', 'Rossi', '', , , ''),
-(22, 'Nino', 'Fratimirović', '', , , ''),
-(23, 'Ines', 'Mijarkalec', '', , , ''),
-(24, 'Vedran', 'Hercog', '', , , ''),
-(25, 'Saša', 'Nikel', '', , , ''),
-(26, 'Otto', 'Nikel', '', , , ''),
-(27, 'Anes', 'Celić', '', , , ''),
-(28, 'Borna', 'Fratarić', '', , , ''),
-(29, 'Ugo', 'Nestle', '', , , ''),
-(30, 'Jani', 'Zelkovčić', '', , , ''),
-(31, 'Mateo', 'Hereg', '', , , ''),
-(32, 'Lidija', 'Bafrić', '', , , ''),
-(33, 'Greta', 'Nikša', '', , , ''),
-(34, 'Hektor', 'Persa', '', , , ''),
-(35, 'Zoran', 'Juko', '', , , ''),
-(36, 'Milan', 'Bersan', '', , , ''),
-(37, 'Leo', 'Krelović', '', , , ''),
-(38, 'Marko', 'Katalin', '', , , ''),
-(39, 'Orto', 'Muker', '', , , ''),
-(40, 'David', 'Kovačević', '', , , '');
+INSERT INTO osoblje VALUES
+ ( 2 , 101 , "Borisa" , "Šimunić" , "vojnik" , 2018-4-17 , 2002-11-23 , True , "0+" ),
+ ( 3 , 102 , "Dani" , "Đurić" , "vojnik" , 2018-7-8 , 2015-7-10 , True , "AB+" ),
+ ( 4 , 103 , "Eliana" , "Pavlović" , "general" , 2001-7-24 , 2012-10-16 , False , "AB+" ),
+ ( 5 , 104 , "Neli" , "Lučić" , "vojnik" , 2013-12-4, 2013-4-1 , False , "0+" ),
+ ( 6 , 105 , "Slaven" , "Novaković" , "vojnik" , 2015-4-13 , 2017-10-4 , False , "0+" ),
+ ( 7 , 106 , "Franka" , "Mitrović" , "general" , 2000-9-5 , 2007-5-22 , True , "AB+" ),
+ ( 8 , 107 , "Zvjezdana" , "Radić" , "general" , 2007-5-17 , 2020-7-11 , False , "AB+" ),
+ ( 9 , 108 , "Elana" , "Barišić" , "vojnik" , 2012-8-8 , 2003-2-21 , True , "0+" ),
+ ( 10 , 109 , "Darko" , "Jozić" , "vojnik" , 2013-6-9 , 2018-6-29 , True , "AB+" ),
+ ( 11 , 110 , "Elizabeta" , "Ružić" , "vojnik" , 2008-3-28 , 2020-10-15 , True , "AB+" ),
+ ( 12 , 111 , "Jaka" , "Martinović" , "vojnik" , 2005-10-16 , 2006-8-29 , False , "AB+" ),
+ ( 13 , 112 , "Šime" , "Vučković" , "vojnik" , 2001-5-11 , 2016-6-13 , True , "AB+" ),
+ ( 14 , 113 , "Manuel" , "Josipović" , "vojnik" , 2009-4-7 , 2017-5-1 , False , "0+" ),
+ ( 15 , 114 , "Noel" , "Dragičević" , "vojnik" , 2006-4-17 , 2000-9-15 , False , "0+" ),
+ ( 16 , 115 , "Kate" , "Pavić" , "vojnik" , 2017-3-21 , 2019-6-1 , False , "AB+" ),
+ ( 17 , 116 , "Toma" , "Jurković" , "general" , 2012-1-2 , 2016-7-21 , False , "AB+" ),
+ ( 18 , 117 , "Arijana" , "Matić" , "vojnik" , 2016-1-10 , 2013-6-12 , True , "AB+" ),
+ ( 19 , 118 , "Lucijano" , "Novaković" , "vojnik" , 2019-3-28 , 2001-4-28 , True , "AB+" ),
+ ( 20 , 119 , "Magda" , "Živković" , "vojnik" , 2021-10-25 , 2010-2-14 , False , "AB+" ),
+ ( 21 , 120 , "Alfi" , "Vidović" , "general" , 2013-12-9 , 2022-11-8 , True , "AB+" ),
+ ( 22 , 121 , "Fabijan" , "Nikolić" , "general" , 2001-7-28 , 2007-2-5 , True , "0+" ),
+ ( 23 , 122 , "Aliza" , "Đurić" , "general" , 2010-2-18 , 2002-9-24 , True , "AB+" ),
+ ( 24 , 123 , "Tara" , "Novaković" , "general" , 2016-9-9 , 2001-9-11 , False , "0+" ),
+ ( 25 , 124 , "Aubriela" , "Jelić" , "vojnik" , 2005-2-29 , 2007-2-22 , True , "0+" ),
+ ( 26 , 125 , "Kalani" , "Filipović" , "vojnik" , 2018-12-20 , 2000-9-21 , True , "0+" ),
+ ( 27 , 126 , "Gabrijela" , "Kralj" , "vojnik" , 2007-1-16 , 2001-1-5 , False , "AB+" ),
+ ( 28 , 127 , "Ela" , "Šimunović" , "vojnik" , 2010-1-30 , 2004-8-9 , False , "0+" ),
+ ( 29 , 128 , "Saša" , "Kolarić" , "general" , 2014-8-20 , 2017-12-12 , False , "AB+" ),
+ ( 30 , 129 , "Jasen" , "Miletić" , "general" , 2021-7-6 , 2005-5-1 , True , "AB+" ),
+ ( 31 , 130 , "Analia" , "Šarić" , "vojnik" , 2017-10-18 , 2016-10-11 , True , "AB+" ),
+ ( 32 , 131 , "Emil" , "Antunović" , "general" , 2018-11-9 , 2019-3-28 , False , "0+" ),
+ ( 33 , 132 , "Gema" , "Ivančić" , "general" , 2003-9-25 , 2002-8-22 , True , "AB+" ),
+ ( 34 , 133 , "Ana" , "Šimunović" , "vojnik" , 2015-6-8 , 2008-1-14 , True , "AB+" ),
+ ( 35 , 134 , "Bianka" , "Perković" , "general" , 2022-5-24 , 2014-2-8 , True , "0+" ),
+ ( 36 , 135 , "Roko" , "Ivanović" , "general" , 2015-5-15 , 2007-11-21 , True , "0+" ),
+ ( 37 , 136 , "Ronald" , "Tomić" , "general" , 2001-3-10 , 2013-6-5 , False , "0+" ),
+ ( 38 , 137 , "Maks" , "Marjanović" , "vojnik" , 2001-4-8 , 2003-10-14 , False , "0+" ),
+ ( 39 , 138 , "Siri" , "Grgić" , "vojnik" , 2020-3-30 , 2012-9-4 , False , "0+" ),
+ ( 40 , 139 , "Dela" , "Ćosić" , "vojnik" , 2017-2-12 , 2010-11-16 , False , "0+" ),
+ ( 41 , 140 , "Aurora" , "Vuković" , "general" , 2012-7-17 , 2006-6-17 , True , "0+" );
