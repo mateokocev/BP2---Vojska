@@ -42,13 +42,11 @@ def Date(Dfrom, Dto, addTime=True, addDate=False):
         return vrijeme
 
     elif not addTime and addDate:
-        datum = str(random.randint(2000, 2022)) + "-" + str(
-            random.randint(1, 12)) + "-" + str(random.randint(1, 31))
+        datum = str(random.randint(1, 31))+ "." + str(random.randint(1, 12)) +"."+str(random.randint(2000, 2022))+"." 
         return datum
 
     elif addDate and addTime:
-        datum = str(random.randint(2000, 2022)) + "-" + str(
-            random.randint(1, 12)) + "-" + str(random.randint(1, 31))
+        datum = str(random.randint(1, 31))+ "." + str(random.randint(1, 12)) +"."+str(random.randint(2000, 2022))+"." 
 
         vrijeme = str(random.randint(1, 24)) + ":" + str(random.randint(
             0, 60)) + ":" + str(random.randint(0, 60))
@@ -153,10 +151,10 @@ for y in range(int(input("Velicina tablice? "))):
         elif x == "prezime":
             rj.append(str('"'+randprezime())+'"' )
                 #datum - vrijeme
-        elif x == "datum1":
-            rj.append(str(Date(0, 0, Vrijeme1, Datum1)) )  
+        elif x == "datum1":     #STR_TO_DATE("22.03.1991.", "%d.%m.%Y.")
+            rj.append(str('STR_TO_DATE("'+Date(0, 0, Vrijeme1, Datum1)+'"'+', "%d.%m.%Y.")') )  
         elif x == "datum2":
-            rj.append(str(Date(0, 0, Vrijeme2, Datum2)) )
+            rj.append(str('STR_TO_DATE("'+Date(0, 0, Vrijeme2, Datum2)+'"'+', "%d.%m.%Y.")') )  
                 #custom name
         elif x == "customname1":
             rj.append(str('"'+ Customrandname(custom1)+'"') )
