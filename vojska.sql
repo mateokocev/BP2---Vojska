@@ -166,6 +166,10 @@ DROP TABLE trening;
 
 CREATE TABLE osoblje_na_treningu(
 	id INTEGER PRIMARY KEY,
+	id_osoblje INTEGER NOT NULL,
+	id_trening INTEGER NOT NULL,
+	performans INTEGER NOT NULL,
+	CHECK(performans >= 0 AND performans < 11)
 );
 
 
@@ -175,7 +179,7 @@ CREATE TABLE lijecenje(
     status_lijecenja TEXT NOT NULL,  -- interaktivno ongoing completed itd. ako je ongoing datum kraja je null / possible trigger?
     pocetak_lijecenja DATE NOT NULL,
     kraj_lijecenja DATE NOT NULL,
-	opis_ozljede TEXT NOT NULL,
+    opis_ozljede TEXT NOT NULL,
     trosak_lijecenja NUMERIC(15,2),
     FOREIGN KEY (id_osoblje) REFERENCES osoblje(id)
 );
