@@ -7,7 +7,7 @@ USE vojska;
 CREATE TABLE sektor(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(60) NOT NULL,
-    godina_osnivanja INTEGER,
+    datum_osnivanja DATE NOT NULL,
     opis TEXT,
     ukupni_proracun DECIMAL(12,2)
 );
@@ -285,15 +285,11 @@ DELIMITER ;
 
 */
 -- UNOS TABLICA:
-CREATE TABLE sektor(
-    id INTEGER PRIMARY KEY,
-    naziv VARCHAR(60) NOT NULL,
-    godina_osnivanja INTEGER,
-    opis TEXT,
-    ukupni_proracun DECIMAL(12,2)
-);
+
 INSERT INTO sektor VALUES 
-(1, "Kopnena vojska", 1991, "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 7568000000.00)
+(1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.&Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
+(2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.&Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
+(3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.&Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00);
 
 
 
