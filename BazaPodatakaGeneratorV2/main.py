@@ -197,3 +197,5 @@ for y in range(int(input("Velicina tablice? "))):
     rj=rj[:-1]
     rj.append("),\n")
 print(*rj, end=");")
+
+raw_input()
