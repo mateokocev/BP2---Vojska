@@ -288,16 +288,43 @@ DELIMITER ;
 INSERT INTO sektor VALUES 
 (1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.%Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
 (2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.%Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
-(3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.%Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00);
-
+(3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.%Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00),
+(4, "Hrvatska vojna policija", STR_TO_DATE("24.08.1991.", "%d.%m.%Y."), "Vojna policija Oružanih snaga Republike Hrvatske (VP OSRH) pruža potporu Ministarstvu obrane i Oružanim snagama Republike Hrvatske obavljanjem namjenskih vojnopolicijskih poslova u miru i ratu te borbenih zadaća u ratu.", 1822000000.00)
+;
 
 
 INSERT INTO osoblje VALUES
 ()
 
 
+INSERT INTO tura VALUES
+(01, "UNMOGIP", "Mirovna tura", STR_TO_DATE("01.08.2008","%d.%m.%Y."), STR_TO_DATE("04.11.2021","%d.%m.%Y.")),
+(02, "EUFOR Tchad/RCA", "Vojna tura", STR_TO_DATE("01.10.2008","%d.%m.%Y."), STR_TO_DATE("15.04.2009","%d.%m.%Y.")),
+(03, "ISAF", "Mirovna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y.")),
+(04, "Resolute support", "Mirovna tura", STR_TO_DATE("01.01.2015","%d.%m.%Y."), STR_TO_DATE("04.09.2020","%d.%m.%Y.")),
+(05, "", "Mirovna tura", STR_TO_DATE("01.08.2008","%d.%m.%Y."), STR_TO_DATE("04.11.2021","%d.%m.%Y.")),
+(06, "ISAF", "Mirovna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y.")),
 
 
+
+
+CREATE TABLE vozila(
+    id INTEGER PRIMARY KEY,
+    naziv VARCHAR(60) NOT NULL,
+    vrsta VARCHAR(50) NOT NULL,
+    ukupna_kolicina INTEGER NOT NULL,
+    kapacitet INTEGER NOT NULL -- leo je rekao da mu ne pase, zasto je to tu? ko je to dodao? zasto smo zivi? di mi je pistolj? auto increment?
+);
+INSERT INTO vozila VALUES
+
+
+/*
+id INTEGER PRIMARY KEY,
+    naziv VARCHAR(50) NOT NULL,
+    vrsta_ture VARCHAR(69) NOT NULL,
+    vrijeme_pocetka DATETIME NOT NULL,
+    vrijeme_kraja DATETIME NOT NULL
+*/
 
 -- enkripcija podataka
 
@@ -311,5 +338,3 @@ select lozinka from login
 where ime="pero" and md5("1234") = lozinka;
 
 select * from login;
-
-
