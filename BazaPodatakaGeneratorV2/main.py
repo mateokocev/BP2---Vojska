@@ -28,19 +28,20 @@ def Customrandname(custom=[]):
     return random.choice(custom)
 
          
-def Date(Dfrom, Dto, addTime=True, addDate=False):
+def Date(addTime=True, addDate=False,god1=2,god2=2):
+  
+  vrijeme = str( random.randint( 1, 24 )) + ":" + str( random.randint( 0, 60 )) + ":" + str(random.randint( 0, 60 ))
+  datum = str(random.randint( 1, 31 ))+ "." + str(random.randint( 1, 12 )) +"."+str(random.randint( god1, god2 ))+"." 
 
-    vrijeme = str( random.randint( 1, 24 )) + ":" + str( random.randint( 0, 60 )) + ":" + str(random.randint( 0, 60 ))
-    datum = str(random.randint( 1, 31 ))+ "." + str(random.randint( 1, 12 )) +"."+str(random.randint( 2000, 2022 ))+"." 
+  if addTime and not addDate:
+      return vrijeme
+    
+  elif not addTime and addDate:
+      return datum
 
-    if addTime and not addDate:
-        return vrijeme
-
-    elif not addTime and addDate:
-        return datum
-
-    elif addDate and addTime:
-        return datum + "  " + vrijeme
+  elif addDate and addTime:
+      return datum + "  " + vrijeme
+  return "greska"
 
 
 
@@ -91,8 +92,11 @@ for x in lista:
           Datum1 = True
       else:
           Datum1 = False
+      god1=input("date from: ")
+      god2=input("date to: ")
         
   if ("datum2"== x):
+    
       if input("Add Time? y/n") == "y":
           Vrijeme2 = True
       else:
@@ -101,8 +105,10 @@ for x in lista:
           Datum2 = True
       else:
           Datum2 = False
+      god3=input("date from: ")
+      god4=input("date to: ")
 
-
+    
         
   if ("randnum1"==x):
       start1 = input("rand number starts at? ")
@@ -141,9 +147,10 @@ for y in range(int(input("Velicina tablice? "))):
             rj.append(str('"'+randprezime())+'"' )
                 #datum - vrijeme
         elif x == "datum1":     #STR_TO_DATE("22.03.1991.", "%d.%m.%Y.")
-            rj.append(str('STR_TO_DATE("'+Date(0, 0, Vrijeme1, Datum1)+'"'+', "%d.%m.%Y.")') )  
+           
+            rj.append(str('STR_TO_DATE("'+str(Date(Vrijeme1, Datum1,int(god1),int(god2)))+'"'+', "%d.%m.%Y.")') )  
         elif x == "datum2":
-            rj.append(str('STR_TO_DATE("'+Date(0, 0, Vrijeme2, Datum2)+'"'+', "%d.%m.%Y.")') )  
+              rj.append(str('STR_TO_DATE("'+str(Date(Vrijeme2, Datum2,int(god3),int(god4)))+'"'+', "%d.%m.%Y.")') )  
                 #custom name
         elif x == "customname1":
             rj.append(str('"'+ Customrandname(custom1)+'"') )
