@@ -1,6 +1,3 @@
-# fixat datum customanem randnum id
-
-
 import random
 from imena import ime, prezime
 # variables
@@ -9,14 +6,11 @@ custom2 = []
 custom3 = []
 custom4 = []
 custom5 = []
-
-
 #functions
 def randname():
     return random.choice(ime)
 def randprezime():
     return random.choice(prezime)
-
 
 def randbool():
     x = random.randint(0, 1)
@@ -33,33 +27,28 @@ def RandNumb(brFrom, brTo):
 def Customrandname(custom=[]):
     return random.choice(custom)
 
-            #needs to be fixed STR_TO_DATE("22.03.1991.", "%d.%m.%Y.")
+         
 def Date(Dfrom, Dto, addTime=True, addDate=False):
-    #2020-01-01 15:10:10
+
+    vrijeme = str( random.randint( 1, 24 )) + ":" + str( random.randint( 0, 60 )) + ":" + str(random.randint( 0, 60 ))
+    datum = str(random.randint( 1, 31 ))+ "." + str(random.randint( 1, 12 )) +"."+str(random.randint( 2000, 2022 ))+"." 
+
     if addTime and not addDate:
-        vrijeme = str(random.randint(1, 24)) + ":" + str(random.randint(
-            0, 60)) + ":" + str(random.randint(0, 60))
         return vrijeme
 
     elif not addTime and addDate:
-        datum = str(random.randint(1, 31))+ "." + str(random.randint(1, 12)) +"."+str(random.randint(2000, 2022))+"." 
         return datum
 
     elif addDate and addTime:
-        datum = str(random.randint(1, 31))+ "." + str(random.randint(1, 12)) +"."+str(random.randint(2000, 2022))+"." 
-
-        vrijeme = str(random.randint(1, 24)) + ":" + str(random.randint(
-            0, 60)) + ":" + str(random.randint(0, 60))
         return datum + "  " + vrijeme
 
 
-#start program
 
 
 
-# Start program
-print("Dostupni atributi: \n [id] [ime] [prezime] [datum[nummber (max 2)]] [customname[number(max 5)]] [bool [randnum[number(max 5)]] [foreignkey[nummber] \n Exmaple: id ime date2 customname4"
-)
+
+
+print("Dostupni atributi: \n [id] [ime] [prezime] \n [datum[(max 2)]] [customname[(max 5)]] [bool] \n [randnum[(max 5)]] [foreignkey[nummber] \n Exmaple: id ime date2 customname4")
 
 lista = list(map(str, input().split()))
 for x in lista:
