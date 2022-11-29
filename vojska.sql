@@ -200,14 +200,28 @@ CREATE TABLE lijecenje(
 );
 -- DROP TABLE lijecenje;
 
+CREATE TABLE login(
+    id INTEGER primary KEY,  -- autoincrement
+	ime varchar(100),
+    lozinka varchar(100)
+   
+);
+-- DROP TABLE login;
 
 
 
 
 
-
-
--- OKIDACI:
+-- OKIDACI
+						-- za kriptiranje lozinke
+DELIMITER //
+CREATE TRIGGER kriptiranje
+ BEFORE INSERT ON login
+ FOR EACH ROW
+BEGIN
+ SET new.lozinka = MD5(new.lozinka);
+END//
+DELIMITER ;
 
 -- struktura je ova:
 /*
@@ -288,6 +302,29 @@ DELIMITER ;
 
 -- PROCEDURE:
 
+
+
+
+
+
+
+
+
+-- UNOS TABLICA:
+
+
+-- enkripcija podataka
+
+INSERT INTO login VALUES (1,"pero","1234");
+INSERT INTO login VALUES (2,"ivan","1234");
+INSERT INTO login VALUES (3,"test","test");
+select * from login;
+
+-- provjera lozinke
+select lozinka from login
+where ime="pero" and md5("1234") = lozinka;
+
+select * from login;
 
 
 
