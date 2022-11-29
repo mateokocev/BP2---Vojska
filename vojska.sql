@@ -284,33 +284,20 @@ END//
 DELIMITER ;
 
 */
-
-
-
-
-
--- FUNKCIJE:
-
-
-
-
-
-
-
-
-
-
--- PROCEDURE:
-
-
-
-
-
-
-
-
-
 -- UNOS TABLICA:
+CREATE TABLE sektor(
+    id INTEGER PRIMARY KEY,
+    naziv VARCHAR(60) NOT NULL,
+    godina_osnivanja INTEGER,
+    opis TEXT,
+    ukupni_proracun DECIMAL(12,2)
+);
+INSERT INTO sektor VALUES 
+(1, "Kopnena vojska", 1991, "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 7568000000.00)
+
+
+
+
 
 
 -- enkripcija podataka
@@ -325,6 +312,5 @@ select lozinka from login
 where ime="pero" and md5("1234") = lozinka;
 
 select * from login;
-
 
 
