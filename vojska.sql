@@ -135,8 +135,8 @@ CREATE TABLE popravak(
     id INTEGER PRIMARY KEY,
     id_vozilo_na_misiji INTEGER,
     opis_stete TEXT NOT NULL,
-    pocetak_popravka DATE NOT NULL,
-    kraj_popravka DATE NOT NULL,
+    pocetak_popravka DATETIME NOT NULL,
+    kraj_popravka DATETIME NOT NULL,
     trosak_popravka NUMERIC(15,2),
     FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id)
 );
