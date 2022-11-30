@@ -209,7 +209,7 @@ CREATE TABLE lijecenje(
 
 -- OKIDACI
 						
-
+-- tekst zadataka ce bit jos restrukturiran, ovo je okvirno
 
 -- struktura je ova:
 /*
@@ -226,6 +226,7 @@ BEGIN
 END//
 DELIMITER ;
 */
+
 
 
 -- DK
@@ -258,7 +259,7 @@ DELIMITER ;
 
 
 -- DK
--- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme
+-- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme tijekom insert-a
 	
 DROP TRIGGER IF EXISTS kop;
 
@@ -278,15 +279,46 @@ BEGIN
     FROM oprema
     WHERE id = new.id_oprema;
     
-    
     IF br + new.izdana_kolicina > uk THEN
 	SIGNAL SQLSTATE '40000'
         SET MESSAGE_TEXT = 'Oprema koju zelite unijeti nije dostupna u zeljenoj kolicini!';
     END IF;
-    
 END//
 DELIMITER ;
 
+
+
+
+
+
+-- DK
+-- Prati se da zbroj izdane kolicine ne bude veci od sveukupne moguce kolicine opreme tijekom update-a
+
+DROP TRIGGER IF EXISTS ukop;
+
+DELIMITER //
+CREATE TRIGGER ukop
+    BEFORE UPDATE ON izdana_oprema
+    FOR EACH ROW
+BEGIN
+    DECLARE br INTEGER;
+    DECLARE uk INTEGER;
+    
+    SELECT SUM(izdana_kolicina) INTO br
+    FROM izdana_oprema
+    WHERE id_oprema = new.id_oprema;
+    
+    
+    SELECT ukupna_kolicina INTO uk
+    FROM oprema
+    WHERE id = new.id_oprema;
+    
+    IF (br - old.izdana_kolicina) + new.izdana_kolicina > uk THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Ne mozete promijenit kolicinu zeljene opreme koja je izdana osobi zato jer nije dostupna u toj kolicini!';
+    END IF;
+END//
+DELIMITER ;
 
 
 
@@ -345,12 +377,10 @@ CREATE TRIGGER vrli
     BEFORE INSERT ON lijecenje
     FOR EACH ROW
 BEGIN
-
     IF DATE(new.pocetak_lijecenja) >= DATE(new.kraj_lijecenja) AND new.kraj_lijecenja != NULL THEN
 	 SIGNAL SQLSTATE '40000'
          SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
     END IF;
-
 END//
 DELIMITER ;
 
