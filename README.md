@@ -1,7 +1,8 @@
 # Hrvatska Vojska Baze Podataka 2
 
 Rokovi koji se priblizavaju:
-# do 01.12.2022. korak 1 (Sažetak projekta) projekta učitati na e-ucenje   -> pravil za sazetak sam stavio na dnu readme
+# do 01.12.2022. korak 1 (Sažetak projekta) projekta učitati na e-ucenje   
+-> pravila za sazetak sam stavio na dnu readme
 # do 12.12.2022. checkpoint projekta - Tablice i upiti
 
 
