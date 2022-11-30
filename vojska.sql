@@ -1537,4 +1537,3 @@ insert into osoblje values( 10058 , 2 , "Mario" , "Šimić" , "Bojnik" , STR_TO_
  ( 10997 , 1 , "Felicija" , "Herceg" , "Pozornik" , STR_TO_DATE("10.1.1958.", "%d.%m.%Y.") , STR_TO_DATE("29.4.2007.", "%d.%m.%Y.") , "Umirovljen" , "B+" ),
  ( 10998 , 3 , "Božana" , "Galić" , "Narednik" , STR_TO_DATE("1.6.1968.", "%d.%m.%Y.") , STR_TO_DATE("19.10.1995.", "%d.%m.%Y.") , "Mrtav" , "AB-" ),
  ( 10999 , 3 , "Pavle" , "Dujmović" , "Razvodnik" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Neaktivan" , "A+" );
->>>>>>> parent of f2f0f0a (Update vojska.sql)
