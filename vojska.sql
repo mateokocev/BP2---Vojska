@@ -10,7 +10,7 @@ CREATE TABLE sektor(
     opis TEXT,
     ukupni_proracun DECIMAL(12,2) NOT NULL
 );
-DROP TABLE sektor;
+-- DROP TABLE sektor;
 
 
 
@@ -38,7 +38,7 @@ CREATE TABLE osoblje(
     krvna_grupa CHAR(3) NOT NULL,
     FOREIGN KEY (id_sektor) REFERENCES sektor(id) 
 );
-DROP TABLE osoblje;
+-- DROP TABLE osoblje;
 
 
 
@@ -437,7 +437,6 @@ SELECT visak() AS visak FROM DUAL;
 
 -- PROCEDURE:
 
-...
 
 
 
@@ -454,8 +453,6 @@ INSERT INTO sektor VALUES
 ;
 
 
-INSERT INTO osoblje VALUES
-()
 
 
 INSERT INTO tura VALUES
@@ -477,19 +474,6 @@ CREATE TABLE vozila(
     kapacitet INTEGER NOT NULL -- leo je rekao da mu ne pase, zasto je to tu? ko je to dodao? zasto smo zivi? di mi je pistolj? auto increment?
 );
 INSERT INTO vozila VALUES
-
-
-
-
-DELIMITER //
-CREATE TRIGGER kriptiranje
- BEFORE INSERT ON osoblje
- FOR EACH ROW
-BEGIN
- SET new.lozinka = MD5(new.lozinka);
-END//
-DELIMITER ;
-
 -- BACKEND:
 
 
@@ -499,16 +483,10 @@ CREATE TRIGGER kriptiranje
  FOR EACH ROW
 BEGIN
  INSERT INTO login VALUES (new.id,new.ime,md5(new.ime));
- -- SET new.lozinka = MD5(new.lozinka);
-        
 END//
 DELIMITER ;
 drop trigger kriptiranje;
 
-select * from login;
-insert into osoblje values (3,4,"pero1","perić","general",STR_TO_DATE("16.11.2014","%d.%m.%Y."),STR_TO_DATE("16.11.2014","%d.%m.%Y."),"aktivan","AB+");
-drop table osoblje;
-select * from osoblje;
 
 CREATE TABLE login(
     id INTEGER primary KEY,  -- autoincrement
@@ -528,17 +506,3 @@ id INTEGER PRIMARY KEY,
     vrijeme_pocetka DATETIME NOT NULL,
     vrijeme_kraja DATETIME NOT NULL
 */
-
--- enkripcija podataka
-
-INSERT INTO login VALUES (1,"pero","1234");
-INSERT INTO login VALUES (2,"ivan","1234");
-INSERT INTO login VALUES (3,"test","test");
-select * from login;
-
--- provjera lozinke
-select lozinka from login
-where ime="pero" and md5("1234") = lozinka;
-
-select * from login;
-select opis from sektor where id=4;
