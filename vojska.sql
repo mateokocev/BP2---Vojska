@@ -388,6 +388,61 @@ DELIMITER ;
 
 
 
+-- FUNKCIJE:
+
+-- Funkcija vraca ukupni trosak
+
+DELIMITER //
+CREATE FUNCTION trosak() RETURNS DECIMAL(12,2)
+DETERMINISTIC
+BEGIN
+    DECLARE ukupno_misija, ukupni_popravak, ukupno_lijecenje DECIMAL(8,2);
+    
+    SELECT SUM(trosak_misije) INTO ukupno_misija
+    FROM misija;
+    
+    SELECT SUM(trosak_popravka) INTO ukupni_popravak
+    FROM popravak;
+    
+    SELECT SUM(trosak_lijecenja) INTO ukupno_lijecenje
+    FROM lijecenje;
+    
+    RETURN ukupno_misija + ukupni_popravak + ukupno_lijecenje;
+END//
+DELIMITER ;
+
+SELECT trosak() AS ukupni_trosak FROM DUAL;
+
+
+
+-- Funkcija racuna koliko je novca ostalo "viska" iz proracuna:
+
+DELIMITER //
+CREATE FUNCTION visak() RETURNS DECIMAL(12,2)
+DETERMINISTIC
+BEGIN
+    DECLARE proracun_svih_sektora DECIMAL(12,2);
+    
+    SELECT SUM(ukupni_proracun) INTO proracun_svih_sektora
+    FROM sektor;
+    
+    RETURN proracun_svih_sektora - trosak();
+END//
+DELIMITER ;
+
+SELECT visak() AS visak FROM DUAL;
+
+
+
+
+
+
+-- PROCEDURE:
+
+...
+
+
+
 
 
 
@@ -430,7 +485,7 @@ INSERT INTO vozila VALUES
 
 
 
-
+-- BACKEND:
 
 
 DELIMITER //
