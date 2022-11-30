@@ -247,23 +247,49 @@ DROP TRIGGER IF EXISTS postoji;
 
 DELIMITER //
 CREATE TRIGGER postoji
-	AFTER INSERT ON oprema
+    AFTER INSERT ON oprema
     FOR EACH ROW
 BEGIN
-	DECLARE br INTEGER;
+    DECLARE br INTEGER;
     
-	SELECT COUNT(*) INTO br
+    SELECT COUNT(*) INTO br
     FROM oprema
     WHERE naziv = new.naziv;
     
     
 	IF br > 1 THEN
         UPDATE oprema SET ukupna_kolicina = ukupna_kolicina + new.ukupna_kolicina WHERE naziv = new.naziv;
-    END IF;
+        END IF;
 
 	DELETE FROM oprema WHERE id = new.id;
 END//
 DELIMITER ;
+
+
+
+
+
+-- DK
+-- Vrijeme pocetka ne smije biti isto ili manje kao vrijeme kraja te trening bi najmanje trebao trajat 20 min(jos vidjet s Stevanom)
+DROP TRIGGER IF EXISTS vrtr;
+
+DELIMITER //
+CREATE TRIGGER vr_tr
+    BEFORE INSERT ON trening
+    FOR EACH ROW
+BEGIN
+
+    IF DATE(new.vrijeme_pocetka) >= DATE(new.vrijeme_kraja) OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
+    END IF;
+
+END//
+DELIMITER ;
+
+
+
+
 
 
 
