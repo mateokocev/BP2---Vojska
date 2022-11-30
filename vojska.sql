@@ -509,24 +509,6 @@ id INTEGER PRIMARY KEY,
     vrijeme_kraja DATETIME NOT NULL
 */
 
--- enkripcija podataka
-
-INSERT INTO login VALUES (1,"pero","1234");
-INSERT INTO login VALUES (2,"ivan","1234");
-INSERT INTO login VALUES (3,"test","test");
-select * from login;
-
--- provjera lozinke
-select lozinka from login
-where ime="pero" and md5("1234") = lozinka;
-
-select * from login;
-<<<<<<< HEAD
-select opis from sektor where id=4;
-=======
-
-INSERT INTO osoblje VALUES
- ( 10000 , 2 , "David" , "Vuković" , "Bojnik" , STR_TO_DATE("31.12.1969.", "%d.%m.%Y.") , STR_TO_DATE("15.5.1998.", "%d.%m.%Y.") , "Aktivan" , "0-" );
 
 INSERT INTO vozila VALUES
 (2000,"Patria AMV","Kotačna oklopna vozila",158,3),
