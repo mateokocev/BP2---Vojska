@@ -209,14 +209,7 @@ CREATE TABLE lijecenje(
 
 -- OKIDACI
 						
-DELIMITER //
-CREATE TRIGGER kriptiranje
- BEFORE INSERT ON login
- FOR EACH ROW
-BEGIN
- SET new.lozinka = MD5(new.lozinka);
-END//
-DELIMITER ;
+
 
 -- struktura je ova:
 /*
@@ -253,13 +246,35 @@ BEGIN
     WHERE naziv = new.naziv;
     
     
-	IF br > 1 THEN
+    IF br > 1 THEN
         UPDATE oprema SET ukupna_kolicina = ukupna_kolicina + new.ukupna_kolicina WHERE naziv = new.naziv;
-        END IF;
+    END IF;
 
-	DELETE FROM oprema WHERE id = new.id;
+    DELETE FROM oprema WHERE id = new.id;
 END//
 DELIMITER ;
+
+
+
+
+-- DK
+-- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da vr hraj nije NULL.
+-- Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
+ 
+DROP TRIGGER IF EXISTS vr_po;
+
+DELIMITER //
+CREATE TRIGGER vr_po
+    BEFORE INSERT ON popravak
+    FOR EACH ROW
+BEGIN
+	IF DATE(new.pocetak_popravka) >= DATE(new.kraj_popravka) AND new.kraj_popravka != NULL THEN
+		SIGNAL SQLSTATE '40000'
+                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
+        END IF;
+END//
+DELIMITER ;
+
 
 
 
@@ -274,37 +289,14 @@ CREATE TRIGGER vr_tr
     BEFORE INSERT ON trening
     FOR EACH ROW
 BEGIN
-
     IF DATE(new.vrijeme_pocetka) >= DATE(new.vrijeme_kraja) OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
 	SIGNAL SQLSTATE '40000'
         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
     END IF;
-
 END//
 DELIMITER ;
 
 
-
-
-
-
-
--- DK
-/*
-DROP TRIGGER IF EXISTS vec_ima;
-
-DELIMITER //
-CREATE TRIGGER vec_ima
-	BEFORE INSERT ON popravak
-    FOR EACH ROW
-BEGIN
-
-	IF new.id_vozilo_
-
-END//
-DELIMITER ;
-
-*/
 
 
 
@@ -349,6 +341,19 @@ INSERT INTO vozila VALUES
 
 
 
+
+
+
+
+
+DELIMITER //
+CREATE TRIGGER kriptiranje
+ BEFORE INSERT ON login
+ FOR EACH ROW
+BEGIN
+ SET new.lozinka = MD5(new.lozinka);
+END//
+DELIMITER ;
 
 
 
