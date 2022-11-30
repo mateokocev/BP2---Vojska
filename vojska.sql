@@ -340,10 +340,7 @@ where ime="pero" and md5("1234") = lozinka;
 select * from login;
 
 INSERT INTO osoblje VALUES
- ( 10000 , 2 , "David" , "Vuković" , "Bojnik" , STR_TO_DATE("31.12.1969.", "%d.%m.%Y.") , STR_TO_DATE("15.5.1998.", "%d.%m.%Y.") , "Aktivan" , "0-" );
-
-
-INSERT INTO osoblje VALUES
+ ( 10000 , 2 , "David" , "Vuković" , "Bojnik" , STR_TO_DATE("31.12.1969.", "%d.%m.%Y.") , STR_TO_DATE("15.5.1998.", "%d.%m.%Y.") , "Aktivan" , "0-" ),
  ( 10001 , 3 , "Jagoda" , "Lučić" , "Pozornik" , STR_TO_DATE("5.3.1968.", "%d.%m.%Y.") , STR_TO_DATE("21.3.2002.", "%d.%m.%Y.") , "Mrtav" , "AB-" ),
  ( 10002 , 3 , "Arabela" , "Herceg" , "Skupnik" , STR_TO_DATE("1.10.1967.", "%d.%m.%Y.") , STR_TO_DATE("20.10.2013.", "%d.%m.%Y.") , "Mrtav" , "A-" ),
  ( 10003 , 1 , "Vilim" , "Grgurić" , "Skupnik" , STR_TO_DATE("30.10.1956.", "%d.%m.%Y.") , STR_TO_DATE("3.2.2016.", "%d.%m.%Y.") , "Mrtav" , "A+" ),
@@ -399,9 +396,9 @@ INSERT INTO osoblje VALUES
  ( 10053 , 2 , "Elie" , "Galić" , "Pukovnik" , STR_TO_DATE("2.3.1966.", "%d.%m.%Y.") , STR_TO_DATE("24.6.2018.", "%d.%m.%Y.") , "Mrtav" , "B-" ),
  ( 10054 , 4 , "Mihaela" , "Novak" , "Bojnik" , STR_TO_DATE("1.7.1969.", "%d.%m.%Y.") , STR_TO_DATE("20.8.1994.", "%d.%m.%Y.") , "Aktivan" , "AB+" ),
  ( 10055 , 1 , "Matea" , "Sever" , "Poručnik" , STR_TO_DATE("7.9.1958.", "%d.%m.%Y.") , STR_TO_DATE("16.1.2016.", "%d.%m.%Y.") , "Neaktivan" , "AB+" ),
- ( 10056 , 4 , "Antun" , "Barišić" , "Razvodnik" , STR_TO_DATE("17.10.1951.", "%d.%m.%Y.") , STR_TO_DATE("23.4.2018.", "%d.%m.%Y.") , "Aktivan" , "A+" );
-insert into osoblje values ( 10057 , 4 , "Rhea" , "Živković" , "Narednik" , STR_TO_DATE("22.9.1964.", "%d.%m.%Y.") , STR_TO_DATE("28.2.1996.", "%d.%m.%Y.") , "Umirovljen" , "B+" );
-insert into osoblje values( 10058 , 2 , "Mario" , "Šimić" , "Bojnik" , STR_TO_DATE("12.3.1951.", "%d.%m.%Y.") , STR_TO_DATE("10.8.1990.", "%d.%m.%Y.") , "Umirovljen" , "A+" ),
+ ( 10056 , 4 , "Antun" , "Barišić" , "Razvodnik" , STR_TO_DATE("17.10.1951.", "%d.%m.%Y.") , STR_TO_DATE("23.4.2018.", "%d.%m.%Y.") , "Aktivan" , "A+" ),
+ ( 10057 , 4 , "Rhea" , "Živković" , "Narednik" , STR_TO_DATE("22.9.1964.", "%d.%m.%Y.") , STR_TO_DATE("28.2.1996.", "%d.%m.%Y.") , "Umirovljen" , "B+" ),
+ ( 10058 , 2 , "Mario" , "Šimić" , "Bojnik" , STR_TO_DATE("12.3.1951.", "%d.%m.%Y.") , STR_TO_DATE("10.8.1990.", "%d.%m.%Y.") , "Umirovljen" , "A+" ),
  ( 10059 , 1 , "Jolena" , "Šimunić" , "Brigadir" , STR_TO_DATE("13.12.1961.", "%d.%m.%Y.") , STR_TO_DATE("14.2.2016.", "%d.%m.%Y.") , "Neaktivan" , "B-" ),
  ( 10060 , 3 , "Dorotea" , "Kovačević" , "Poručnik" , STR_TO_DATE("23.10.1968.", "%d.%m.%Y.") , STR_TO_DATE("30.4.2019.", "%d.%m.%Y.") , "Neaktivan" , "AB-" ),
  ( 10061 , 2 , "Nika" , "Jurišić" , "Skupnik" , STR_TO_DATE("16.6.1960.", "%d.%m.%Y.") , STR_TO_DATE("18.12.2007.", "%d.%m.%Y.") , "Umirovljen" , "AB+" ),
