@@ -383,11 +383,6 @@ END//
 DELIMITER ;
 
 
-
-
-
--- FUNKCIJE:
-
 -- Funkcija vraca ukupni trosak
 
 DELIMITER //
@@ -431,41 +426,6 @@ DELIMITER ;
 SELECT visak() AS visak FROM DUAL;
 
 
-
-
-
-
--- PROCEDURE:
-
-
-
-
-
-
-
--- UNOS TABLICA:
-
-INSERT INTO sektor VALUES
-(1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.%Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
-(2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.%Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
-(3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.%Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00),
-(4, "Hrvatska vojna policija", STR_TO_DATE("24.08.1991.", "%d.%m.%Y."), "Vojna policija Oružanih snaga Republike Hrvatske (VP OSRH) pruža potporu Ministarstvu obrane i Oružanim snagama Republike Hrvatske obavljanjem namjenskih vojnopolicijskih poslova u miru i ratu te borbenih zadaća u ratu.", 1822000000.00)
-;
-
-
-
-
-INSERT INTO tura VALUES
-(01, "UNMOGIP", "Mirovna tura", STR_TO_DATE("01.08.2008","%d.%m.%Y."), STR_TO_DATE("04.11.2021","%d.%m.%Y.")),
-(02, "EUFOR Tchad/RCA", "Vojna tura", STR_TO_DATE("01.10.2008","%d.%m.%Y."), STR_TO_DATE("15.04.2009","%d.%m.%Y.")),
-(03, "ISAF", "Mirovna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y.")),
-(04, "Resolute support", "Mirovna tura", STR_TO_DATE("01.01.2015","%d.%m.%Y."), STR_TO_DATE("04.09.2020","%d.%m.%Y.")),
-(05, "", "Mirovna tura", STR_TO_DATE("01.08.2008","%d.%m.%Y."), STR_TO_DATE("04.11.2021","%d.%m.%Y.")),
-(06, "ISAF", "Mirovna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y."));
-
-
-
-
 CREATE TABLE vozila(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(60) NOT NULL,
@@ -496,19 +456,29 @@ CREATE TABLE login(
     lozinka varchar(100)
 );
 DROP TABLE login;
-
 -- za kriptiranje lozinke
 
+INSERT INTO sektor VALUES
+(1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.%Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
+(2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.%Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
+(3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.%Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00),
+(4, "Hrvatska vojna policija", STR_TO_DATE("24.08.1991.", "%d.%m.%Y."), "Vojna policija Oružanih snaga Republike Hrvatske (VP OSRH) pruža potporu Ministarstvu obrane i Oružanim snagama Republike Hrvatske obavljanjem namjenskih vojnopolicijskih poslova u miru i ratu te borbenih zadaća u ratu.", 1822000000.00);
 
-
-/*
-id INTEGER PRIMARY KEY,
-    naziv VARCHAR(50) NOT NULL,
-    vrsta_ture VARCHAR(69) NOT NULL,
-    vrijeme_pocetka DATETIME NOT NULL,
-    vrijeme_kraja DATETIME NOT NULL
-*/
-
+INSERT INTO tura VALUES
+(01, "Indijska i Pakistanska tura", "Mirovna tura", STR_TO_DATE("01.08.2008","%d.%m.%Y."), STR_TO_DATE("04.11.2021","%d.%m.%Y.")),
+(02, "1. Afganistanska tura", "Vojna tura", STR_TO_DATE("01.10.2008","%d.%m.%Y."), STR_TO_DATE("15.04.2009","%d.%m.%Y.")),
+(03, "Grčka tura", "Vojna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y.")),
+(04, "Poljska tura", "Mirovna tura", STR_TO_DATE("01.01.2015","%d.%m.%Y."), STR_TO_DATE("04.09.2015","%d.%m.%Y.")),
+(05, "Ukrainska tura", "Vojna tura", STR_TO_DATE("24.02.2022","%d.%m.%Y."), STR_TO_DATE("30.10.2022","%d.%m.%Y.")),
+(07, "2. Afganistanska tura", "Mirovna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y.")),
+(08, "Južnoafrička tura", "Mirovna tura", STR_TO_DATE("04.10.2013","%d.%m.%Y."), STR_TO_DATE("13.09.2014","%d.%m.%Y.")),
+(09, "Taiwanska tura", "Mirovna tura", STR_TO_DATE("08.06.2019","%d.%m.%Y."), STR_TO_DATE("15.07.2020","%d.%m.%Y.")),
+(10, "Južno Koreanska tura", "Mirovna tura", STR_TO_DATE("24.11.2009","%d.%m.%Y."), STR_TO_DATE("16.02.2011","%d.%m.%Y.")),
+(11, "Bosanskohercegovačka tura", "Mirovna tura", STR_TO_DATE("13.10.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2012","%d.%m.%Y.")),
+(12, "Venezuelanksa tura", "Vojna tura", STR_TO_DATE("26.09.2015","%d.%m.%Y."), STR_TO_DATE("16.08.2017","%d.%m.%Y.")),
+(13, "Norveška tura", "Mirovna tura", STR_TO_DATE("01.04.2016","%d.%m.%Y."), STR_TO_DATE("23.04.2018","%d.%m.%Y.")),
+(14, "Švicarska tura ", "Mirovna tura", STR_TO_DATE("07.05.2006","%d.%m.%Y."), STR_TO_DATE("20.11.2009","%d.%m.%Y.")),
+(15, "SAD tura", "Mirovna tura", STR_TO_DATE("01.12.2012","%d.%m.%Y."), STR_TO_DATE("28.09.2013","%d.%m.%Y."));
 
 INSERT INTO vozila VALUES
 (2000,"Patria AMV","Kotačna oklopna vozila",158,3),
@@ -593,9 +563,9 @@ INSERT INTO osoblje VALUES
  ( 10053 , 2 , "Elie" , "Galić" , "Pukovnik" , STR_TO_DATE("2.3.1966.", "%d.%m.%Y.") , STR_TO_DATE("24.6.2018.", "%d.%m.%Y.") , "Mrtav" , "B-" ),
  ( 10054 , 4 , "Mihaela" , "Novak" , "Bojnik" , STR_TO_DATE("1.7.1969.", "%d.%m.%Y.") , STR_TO_DATE("20.8.1994.", "%d.%m.%Y.") , "Aktivan" , "AB+" ),
  ( 10055 , 1 , "Matea" , "Sever" , "Poručnik" , STR_TO_DATE("7.9.1958.", "%d.%m.%Y.") , STR_TO_DATE("16.1.2016.", "%d.%m.%Y.") , "Neaktivan" , "AB+" ),
- ( 10056 , 4 , "Antun" , "Barišić" , "Razvodnik" , STR_TO_DATE("17.10.1951.", "%d.%m.%Y.") , STR_TO_DATE("23.4.2018.", "%d.%m.%Y.") , "Aktivan" , "A+" );
-insert into osoblje values ( 10057 , 4 , "Rhea" , "Živković" , "Narednik" , STR_TO_DATE("22.9.1964.", "%d.%m.%Y.") , STR_TO_DATE("28.2.1996.", "%d.%m.%Y.") , "Umirovljen" , "B+" );
-insert into osoblje values( 10058 , 2 , "Mario" , "Šimić" , "Bojnik" , STR_TO_DATE("12.3.1951.", "%d.%m.%Y.") , STR_TO_DATE("10.8.1990.", "%d.%m.%Y.") , "Umirovljen" , "A+" ),
+ ( 10056 , 4 , "Antun" , "Barišić" , "Razvodnik" , STR_TO_DATE("17.10.1951.", "%d.%m.%Y.") , STR_TO_DATE("23.4.2018.", "%d.%m.%Y.") , "Aktivan" , "A+" ),
+ ( 10057 , 4 , "Rhea" , "Živković" , "Narednik" , STR_TO_DATE("22.9.1964.", "%d.%m.%Y.") , STR_TO_DATE("28.2.1996.", "%d.%m.%Y.") , "Umirovljen" , "B+" ),
+ ( 10058 , 2 , "Mario" , "Šimić" , "Bojnik" , STR_TO_DATE("12.3.1951.", "%d.%m.%Y.") , STR_TO_DATE("10.8.1990.", "%d.%m.%Y.") , "Umirovljen" , "A+" ),
  ( 10059 , 1 , "Jolena" , "Šimunić" , "Brigadir" , STR_TO_DATE("13.12.1961.", "%d.%m.%Y.") , STR_TO_DATE("14.2.2016.", "%d.%m.%Y.") , "Neaktivan" , "B-" ),
  ( 10060 , 3 , "Dorotea" , "Kovačević" , "Poručnik" , STR_TO_DATE("23.10.1968.", "%d.%m.%Y.") , STR_TO_DATE("30.4.2019.", "%d.%m.%Y.") , "Neaktivan" , "AB-" ),
  ( 10061 , 2 , "Nika" , "Jurišić" , "Skupnik" , STR_TO_DATE("16.6.1960.", "%d.%m.%Y.") , STR_TO_DATE("18.12.2007.", "%d.%m.%Y.") , "Umirovljen" , "AB+" ),
