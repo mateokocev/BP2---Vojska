@@ -31,7 +31,7 @@ def Customrandname(custom=[]):
 def Date(addTime=True, addDate=False,god1=2,god2=2):
   
   vrijeme = str( random.randint( 1, 24 )) + ":" + str( random.randint( 0, 60 )) + ":" + str(random.randint( 0, 60 ))
-  datum = str(random.randint( 1, 31 ))+ "." + str(random.randint( 1, 12 )) +"."+str(random.randint( god1, god2 ))+"." 
+  datum = str(random.randint( 1, 28 ))+ "." + str(random.randint( 1, 12 )) +"."+str(random.randint( god1, god2 ))+"." 
 
   if addTime and not addDate:
       return vrijeme
@@ -49,10 +49,20 @@ def Date(addTime=True, addDate=False,god1=2,god2=2):
 
 
 
-print("Dostupni atributi: \n [id] [ime] [prezime] \n [datum[(max 2)]] [customname[(max 5)]] [bool] \n [randnum[(max 5)]] [foreignkey[nummber] \n Exmaple: id ime date2 customname4")
+print("Dostupni atributi: \n [id] [ime] [prezime] \n [datum[(max 2)]] [customname[(max 5)]] [bool] \n [randnum[(max 5)]] [foreignkey[nummber] umirovljen \n Exmaple: id ime date2 customname4")
 
 lista = list(map(str, input().split()))
 for x in lista:
+        #<---------custom commands---------------------->
+  if "umirovljen"==x:
+
+
+
+
+
+        #<---------custom commands---------------------->
+
+
   if ("customname1"==x):
       for x in range(int(input("nummber of diffrent names for customnames: "))):
           custom1.append(input(str(x+1) + " name: "))

@@ -10,31 +10,42 @@ import mysql.connector
 
 
 #sve=mycursor.fetchmany(size=4) kolicina podataka
-
 #sve=mycursor.fetchone() jedan red 
-
 #sve=mycursor.fetchall() #samo sve uzme... 
 
 
 
 app = Flask(__name__)
-
+                                        # <--------MAIN-------->
 @app.route("/sauhdkuahsghdi7123z479123hj1jksdhusihadjkhsdfgliohjerofhj3489o5z923475z83475h") #for safety reasons tottaly not hackable
 def index():
-    return render_template('index.html',test=123*123)
+
+    Main= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
+    MainKursor = Main.cursor()
+
+    kopnenaVojska=MainKursor.execute("select opis from sektor where id=1;")
+    kopnenaVojskaText= str(MainKursor.fetchone())[2:-4]
+
+    ratnaMornarica=MainKursor.execute("select opis,naziv from sektor where id=2;")
+    print(MainKursor.fetchone())
+
+    ratnoZrakoplovstvo=MainKursor.execute("select opis,naziv from sektor where id=3;")
+    print(MainKursor.fetchone())
+
+    vojnaPolicija=MainKursor.execute("select opis,naziv from sektor where id=4;")
+    print(MainKursor.fetchone())
+
+
+    return render_template('index.html',kopnenaVojskaText=kopnenaVojskaText)
+
 
 @app.route("/kopnenaVojska/")
 def KopnenaVojska():
-    return render_template('kopnenaVojska.html')
-
-
-
-
+    return render_template('kopnenaVojska.html',)
 
 
                 # login connecting to DataBase vojska
-vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
-krusor = vojska.cursor()
+
 
 
 
@@ -43,11 +54,12 @@ krusor = vojska.cursor()
 # Route for handling the login page logic
 @app.route('/', methods=['GET', 'POST'])
 def login():
+    vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
+    krusor = vojska.cursor()
     error = ""
     if request.method == 'POST':
-        UpisIme=request.form['username']
-        UpisLozinka=request.form['password']
-
+        UpisIme = request.form['username']
+        UpisLozinka = request.form['password']
 
         krusor.execute("select * from login where ime= '"+UpisIme+"' and md5('"+UpisLozinka+"') = lozinka;")
        
