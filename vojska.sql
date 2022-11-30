@@ -1,5 +1,4 @@
 DROP DATABASE IF EXISTS vojska;
-
 CREATE DATABASE vojska;
 USE vojska;
 
@@ -11,7 +10,7 @@ CREATE TABLE sektor(
     opis TEXT,
     ukupni_proracun DECIMAL(12,2) NOT NULL
 );
--- DROP TABLE sektor;
+DROP TABLE sektor;
 
 
 
@@ -37,10 +36,9 @@ CREATE TABLE osoblje(
     datum_uclanjenja DATE NOT NULL,
     status_osoblja VARCHAR(50) NOT NULL,
     krvna_grupa CHAR(3) NOT NULL,
-    FOREIGN KEY (id_sektor) REFERENCES sektor(id)
+    FOREIGN KEY (id_sektor) REFERENCES sektor(id) 
 );
--- DROP TABLE osoblje;
-
+DROP TABLE osoblje;
 
 
 
@@ -466,7 +464,7 @@ INSERT INTO tura VALUES
 (03, "ISAF", "Mirovna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y.")),
 (04, "Resolute support", "Mirovna tura", STR_TO_DATE("01.01.2015","%d.%m.%Y."), STR_TO_DATE("04.09.2020","%d.%m.%Y.")),
 (05, "", "Mirovna tura", STR_TO_DATE("01.08.2008","%d.%m.%Y."), STR_TO_DATE("04.11.2021","%d.%m.%Y.")),
-(06, "ISAF", "Mirovna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y.")),
+(06, "ISAF", "Mirovna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y."));
 
 
 
@@ -483,28 +481,41 @@ INSERT INTO vozila VALUES
 
 
 
-
-
--- BACKEND:
-
-
 DELIMITER //
 CREATE TRIGGER kriptiranje
- BEFORE INSERT ON login
+ BEFORE INSERT ON osoblje
  FOR EACH ROW
 BEGIN
  SET new.lozinka = MD5(new.lozinka);
 END//
 DELIMITER ;
 
+-- BACKEND:
 
+
+DELIMITER //
+CREATE TRIGGER kriptiranje
+ BEFORE INSERT ON osoblje
+ FOR EACH ROW
+BEGIN
+ INSERT INTO login VALUES (new.id,new.ime,md5(new.ime));
+ -- SET new.lozinka = MD5(new.lozinka);
+        
+END//
+DELIMITER ;
+drop trigger kriptiranje;
+
+select * from login;
+insert into osoblje values (3,4,"pero1","perić","general",STR_TO_DATE("16.11.2014","%d.%m.%Y."),STR_TO_DATE("16.11.2014","%d.%m.%Y."),"aktivan","AB+");
+drop table osoblje;
+select * from osoblje;
 
 CREATE TABLE login(
     id INTEGER primary KEY,  -- autoincrement
 	ime varchar(100),
     lozinka varchar(100)
 );
--- DROP TABLE login;
+DROP TABLE login;
 
 -- za kriptiranje lozinke
 
@@ -530,3 +541,4 @@ select lozinka from login
 where ime="pero" and md5("1234") = lozinka;
 
 select * from login;
+select opis from sektor where id=4;
