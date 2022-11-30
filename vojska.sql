@@ -9,7 +9,7 @@ CREATE TABLE sektor(
     naziv VARCHAR(60) NOT NULL,
     datum_osnivanja DATE NOT NULL,
     opis TEXT,
-    ukupni_proracun DECIMAL(12,2)
+    ukupni_proracun DECIMAL(12,2) NOT NULL
 );
 -- DROP TABLE sektor;
 
@@ -49,7 +49,7 @@ CREATE TABLE tura(
     naziv VARCHAR(50) NOT NULL,
     vrsta_ture VARCHAR(69) NOT NULL,
     vrijeme_pocetka DATETIME NOT NULL,
-    vrijeme_kraja DATETIME NOT NULL
+    vrijeme_kraja DATETIME
 );
 -- DROP TABLE tura;
 
@@ -59,11 +59,11 @@ CREATE TABLE misija(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
     vrijeme_pocetka DATETIME NOT NULL,
-    vrijeme_kraja DATETIME NOT NULL,
+    vrijeme_kraja DATETIME,
     id_lokacija INTEGER NOT NULL,
     id_tura INTEGER NOT NULL,
     ishod TEXT NOT NULL,
-    trosak_misije NUMERIC(15, 2) NOT NULL,
+    trosak_misije NUMERIC(15, 2),
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id)
 ); 
@@ -86,7 +86,7 @@ CREATE TABLE osoblje_na_turi(
     id_osoblje INTEGER,
     id_tura INTEGER,
     datum_pocetka DATETIME NOT NULL,
-    datum_kraja DATETIME NOT NULL,
+    datum_kraja DATETIME,
     FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id)
 );
@@ -136,7 +136,7 @@ CREATE TABLE popravak(
     id_vozilo_na_misiji INTEGER,
     opis_stete TEXT NOT NULL,
     pocetak_popravka DATETIME NOT NULL,
-    kraj_popravka DATETIME NOT NULL,
+    kraj_popravka DATETIME,
     trosak_popravka NUMERIC(15,2),
     FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id)
 );
@@ -192,27 +192,23 @@ CREATE TABLE lijecenje(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER,
     status_lijecenja TEXT NOT NULL,  -- interaktivno ongoing completed itd. ako je ongoing datum kraja je null / possible trigger?
-    pocetak_lijecenja DATE NOT NULL,
-    kraj_lijecenja DATE NOT NULL,
+    pocetak_lijecenja DATETIME NOT NULL,
+    kraj_lijecenja DATETIME,
     opis_ozljede TEXT NOT NULL,
     trosak_lijecenja NUMERIC(15,2),
     FOREIGN KEY (id_osoblje) REFERENCES osoblje(id)
 );
 -- DROP TABLE lijecenje;
 
-CREATE TABLE login(
-    id INTEGER primary KEY,  -- autoincrement
-	ime varchar(100),
-    lozinka varchar(100)
-);
--- DROP TABLE login;
+
+
 
 
 
 
 
 -- OKIDACI
-						-- za kriptiranje lozinke
+						
 DELIMITER //
 CREATE TRIGGER kriptiranje
  BEFORE INSERT ON login
@@ -309,6 +305,13 @@ END//
 DELIMITER ;
 
 */
+
+
+
+
+
+
+
 -- UNOS TABLICA:
 
 INSERT INTO sektor VALUES 
@@ -342,6 +345,22 @@ CREATE TABLE vozila(
     kapacitet INTEGER NOT NULL -- leo je rekao da mu ne pase, zasto je to tu? ko je to dodao? zasto smo zivi? di mi je pistolj? auto increment?
 );
 INSERT INTO vozila VALUES
+
+
+
+
+
+
+
+CREATE TABLE login(
+    id INTEGER primary KEY,  -- autoincrement
+	ime varchar(100),
+    lozinka varchar(100)
+);
+-- DROP TABLE login;
+
+-- za kriptiranje lozinke
+
 
 
 /*
