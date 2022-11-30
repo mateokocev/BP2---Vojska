@@ -36,7 +36,7 @@ CREATE TABLE osoblje(
     datum_uclanjenja DATE NOT NULL,
     status_osoblja VARCHAR(50) NOT NULL,
     krvna_grupa CHAR(3) NOT NULL,
-    FOREIGN KEY (id_sektor) REFERENCES sektor(id) 
+    FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 -- DROP TABLE osoblje;
 
@@ -64,7 +64,7 @@ CREATE TABLE misija(
     trosak_misije NUMERIC(15, 2),
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id)
-); 
+);
 -- DROP TABLE misija;
 
 
@@ -206,7 +206,7 @@ CREATE TABLE lijecenje(
 
 
 -- OKIDACI
-						
+
 -- tekst zadataka ce bit jos restrukturiran, ovo je okvirno
 
 -- struktura je ova:
@@ -228,7 +228,7 @@ DELIMITER ;
 
 
 -- DK
--- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer 
+-- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
 -- korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi
 
 DROP TRIGGER IF EXISTS postoji;
@@ -239,12 +239,12 @@ CREATE TRIGGER postoji
     FOR EACH ROW
 BEGIN
     DECLARE br INTEGER;
-    
+
     SELECT COUNT(*) INTO br
     FROM oprema
     WHERE naziv = new.naziv;
-    
-    
+
+
     IF br > 1 THEN
         UPDATE oprema SET ukupna_kolicina = ukupna_kolicina + new.ukupna_kolicina WHERE naziv = new.naziv;
     END IF;
@@ -258,7 +258,7 @@ DELIMITER ;
 
 -- DK
 -- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme tijekom insert-a
-	
+
 DROP TRIGGER IF EXISTS kop;
 
 DELIMITER //
@@ -268,15 +268,15 @@ CREATE TRIGGER kop
 BEGIN
     DECLARE br INTEGER;
     DECLARE uk INTEGER;
-    
+
     SELECT SUM(izdana_kolicina) INTO br
     FROM izdana_oprema
     WHERE id_oprema = new.id_oprema;
-    
+
     SELECT ukupna_kolicina INTO uk
     FROM oprema
     WHERE id = new.id_oprema;
-    
+
     IF br + new.izdana_kolicina > uk THEN
 	SIGNAL SQLSTATE '40000'
         SET MESSAGE_TEXT = 'Oprema koju zelite unijeti nije dostupna u zeljenoj kolicini!';
@@ -301,16 +301,16 @@ CREATE TRIGGER ukop
 BEGIN
     DECLARE br INTEGER;
     DECLARE uk INTEGER;
-    
+
     SELECT SUM(izdana_kolicina) INTO br
     FROM izdana_oprema
     WHERE id_oprema = new.id_oprema;
-    
-    
+
+
     SELECT ukupna_kolicina INTO uk
     FROM oprema
     WHERE id = new.id_oprema;
-    
+
     IF (br - old.izdana_kolicina) + new.izdana_kolicina > uk THEN
 	SIGNAL SQLSTATE '40000'
         SET MESSAGE_TEXT = 'Ne mozete promijenit kolicinu zeljene opreme koja je izdana osobi zato jer nije dostupna u toj kolicini!';
@@ -325,7 +325,7 @@ DELIMITER ;
 -- DK
 -- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
 -- Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
- 
+
 DROP TRIGGER IF EXISTS vr_po;
 
 DELIMITER //
@@ -395,16 +395,16 @@ CREATE FUNCTION trosak() RETURNS DECIMAL(12,2)
 DETERMINISTIC
 BEGIN
     DECLARE ukupno_misija, ukupni_popravak, ukupno_lijecenje DECIMAL(8,2);
-    
+
     SELECT SUM(trosak_misije) INTO ukupno_misija
     FROM misija;
-    
+
     SELECT SUM(trosak_popravka) INTO ukupni_popravak
     FROM popravak;
-    
+
     SELECT SUM(trosak_lijecenja) INTO ukupno_lijecenje
     FROM lijecenje;
-    
+
     RETURN ukupno_misija + ukupni_popravak + ukupno_lijecenje;
 END//
 DELIMITER ;
@@ -420,10 +420,10 @@ CREATE FUNCTION visak() RETURNS DECIMAL(12,2)
 DETERMINISTIC
 BEGIN
     DECLARE proracun_svih_sektora DECIMAL(12,2);
-    
+
     SELECT SUM(ukupni_proracun) INTO proracun_svih_sektora
     FROM sektor;
-    
+
     RETURN proracun_svih_sektora - trosak();
 END//
 DELIMITER ;
@@ -445,7 +445,7 @@ SELECT visak() AS visak FROM DUAL;
 
 -- UNOS TABLICA:
 
-INSERT INTO sektor VALUES 
+INSERT INTO sektor VALUES
 (1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.%Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
 (2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.%Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
 (3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.%Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00),
@@ -483,6 +483,8 @@ CREATE TRIGGER kriptiranje
  FOR EACH ROW
 BEGIN
  INSERT INTO login VALUES (new.id,new.ime,md5(new.ime));
+ -- SET new.lozinka = MD5(new.lozinka);
+        
 END//
 DELIMITER ;
 drop trigger kriptiranje;
@@ -506,3 +508,17 @@ id INTEGER PRIMARY KEY,
     vrijeme_pocetka DATETIME NOT NULL,
     vrijeme_kraja DATETIME NOT NULL
 */
+
+-- enkripcija podataka
+
+INSERT INTO login VALUES (1,"pero","1234");
+INSERT INTO login VALUES (2,"ivan","1234");
+INSERT INTO login VALUES (3,"test","test");
+select * from login;
+
+-- provjera lozinke
+select lozinka from login
+where ime="pero" and md5("1234") = lozinka;
+
+select * from login;
+select opis from sektor where id=4;
