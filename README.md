@@ -39,9 +39,9 @@ status:
 
 
 Pravila za sastaviti 'Sažetak projekta':
-  -> definira uloge svih članova tima u projektu
-  -> opisuje problem koji je odabran te način kako je tim shvatio zadatak u kontekstu definiranih pravila
-  -> potrebno je navesti alate i tehnologije koji će se koristiti u projektu
-  -> opisati opseg projekta (što će biti isporučeno)
-  -> minimalno 3 stranice teksta
+  - definira uloge svih članova tima u projektu
+  - opisuje problem koji je odabran te način kako je tim shvatio zadatak u kontekstu definiranih pravila
+  - potrebno je navesti alate i tehnologije koji će se koristiti u projektu
+  - opisati opseg projekta (što će biti isporučeno)
+  - minimalno 3 stranice teksta
 
