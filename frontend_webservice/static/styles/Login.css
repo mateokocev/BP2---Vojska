@@ -1,6 +1,7 @@
 body
 {
     background-color: rgb(74, 70, 70);
+    background-image: url(../img/login_back.jpg);
 }
 
 .cube

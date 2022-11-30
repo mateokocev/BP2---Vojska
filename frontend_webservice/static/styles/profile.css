@@ -1,0 +1,110 @@
+*
+{
+    font-family: 'Poppins',sans-serif;
+}
+body
+{
+    background-image: url(../img/login_back.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+     background-size:     cover; 
+}
+
+
+
+.cube
+{   
+   
+    background-color: rgba(255,255,255,0.13);
+    transform: translate(-50%,-50%);
+    border-radius: 5px;
+    width: 1000px;
+    height: 800px;
+    backdrop-filter: blur(50px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 10px;
+
+}
+.center
+{
+    margin-left: 50%;
+    margin-top: 25%;
+
+}
+.informacije{
+    position: absolute;
+    text-align: right;
+    right: 0%;
+    width: 600px;
+    height: 95%;
+   
+}
+.informacije h1 {
+   text-align: center;
+}
+
+.grid2
+{
+    display: grid;
+    grid-template-columns: 20px 100px 240px 250px;
+   
+    height: 100px;
+
+    grid-auto-rows: 200px;
+}
+.grid8
+{   text-align: center;
+    display: grid;
+    grid-template-columns: 160px 145px 160px 5px;
+    
+    height: 60%;
+    grid-auto-rows: 100px;
+}
+
+.leftbar
+{   
+    height: 772px;
+    margin-left: 167px;
+    margin-top: 399px;
+    background-color: rgba(63, 178, 213, 0.13);
+    transform: translate(-50%,-50%);
+    border-radius: 5px;
+    backdrop-filter: blur(50px);
+    border: 2px solid rgba(28, 44, 138, 0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 10px;
+
+}
+
+.griddivide
+{
+    display: grid;
+    grid-template-columns: 500px 400px;
+  
+    grid-auto-rows: 800px;
+}
+
+
+.cinimg
+{   position: absolute;
+    left: 35%;
+    bottom: 5%;
+
+}
+
+.cinimg img
+{
+  width: 100px;
+ 
+}
+
+
+.profileimg
+{   position: absolute;
+    left: 30%;
+   
+}
+.profileimg img
+{   width: 150px;
+}

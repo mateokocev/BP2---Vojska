@@ -1,31 +1,18 @@
-*
-{
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+*{font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
 
-}
+body{
+   background-color: #353535;}
 
-body
-{
-   background-color: #353535;
-   
-}
 topbar{
 position: absolute;
 width: auto;
 height: 57px;
 left: 0px;
-
 right: 0px;
 top: 0px;
-background: #353535;
+background: #353535;}
 
-}
-topbar img
-{
-  margin-left: 30px;
-}
-
-
+topbar img{margin-left: 30px;}
 
 topMainbar{
     display: grid;
@@ -39,14 +26,9 @@ topMainbar{
     margin-right: -10px;
     color: white;
     font-size: 10px;
-    background: #AF997F;
- 
-    }
+    background: #AF997F;}
 
-
-
-    imageCover
-    {
+imageCover{
       position: absolute;
       background-image: url("../img/kopnena_back.png");
       background-repeat: no-repeat;
@@ -55,17 +37,11 @@ topMainbar{
       background-repeat:   no-repeat;
       background-attachment: fixed;
       margin-left: -10px;
-      text-align: center;
-    
-    
       height: 800px;
       width: 100%;
-      color: white;
-    }
+      color: white;}
 
-
-    imageCoverZrakoplovna
-    {
+imageCoverZrakoplovna{
       position: absolute;
       background-image: url("../img/zrakoplovna_back.png");
       background-repeat: no-repeat;
@@ -75,18 +51,13 @@ topMainbar{
       background-repeat:   no-repeat;
       margin-left: -10px;
       text-align: center;
-    
       height: 800px;
       width: 100%;
-      color: white;
-    }
+      color: white;}
 
-
-
-    imageCoverPomorksa
-    {
+imageCoverPomorksa{
       position: absolute;
-      background-image: url("../img/pomorska_back.png");
+      background-image: url("../img/pomorska_back.jpeg");
       background-repeat: no-repeat;
       background-color: #cccccc;
       background-attachment: fixed;
@@ -97,75 +68,91 @@ topMainbar{
     
       height: 888px;
       width: 100%;
-      color: white;
-    }
+      color: white;}
 
+imageCoverPolicija{
+      position: absolute;
+      background-image: url("../img/policija_back.jpg");
+      background-repeat: no-repeat;
+      background-color: #cccccc;
+      background-attachment: fixed;
+      background-size:     cover;                     
+      background-repeat:   no-repeat;
+      margin-left: -10px;
+      text-align: center;
+    
+      height: 888px;
+      width: 100%;
+      color: white;}
 
-    imageCover h1
-    {
-         font-size: 4vw;
-    }
+imageCover h1{
+         font-size: 2vw;}
 
+imageCoverZrakoplovna h1{
+         font-size: 4vw;}
 
-    imageCover div
-    {
-      text-align: right;
-
-      margin-right:200px;
-      margin-top: 300px;
-    }
-
-     
-    imageCoverZrakoplovna h1
-    {
-         font-size: 4vw;
-    }
-
-
-    imageCoverZrakoplovna div
-    {
+imageCoverZrakoplovna div{
       text-align: left;
       margin-left:200px;
-      margin-top: 280px;
-    }
+      margin-top: 280px;}
 
+imageCoverPolicija h1{
+         font-size: 4vw;}
 
-    imageCoverPomorksa h1
-    {
+imageCoverPolicija div{
+      text-align: left;
+      margin-left:200px;
+      margin-top: 280px;}
+
+imageCoverPomorksa h1{
          font-size: 4vw;
-         color: #ffffff;
-    }
+         color: #ffffff;}
 
-
-    imageCoverPomorksa div
-    {
+imageCoverPomorksa div{
       text-align: left;
       color: #000000;
       margin-right:90%;
-     
       width: 100%;
-    
       text-align: center;
-      margin-top: 300px;
+      margin-top: 300px;}
+
+podstranica1{  
+      position:absolute;
+      width: 100%;
+      margin-top: 730px;}
+
+podstranica2{
+      position: absolute;
+      width: 100%;
+      
+      margin-top: 1540px;}
+
+podstranica3{  
+      position: absolute;
+      width: 100%;
+      margin-top: 2440px;}
+      
+.naslovAlign{
+    text-align: center;}
+
+
+.alignText{
+    margin-left: 90%;
+    margin-top: -5%;
     }
 
-
-
-    podstranica1
-   {  position: absolute;
-      width: 100%;
-      margin-top: 730px;
-
-   }
-
-
-   podstranica2
-   {  position: absolute;
-      width: 100%;
-      margin-top: 1540px;
-     
-
-   }
+.textHolder{
+    width: 100%;
+    margin-left: 20%;
+    background-color: rgba(255,255,255,0.13);
+    transform: translate(-50%,-50%);
+    border-radius: 5px;
+    width: 600px;
+   
+    backdrop-filter: blur(50px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 10px;}
 
    .button-24 {
      background: #FF4742;
@@ -189,18 +176,10 @@ topMainbar{
      user-select: none;
      -webkit-user-select: none;
      touch-action: manipulation;
-     vertical-align: middle;
-   }
-   
-
+     vertical-align: middle;}
    .button-24:hover,
    .button-24:active {
      background-color: initial;
      background-position: 0 0;
-     color: #FF4742;
-   }
-   
-   
-   .button-24:active {
-     opacity: .5;
-   }
+     color: #FF4742;} 
+   .button-24:active { opacity: .5;}
