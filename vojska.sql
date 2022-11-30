@@ -528,6 +528,32 @@ select opis from sektor where id=4;
 INSERT INTO osoblje VALUES
  ( 10000 , 2 , "David" , "Vuković" , "Bojnik" , STR_TO_DATE("31.12.1969.", "%d.%m.%Y.") , STR_TO_DATE("15.5.1998.", "%d.%m.%Y.") , "Aktivan" , "0-" );
 
+INSERT INTO vozila VALUES
+(2000,"Patria AMV","Kotačna oklopna vozila",158,3),
+(2001,"International MaxxPro","Kotačna oklopna vozila",40,5),
+(2002,"Oshkosh M-ATV","Kotačna oklopna vozila",172,5),
+(2003,"HMMWV","Kotačna oklopna vozila",112,4),
+(2004,"Iveco LMV","Kotačna oklopna vozila",14,4),
+(2005,"BOV","Kotačna oklopna vozila",84,6),
+
+(2006,"M2 Bradley","Gusjenična oklopna vozila",67,5),
+(2007,"BVP M-80A","Gusjenična oklopna vozila",128,4),
+(2008,"M-84","Gusjenična oklopna vozila",78,4),
+
+(2009,"RTOP-11 Kralj Petar Krešimir IV.","Mornarica",1,50),
+(2010,"RTOP-12 Kralj Dmitar Zvonimir","Mornarica",1,20),
+(2011,"RTOP-21 Šibenik","Mornarica",1,35),
+(2012,"RTOP-41 Vukovar","Mornarica",1,36),
+(2013,"RTOP-42 Dubrovnik","Mornarica",1,42),
+(2014,"Lovac mina LM-51 Korčula","Mornarica",1,55),
+
+(2015,"Dassault Rafale","Borbeni avioni",12,2),
+(2016,"Mikojan-Gurjevič MiG-21","Borbeni avioni",7,1),
+
+(2017,"Mil Mi-17","Helikopteri",11,2),
+(2018,"Mil Mi-8","Helikopteri",13,4),
+(2019,"Sikorsky UH-60 Black Hawk","Helikopteri",2,5),
+(2020,"Bell OH-58 Kiowa Warrior","Helikopteri",15,6);
 
 INSERT INTO osoblje VALUES
  ( 10001 , 3 , "Jagoda" , "Lučić" , "Pozornik" , STR_TO_DATE("5.3.1968.", "%d.%m.%Y.") , STR_TO_DATE("21.3.2002.", "%d.%m.%Y.") , "Mrtav" , "AB-" ),
