@@ -258,6 +258,41 @@ DELIMITER ;
 
 
 -- DK
+-- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme
+	
+DROP TRIGGER IF EXISTS kop;
+
+DELIMITER //
+CREATE TRIGGER kop
+    BEFORE INSERT ON izdana_oprema
+    FOR EACH ROW
+BEGIN
+    DECLARE br INTEGER;
+    DECLARE uk INTEGER;
+    
+    SELECT SUM(izdana_kolicina) INTO br
+    FROM izdana_oprema
+    WHERE id_oprema = new.id_oprema;
+    
+    SELECT ukupna_kolicina INTO uk
+    FROM oprema
+    WHERE id = new.id_oprema;
+    
+    
+    IF br + new.izdana_kolicina > uk THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Oprema koju zelite unijeti nije dostupna u zeljenoj kolicini!';
+    END IF;
+    
+END//
+DELIMITER ;
+
+
+
+
+
+
+-- DK
 -- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da vr hraj nije NULL.
 -- Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
  
@@ -282,7 +317,7 @@ DELIMITER ;
 
 -- DK
 -- Vrijeme pocetka ne smije biti isto ili manje kao vrijeme kraja te trening bi najmanje trebao trajat 20 min(jos vidjet s Stevanom)
-DROP TRIGGER IF EXISTS vrtr;
+DROP TRIGGER IF EXISTS vr_tr;
 
 DELIMITER //
 CREATE TRIGGER vr_tr
