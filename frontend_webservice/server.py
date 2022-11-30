@@ -26,7 +26,7 @@ def KopnenaVojska():
 test=""
 
 # Route for handling the login page logic
-@app.route('/sad', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
     krusor = vojska.cursor()
@@ -86,7 +86,7 @@ def index(methods=['kopnena']):
 
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/asd', methods=['GET', 'POST'])
 def profile():
 
     return render_template('profile.html')
