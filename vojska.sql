@@ -293,7 +293,7 @@ DELIMITER ;
 
 
 -- DK
--- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da vr hraj nije NULL.
+-- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
 -- Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
  
 DROP TRIGGER IF EXISTS vr_po;
@@ -331,6 +331,28 @@ BEGIN
 END//
 DELIMITER ;
 
+
+
+
+
+-- DK
+-- Datetime pocetka lijecenja ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
+-- Ak je kraj NULL to znaci da je lijecenje jos uvijek u tijeku
+DROP TRIGGER IF EXISTS vrli;
+
+DELIMITER //
+CREATE TRIGGER vrli
+    BEFORE INSERT ON lijecenje
+    FOR EACH ROW
+BEGIN
+
+    IF DATE(new.pocetak_lijecenja) >= DATE(new.kraj_lijecenja) AND new.kraj_lijecenja != NULL THEN
+	 SIGNAL SQLSTATE '40000'
+         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
+    END IF;
+
+END//
+DELIMITER ;
 
 
 
