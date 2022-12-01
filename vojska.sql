@@ -458,6 +458,99 @@ CREATE TABLE login(
 DROP TABLE login;
 -- za kriptiranje lozinke
 
+
+INSERT INTO misija VALUES
+(,"","","",,,,);
+-- id,naziv,vrijeme_pocetka,vrijeme_kraja,FOREIGNid_lokacija,FOREIGNid_tura,ishod,trosak_misije
+
+INSERT INTO osoblje_na_misiji VALUES
+(,,);
+-- id,FOREIGNid_osoblje,FOREIGNid_misija
+
+INSERT INTO osoblje_na_turi VALUES
+(,,);
+-- id,FOREIGNid_osoblje,FOREIGNid_tura,datum_pocetka,datum_kraja
+
+INSERT INTO osoblje_na_turi VALUES
+(,,);
+-- id,FOREIGN KEY (id_vozilo),kolicina,FOREIGN KEY (id_misija)
+
+INSERT INTO vozilo_na_turi VALUES
+(,,);
+-- id,FOREIGN KEY (id_vozilo),FOREIGN KEY (id_tura),FOREIGN KEY (id_odgovorni),kolicina
+
+INSERT INTO popravak VALUES
+(,,);
+-- id,FOREIGN KEY (id_vozilo_na_misiji),opis_stete,pocetak_popravka,kraj_popravka,trosak_popravka
+
+
+
+CREATE TABLE oprema(
+    id INTEGER PRIMARY KEY,
+    naziv VARCHAR(50) NOT NULL,
+    vrsta VARCHAR(50) NOT NULL,
+    ukupna_kolicina INTEGER NULL
+);
+INSERT INTO oprema VALUES
+(,,);
+-- id,naziv,vrsta,ukupna_kolicina
+
+
+
+
+CREATE TABLE izdana_oprema(
+    id INTEGER PRIMARY KEY,
+    id_oprema INTEGER,
+    id_osoblje_na_misiji INTEGER,
+    izdana_kolicina INTEGER DEFAULT 1,
+    FOREIGN KEY (id_oprema) REFERENCES oprema(id),
+    FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
+);
+INSERT INTO izdana_oprema VALUES
+(,,);
+-- id,FOREIGN KEY (id_oprema),FOREIGN KEY (id_osoblje_na_misiji),izdana_kolicina
+
+CREATE TABLE trening(
+    id INTEGER PRIMARY KEY,
+    vrijeme_pocetka DATETIME NOT NULL,
+    vrijeme_kraja DATETIME NOT NULL,
+    id_lokacija INTEGER NOT NULL,
+    opis VARCHAR(80) NOT NULL,
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
+);
+INSERT INTO trening VALUES
+(,,);
+-- id,vrijeme_pocetka,vrijeme_kraja,id_lokacija,opis
+
+
+CREATE TABLE osoblje_na_treningu(
+	id INTEGER PRIMARY KEY,
+	id_osoblje INTEGER NOT NULL,
+	id_trening INTEGER NOT NULL,
+	performans INTEGER NOT NULL,
+	CHECK(performans >= 0 AND performans < 11),
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
+    FOREIGN KEY (id_trening) REFERENCES trening(id)
+);
+INSERT INTO osoblje_na_treningu VALUES
+(,,);
+-- id,id_osoblje,id_trening,performans
+
+
+CREATE TABLE lijecenje(
+    id INTEGER PRIMARY KEY,
+    id_osoblje INTEGER,
+    status_lijecenja TEXT NOT NULL,  -- interaktivno ongoing completed itd. ako je ongoing datum kraja je null / possible trigger?
+    pocetak_lijecenja DATETIME NOT NULL,
+    kraj_lijecenja DATETIME,
+    opis_ozljede TEXT NOT NULL,
+    trosak_lijecenja NUMERIC(15,2),
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id)
+);
+INSERT INTO lijecenje VALUES
+(,,);
+-- id,id_osoblje,status_lijecenja,pocetak_lijecenja,kraj_lijecenja,opis_ozljede,trosak_lijecenja
+
 INSERT INTO lokacija VALUES
 (001,null,"Jaipur",26.922070,75.778885),
 (002,null,"Islamabad",33.738045,73.084488),
