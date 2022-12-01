@@ -461,7 +461,8 @@ DROP TABLE login;
 
 INSERT INTO misija VALUES
 (,"","","",,,,);
--- id,naziv,vrijeme_pocetka,vrijeme_kraja,FOREIGNid_lokacija,FOREIGNid_tura,ishod,trosak_misije
+-- id 1000-1070,naziv,vrijeme_pocetka,vrijeme_kraja,FOREIGNid_lokacija,FOREIGNid_tura,ishod,trosak_misije
+-- 5 po turi
 
 INSERT INTO osoblje_na_misiji VALUES
 (,,);
@@ -482,7 +483,7 @@ INSERT INTO vozilo_na_turi VALUES
 INSERT INTO popravak VALUES
 (,,);
 -- id,FOREIGN KEY (id_vozilo_na_misiji),opis_stete,pocetak_popravka,kraj_popravka,trosak_popravka
-
+-- puta 10
 
 
 CREATE TABLE oprema(
@@ -537,19 +538,108 @@ INSERT INTO osoblje_na_treningu VALUES
 -- id,id_osoblje,id_trening,performans
 
 
-CREATE TABLE lijecenje(
-    id INTEGER PRIMARY KEY,
-    id_osoblje INTEGER,
-    status_lijecenja TEXT NOT NULL,  -- interaktivno ongoing completed itd. ako je ongoing datum kraja je null / possible trigger?
-    pocetak_lijecenja DATETIME NOT NULL,
-    kraj_lijecenja DATETIME,
-    opis_ozljede TEXT NOT NULL,
-    trosak_lijecenja NUMERIC(15,2),
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id)
-);
+
 INSERT INTO lijecenje VALUES
-(,,);
--- id,id_osoblje,status_lijecenja,pocetak_lijecenja,kraj_lijecenja,opis_ozljede,trosak_lijecenja
+ ( 1000 , 10036 , "Izliječen" , STR_TO_DATE("28.12.2000.", "%d.%m.%Y.") , STR_TO_DATE("15.3.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 44187 ),
+ ( 1001 , 10207 , "U tijeku" , STR_TO_DATE("7.4.1996.", "%d.%m.%Y.") , STR_TO_DATE("15.6.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 76427 ),
+ ( 1002 , 10251 , "U tijeku" , STR_TO_DATE("11.2.2013.", "%d.%m.%Y.") , STR_TO_DATE("21.11.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 44531 ),
+ ( 1003 , 10846 , "U tijeku" , STR_TO_DATE("10.10.2008.", "%d.%m.%Y.") , STR_TO_DATE("20.2.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 99963 ),
+ ( 1004 , 10037 , "Izliječen" , STR_TO_DATE("13.11.2007.", "%d.%m.%Y.") , STR_TO_DATE("22.5.2022.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 23204 ),
+ ( 1005 , 10212 , "Izliječen" , STR_TO_DATE("13.5.1998.", "%d.%m.%Y.") , STR_TO_DATE("15.7.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 25238 ),
+ ( 1006 , 10983 , "Izliječen" , STR_TO_DATE("15.7.1993.", "%d.%m.%Y.") , STR_TO_DATE("27.7.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 28933 ),
+ ( 1007 , 10562 , "Izliječen" , STR_TO_DATE("15.2.2001.", "%d.%m.%Y.") , STR_TO_DATE("17.12.2022.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 37088 ),
+ ( 1008 , 10211 , "U tijeku" , STR_TO_DATE("14.4.1997.", "%d.%m.%Y.") , STR_TO_DATE("19.3.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 29812 ),
+ ( 1009 , 10971 , "Izliječen" , STR_TO_DATE("16.5.2010.", "%d.%m.%Y.") , STR_TO_DATE("28.8.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 36829 ),
+ ( 1010 , 10205 , "U tijeku" , STR_TO_DATE("5.10.1992.", "%d.%m.%Y.") , STR_TO_DATE("5.11.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 10338 ),
+ ( 1011 , 10437 , "Izliječen" , STR_TO_DATE("4.2.2012.", "%d.%m.%Y.") , STR_TO_DATE("10.10.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 34986 ),
+ ( 1012 , 10877 , "U tijeku" , STR_TO_DATE("28.4.2004.", "%d.%m.%Y.") , STR_TO_DATE("15.2.2020.", "%d.%m.%Y.") , "Slabo ozljieđen" , 40438 ),
+ ( 1013 , 10287 , "Izliječen" , STR_TO_DATE("18.1.1994.", "%d.%m.%Y.") , STR_TO_DATE("16.4.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 35555 ),
+ ( 1014 , 10710 , "Izliječen" , STR_TO_DATE("14.7.2008.", "%d.%m.%Y.") , STR_TO_DATE("6.4.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 75837 ),
+ ( 1015 , 10009 , "Izliječen" , STR_TO_DATE("28.4.2001.", "%d.%m.%Y.") , STR_TO_DATE("1.8.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 51694 ),
+ ( 1016 , 10184 , "U tijeku" , STR_TO_DATE("20.10.1999.", "%d.%m.%Y.") , STR_TO_DATE("24.9.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 53144 ),
+ ( 1017 , 10060 , "Izliječen" , STR_TO_DATE("18.12.2018.", "%d.%m.%Y.") , STR_TO_DATE("28.1.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 87816 ),
+ ( 1018 , 10028 , "U tijeku" , STR_TO_DATE("20.9.2001.", "%d.%m.%Y.") , STR_TO_DATE("9.9.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 12751 ),
+ ( 1019 , 10091 , "U tijeku" , STR_TO_DATE("22.7.2003.", "%d.%m.%Y.") , STR_TO_DATE("27.6.2022.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 95740 ),
+ ( 1020 , 10199 , "Izliječen" , STR_TO_DATE("18.9.2004.", "%d.%m.%Y.") , STR_TO_DATE("12.9.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 36787 ),
+ ( 1021 , 10390 , "Izliječen" , STR_TO_DATE("2.4.2007.", "%d.%m.%Y.") , STR_TO_DATE("14.4.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 25904 ),
+ ( 1022 , 10452 , "Izliječen" , STR_TO_DATE("12.5.2000.", "%d.%m.%Y.") , STR_TO_DATE("15.3.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 59665 ),
+ ( 1023 , 10833 , "Izliječen" , STR_TO_DATE("2.2.1994.", "%d.%m.%Y.") , STR_TO_DATE("10.4.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 91379 ),
+ ( 1024 , 10781 , "Izliječen" , STR_TO_DATE("10.1.2017.", "%d.%m.%Y.") , STR_TO_DATE("11.4.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 40404 ),
+ ( 1025 , 10103 , "U tijeku" , STR_TO_DATE("14.11.2013.", "%d.%m.%Y.") , STR_TO_DATE("2.9.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 50174 ),
+ ( 1026 , 10458 , "U tijeku" , STR_TO_DATE("13.4.2003.", "%d.%m.%Y.") , STR_TO_DATE("3.3.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 72876 ),
+ ( 1027 , 10319 , "U tijeku" , STR_TO_DATE("28.10.2017.", "%d.%m.%Y.") , STR_TO_DATE("14.10.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 37601 ),
+ ( 1028 , 10038 , "Izliječen" , STR_TO_DATE("14.10.2015.", "%d.%m.%Y.") , STR_TO_DATE("6.2.2020.", "%d.%m.%Y.") , "Slabo ozljieđen" , 85811 ),
+ ( 1029 , 10131 , "Izliječen" , STR_TO_DATE("15.12.1995.", "%d.%m.%Y.") , STR_TO_DATE("28.10.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 95168 ),
+ ( 1030 , 10705 , "Izliječen" , STR_TO_DATE("2.10.2009.", "%d.%m.%Y.") , STR_TO_DATE("26.7.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 23062 ),
+ ( 1031 , 10670 , "U tijeku" , STR_TO_DATE("23.8.2001.", "%d.%m.%Y.") , STR_TO_DATE("23.1.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 65569 ),
+ ( 1032 , 10556 , "U tijeku" , STR_TO_DATE("11.9.1995.", "%d.%m.%Y.") , STR_TO_DATE("4.11.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 1702 ),
+ ( 1033 , 10279 , "U tijeku" , STR_TO_DATE("20.2.1993.", "%d.%m.%Y.") , STR_TO_DATE("20.8.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 81207 ),
+ ( 1034 , 10125 , "U tijeku" , STR_TO_DATE("23.2.2006.", "%d.%m.%Y.") , STR_TO_DATE("24.3.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 68033 ),
+ ( 1035 , 10598 , "Izliječen" , STR_TO_DATE("18.4.2010.", "%d.%m.%Y.") , STR_TO_DATE("2.3.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 47818 ),
+ ( 1036 , 10908 , "U tijeku" , STR_TO_DATE("27.11.2000.", "%d.%m.%Y.") , STR_TO_DATE("20.7.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 65641 ),
+ ( 1037 , 10726 , "U tijeku" , STR_TO_DATE("15.4.1997.", "%d.%m.%Y.") , STR_TO_DATE("14.5.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 11239 ),
+ ( 1038 , 10368 , "U tijeku" , STR_TO_DATE("1.8.2001.", "%d.%m.%Y.") , STR_TO_DATE("4.9.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 86867 ),
+ ( 1039 , 10715 , "Izliječen" , STR_TO_DATE("27.3.1999.", "%d.%m.%Y.") , STR_TO_DATE("5.9.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 63292 ),
+ ( 1040 , 10495 , "U tijeku" , STR_TO_DATE("23.2.1998.", "%d.%m.%Y.") , STR_TO_DATE("23.8.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 17257 ),
+ ( 1041 , 10297 , "Izliječen" , STR_TO_DATE("13.3.2017.", "%d.%m.%Y.") , STR_TO_DATE("28.4.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 26778 ),
+ ( 1042 , 10049 , "Izliječen" , STR_TO_DATE("18.5.1995.", "%d.%m.%Y.") , STR_TO_DATE("15.7.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 22612 ),
+ ( 1043 , 10444 , "U tijeku" , STR_TO_DATE("12.8.2014.", "%d.%m.%Y.") , STR_TO_DATE("25.7.2020.", "%d.%m.%Y.") , "Slabo ozljieđen" , 95383 ),
+ ( 1044 , 10064 , "U tijeku" , STR_TO_DATE("12.12.2001.", "%d.%m.%Y.") , STR_TO_DATE("16.3.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 28069 ),
+ ( 1045 , 10478 , "Izliječen" , STR_TO_DATE("4.8.1999.", "%d.%m.%Y.") , STR_TO_DATE("24.8.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 89446 ),
+ ( 1046 , 10570 , "U tijeku" , STR_TO_DATE("9.1.2013.", "%d.%m.%Y.") , STR_TO_DATE("8.11.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 40012 ),
+ ( 1047 , 10580 , "Izliječen" , STR_TO_DATE("12.6.2010.", "%d.%m.%Y.") , STR_TO_DATE("22.5.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 79188 ),
+ ( 1048 , 10565 , "Izliječen" , STR_TO_DATE("21.6.2005.", "%d.%m.%Y.") , STR_TO_DATE("22.11.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 99502 ),
+ ( 1049 , 10765 , "Izliječen" , STR_TO_DATE("24.6.1990.", "%d.%m.%Y.") , STR_TO_DATE("26.8.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 76841 ),
+ ( 1050 , 10520 , "U tijeku" , STR_TO_DATE("6.9.1996.", "%d.%m.%Y.") , STR_TO_DATE("3.9.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 63516 ),
+ ( 1051 , 10710 , "U tijeku" , STR_TO_DATE("16.5.2020.", "%d.%m.%Y.") , STR_TO_DATE("11.12.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 62502 ),
+ ( 1052 , 10774 , "Izliječen" , STR_TO_DATE("4.9.2012.", "%d.%m.%Y.") , STR_TO_DATE("18.9.2022.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 76037 ),
+ ( 1053 , 10253 , "Izliječen" , STR_TO_DATE("28.3.1996.", "%d.%m.%Y.") , STR_TO_DATE("27.4.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 25300 ),
+ ( 1054 , 10135 , "U tijeku" , STR_TO_DATE("1.2.2002.", "%d.%m.%Y.") , STR_TO_DATE("17.10.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 3371 ),
+ ( 1055 , 10012 , "U tijeku" , STR_TO_DATE("11.7.1991.", "%d.%m.%Y.") , STR_TO_DATE("15.2.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 12259 ),
+ ( 1056 , 10264 , "Izliječen" , STR_TO_DATE("26.3.2017.", "%d.%m.%Y.") , STR_TO_DATE("4.12.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 74708 ),
+ ( 1057 , 10220 , "U tijeku" , STR_TO_DATE("5.7.2000.", "%d.%m.%Y.") , STR_TO_DATE("1.4.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 22970 ),
+ ( 1058 , 10601 , "U tijeku" , STR_TO_DATE("1.9.2017.", "%d.%m.%Y.") , STR_TO_DATE("12.9.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 95920 ),
+ ( 1059 , 10591 , "U tijeku" , STR_TO_DATE("12.12.2015.", "%d.%m.%Y.") , STR_TO_DATE("11.6.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 57331 ),
+ ( 1060 , 10956 , "U tijeku" , STR_TO_DATE("4.3.2006.", "%d.%m.%Y.") , STR_TO_DATE("9.12.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 4316 ),
+ ( 1061 , 10360 , "Izliječen" , STR_TO_DATE("25.5.2009.", "%d.%m.%Y.") , STR_TO_DATE("14.1.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 69323 ),
+ ( 1062 , 10802 , "U tijeku" , STR_TO_DATE("22.11.2012.", "%d.%m.%Y.") , STR_TO_DATE("15.6.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 67088 ),
+ ( 1063 , 10945 , "U tijeku" , STR_TO_DATE("6.4.1994.", "%d.%m.%Y.") , STR_TO_DATE("8.8.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 51062 ),
+ ( 1064 , 10324 , "U tijeku" , STR_TO_DATE("10.1.2001.", "%d.%m.%Y.") , STR_TO_DATE("5.10.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 84510 ),
+ ( 1065 , 10071 , "Izliječen" , STR_TO_DATE("26.4.2007.", "%d.%m.%Y.") , STR_TO_DATE("26.2.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 4680 ),
+ ( 1066 , 10400 , "U tijeku" , STR_TO_DATE("27.3.1993.", "%d.%m.%Y.") , STR_TO_DATE("2.12.2020.", "%d.%m.%Y.") , "Slabo ozljieđen" , 49730 ),
+ ( 1067 , 10670 , "U tijeku" , STR_TO_DATE("22.1.2005.", "%d.%m.%Y.") , STR_TO_DATE("22.7.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 31761 ),
+ ( 1068 , 10810 , "U tijeku" , STR_TO_DATE("26.8.1993.", "%d.%m.%Y.") , STR_TO_DATE("17.4.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 46534 ),
+ ( 1069 , 10675 , "Izliječen" , STR_TO_DATE("2.10.1999.", "%d.%m.%Y.") , STR_TO_DATE("25.4.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 79375 ),
+ ( 1070 , 10551 , "Izliječen" , STR_TO_DATE("17.12.1992.", "%d.%m.%Y.") , STR_TO_DATE("18.12.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 42729 ),
+ ( 1071 , 10349 , "U tijeku" , STR_TO_DATE("18.10.1999.", "%d.%m.%Y.") , STR_TO_DATE("10.3.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 44447 ),
+ ( 1072 , 10793 , "U tijeku" , STR_TO_DATE("6.8.2013.", "%d.%m.%Y.") , STR_TO_DATE("26.1.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 11195 ),
+ ( 1073 , 10771 , "U tijeku" , STR_TO_DATE("14.3.1999.", "%d.%m.%Y.") , STR_TO_DATE("27.6.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 80277 ),
+ ( 1074 , 10054 , "U tijeku" , STR_TO_DATE("12.10.1997.", "%d.%m.%Y.") , STR_TO_DATE("13.8.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 25089 ),
+ ( 1075 , 10069 , "Izliječen" , STR_TO_DATE("8.7.2004.", "%d.%m.%Y.") , STR_TO_DATE("22.9.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 22210 ),
+ ( 1076 , 10608 , "Izliječen" , STR_TO_DATE("18.4.2011.", "%d.%m.%Y.") , STR_TO_DATE("9.10.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 94000 ),
+ ( 1077 , 10303 , "U tijeku" , STR_TO_DATE("27.8.1996.", "%d.%m.%Y.") , STR_TO_DATE("17.6.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 19832 ),
+ ( 1078 , 10743 , "U tijeku" , STR_TO_DATE("24.12.1993.", "%d.%m.%Y.") , STR_TO_DATE("17.1.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 85614 ),
+ ( 1079 , 10318 , "U tijeku" , STR_TO_DATE("23.10.1995.", "%d.%m.%Y.") , STR_TO_DATE("27.11.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 44960 ),
+ ( 1080 , 10063 , "Izliječen" , STR_TO_DATE("19.12.1993.", "%d.%m.%Y.") , STR_TO_DATE("1.2.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 72726 ),
+ ( 1081 , 10895 , "Izliječen" , STR_TO_DATE("25.8.1998.", "%d.%m.%Y.") , STR_TO_DATE("14.9.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 78550 ),
+ ( 1082 , 10479 , "Izliječen" , STR_TO_DATE("19.3.2007.", "%d.%m.%Y.") , STR_TO_DATE("6.4.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 8210 ),
+ ( 1083 , 10152 , "U tijeku" , STR_TO_DATE("6.11.1992.", "%d.%m.%Y.") , STR_TO_DATE("11.10.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 87272 ),
+ ( 1084 , 10599 , "U tijeku" , STR_TO_DATE("7.2.1996.", "%d.%m.%Y.") , STR_TO_DATE("15.5.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 93596 ),
+ ( 1085 , 10949 , "U tijeku" , STR_TO_DATE("12.3.2003.", "%d.%m.%Y.") , STR_TO_DATE("28.7.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 61973 ),
+ ( 1086 , 10733 , "U tijeku" , STR_TO_DATE("23.10.2000.", "%d.%m.%Y.") , STR_TO_DATE("24.9.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 75353 ),
+ ( 1087 , 10476 , "U tijeku" , STR_TO_DATE("8.5.2007.", "%d.%m.%Y.") , STR_TO_DATE("8.11.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 42388 ),
+ ( 1088 , 10644 , "Izliječen" , STR_TO_DATE("25.7.2002.", "%d.%m.%Y.") , STR_TO_DATE("14.7.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 59091 ),
+ ( 1089 , 10804 , "U tijeku" , STR_TO_DATE("12.6.1993.", "%d.%m.%Y.") , STR_TO_DATE("5.8.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 93125 ),
+ ( 1090 , 10774 , "U tijeku" , STR_TO_DATE("3.6.1998.", "%d.%m.%Y.") , STR_TO_DATE("23.9.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 37634 ),
+ ( 1091 , 10931 , "Izliječen" , STR_TO_DATE("1.10.2020.", "%d.%m.%Y.") , STR_TO_DATE("3.7.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 48252 ),
+ ( 1092 , 10800 , "Izliječen" , STR_TO_DATE("3.9.2016.", "%d.%m.%Y.") , STR_TO_DATE("5.5.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 61445 ),
+ ( 1093 , 10331 , "Izliječen" , STR_TO_DATE("1.10.2006.", "%d.%m.%Y.") , STR_TO_DATE("16.2.2020.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 39044 ),
+ ( 1094 , 10732 , "Izliječen" , STR_TO_DATE("10.1.2005.", "%d.%m.%Y.") , STR_TO_DATE("17.8.2021.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 6441 ),
+ ( 1095 , 10248 , "U tijeku" , STR_TO_DATE("20.7.2002.", "%d.%m.%Y.") , STR_TO_DATE("13.9.2022.", "%d.%m.%Y.") , "Slabo ozljieđen" , 38758 ),
+ ( 1096 , 10882 , "Izliječen" , STR_TO_DATE("10.9.1993.", "%d.%m.%Y.") , STR_TO_DATE("3.8.2022.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 27482 ),
+ ( 1097 , 10920 , "Izliječen" , STR_TO_DATE("24.10.2010.", "%d.%m.%Y.") , STR_TO_DATE("17.6.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 27244 ),
+ ( 1098 , 10982 , "U tijeku" , STR_TO_DATE("11.3.2004.", "%d.%m.%Y.") , STR_TO_DATE("28.12.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 50406 ),
+ ( 1099 , 10677 , "U tijeku" , STR_TO_DATE("12.5.2009.", "%d.%m.%Y.") , STR_TO_DATE("19.5.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 11246 );
 
 INSERT INTO lokacija VALUES
 (001,null,"Jaipur",26.922070,75.778885),
