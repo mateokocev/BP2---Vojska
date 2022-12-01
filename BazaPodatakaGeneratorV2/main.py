@@ -52,15 +52,7 @@ def Date(addTime=True, addDate=False,god1=2,god2=2):
 print("Dostupni atributi: \n [id] [ime] [prezime] \n [datum[(max 2)]] [customname[(max 5)]] [bool] \n [randnum[(max 5)]] [foreignkey[nummber] umirovljen \n Exmaple: id ime date2 customname4")
 
 lista = list(map(str, input().split()))
-for x in lista:
-        #<---------custom commands---------------------->
-  if "umirovljen"==x:
 
-
-
-
-
-        #<---------custom commands---------------------->
 
 
   if ("customname1"==x):
