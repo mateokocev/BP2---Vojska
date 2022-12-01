@@ -54,7 +54,7 @@ print("Dostupni atributi: \n [id] [ime] [prezime] \n [datum[(max 2)]] [customnam
 lista = list(map(str, input().split()))
 
 
-
+for x in lista:
   if ("customname1"==x):
       for x in range(int(input("nummber of diffrent names for customnames: "))):
           custom1.append(input(str(x+1) + " name: "))
@@ -200,4 +200,4 @@ for y in range(int(input("Velicina tablice? "))):
     rj.append("),\n")
 print(*rj, end=");")
 
-raw_input()
+xyz= input("Štop")

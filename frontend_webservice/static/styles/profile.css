@@ -36,6 +36,7 @@ body
     position: absolute;
     text-align: right;
     right: 0%;
+    padding: 20px;
     width: 600px;
     height: 95%;
    
@@ -102,7 +103,8 @@ body
 
 .profileimg
 {   position: absolute;
-    left: 30%;
+    left: 28%;
+    top: 10%;
    
 }
 .profileimg img
