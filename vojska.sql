@@ -458,11 +458,34 @@ CREATE TABLE login(
 DROP TABLE login;
 -- za kriptiranje lozinke
 
-INSERT INTO sektor VALUES
-(1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.%Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
-(2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.%Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
-(3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.%Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00),
-(4, "Hrvatska vojna policija", STR_TO_DATE("24.08.1991.", "%d.%m.%Y."), "Vojna policija Oružanih snaga Republike Hrvatske (VP OSRH) pruža potporu Ministarstvu obrane i Oružanim snagama Republike Hrvatske obavljanjem namjenskih vojnopolicijskih poslova u miru i ratu te borbenih zadaća u ratu.", 1822000000.00);
+INSERT INTO lokacija VALUES
+(001,null,"Jaipur",26.922070,75.778885),
+(002,null,"Islamabad",33.738045,73.084488),
+(003,null,"Kabul",34.543896,69.160652),
+(004,null,"Herat",34.343044,62.199074),
+(005,null,"Kholm",51.14312320,23.47119860),
+(006,null,"Charikar",35.013058,69.168892),
+(007,null,"Solun",40.64361,22.93086),
+(008,null,"Patras",38.246639,21.734573),
+(009,null,"Kijev",50.450001,30.523333),
+(010,null,"Nikolajev",46.96591,31.9974),
+(011,null,"Pretorija",-25.731340,28.218370),
+(012,null,"Kaapstad",-33.918861,18.423300),
+(013,null,"Taipei",25.105497,121.597366),
+(014,null,"Kaohsiung",22.633333,120.266670),
+(015,null,"Ulsan",35.549999,129.316666),
+(016,null,"Busan",35.166668,129.066666),
+(017,null,"Sarajevo",43.856430,18.413029),
+(018,null,"Bihac",44.811962,15.868565),
+(019,null,"Caracas",10.500000,-66.916664),
+(020,null,"Maracaibo",10.653860,-71.645966),
+(021,null,"Stavanger",58.969975,5.733107),
+(022,null,"Narvik",68.438499,17.427261),
+(023,null,"Bern",46.947456,7.451123),
+(024,null,"Chur",46.8499,9.5329),
+(025,null,"Ohio",40.367474,-82.996216),
+(026,null,"Columbus",39.983334,-82.983330);
+
 
 INSERT INTO tura VALUES
 (01, "Indijska i Pakistanska tura", "Mirovna tura", STR_TO_DATE("01.08.2008","%d.%m.%Y."), STR_TO_DATE("04.11.2021","%d.%m.%Y.")),
@@ -479,6 +502,12 @@ INSERT INTO tura VALUES
 (13, "Norveška tura", "Mirovna tura", STR_TO_DATE("01.04.2016","%d.%m.%Y."), STR_TO_DATE("23.04.2018","%d.%m.%Y.")),
 (14, "Švicarska tura ", "Mirovna tura", STR_TO_DATE("07.05.2006","%d.%m.%Y."), STR_TO_DATE("20.11.2009","%d.%m.%Y.")),
 (15, "SAD tura", "Mirovna tura", STR_TO_DATE("01.12.2012","%d.%m.%Y."), STR_TO_DATE("28.09.2013","%d.%m.%Y."));
+
+INSERT INTO sektor VALUES
+(1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.%Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
+(2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.%Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
+(3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.%Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00),
+(4, "Hrvatska vojna policija", STR_TO_DATE("24.08.1991.", "%d.%m.%Y."), "Vojna policija Oružanih snaga Republike Hrvatske (VP OSRH) pruža potporu Ministarstvu obrane i Oružanim snagama Republike Hrvatske obavljanjem namjenskih vojnopolicijskih poslova u miru i ratu te borbenih zadaća u ratu.", 1822000000.00);
 
 INSERT INTO vozila VALUES
 (2000,"Patria AMV","Kotačna oklopna vozila",158,3),
