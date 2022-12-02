@@ -9,25 +9,27 @@
    
 </head>
 <body>
-    
-    
+   
     <topbar>
        <a href="https://github.com/mateokocev/BP2---Vojska"> <img src="../static/img/github.png"></a>
     </topbar>
-    {%block content%}
+    
+    
+    
+    {%block content%}    
     <topMainbar>
         <img  src="../static/img/menuicon.png">
-        <h1>Dobro došao, {{ime}}</h1>
+        <h1>Dobro došao, {{ime}} </h1>
     
        <img  src="../static/img/profilecircle.png">
             
 
 
 
-       <form action="" method="POST">
+       <form action="/profile">
             <button>Profile</button>           
        </form>
-       
+      
        
 
 

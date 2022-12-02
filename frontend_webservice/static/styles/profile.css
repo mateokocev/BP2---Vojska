@@ -55,9 +55,10 @@ body
     grid-auto-rows: 200px;
 }
 .grid8
-{   text-align: center;
+{
+    text-align: center;
     display: grid;
-    grid-template-columns: 160px 145px 160px 5px;
+    grid-template-columns: 99px 190px 160px 158px;
     
     height: 60%;
     grid-auto-rows: 100px;
