@@ -20,13 +20,14 @@
     <topMainbar>
         
             <img  action="/profile" src="../static/img/menuicon.png">
-       
-      
+            
         
         <h1>Dobro došao, {{ime}} </h1>
         <div class="imgalign">
         <a href="/profile"><img  src="{{randimg}}"></a> 
+       
         </div>
+        
     </topMainbar>
    
    
@@ -41,7 +42,7 @@
        <div>
             <div class="centerText">
                 <div class="textHolder" style="margin-top: 350px;">
-                    <h2 style="font-size: 20px;"> {{kopnenaVojskaText}}</h2>
+                    <h2 style="font-size: 20px;"> {{VojskaText[0][0]}}</h2>
                 </div>
             </div>
         </div>
@@ -68,7 +69,7 @@
         <h1>HRVATSKA ZRAKOPLOVNA VOJSKA</h1>
         <div>
             <div class="textHolder" >
-                <h2 style="font-size: 20px; ;">{{zrakoplovnaVojskaText}}</h2>
+                <h2 style="font-size: 20px; ;">{{VojskaText[1][0]}}</h2>
             </div>
         </div>
         <div class="alignText">
@@ -91,7 +92,7 @@
     <imageCoverPomorksa>
         <h1 style="color:rgb(47, 47, 47);">HRVATSKA POMORSKA VOJSKA</h1>
         <div class="textHolder">
-            <h2 style="font-size: 20px;">{{pomorskaVojskaText}}</h2>
+            <h2 style="font-size: 20px;">{{VojskaText[2][0]}}</h2>
         </div>
        
             <h3 style="margin-left: 85%; color: rgb(43, 42, 42);">Saznaj Više!</h3>
@@ -111,7 +112,7 @@
      <h1>HRVATSKA VOJNA POLICIJA</h1>
      <div class="textHolder">
 
-      <h2 style="font-size: 20px;">{{vojnaPolicija}}</h2>
+      <h2 style="font-size: 20px;">{{VojskaText[3][0]}}</h2>
      
      </div>
      <h3 style="font-size: 30px; margin-left: 85%;">Saznaj vise</h3>

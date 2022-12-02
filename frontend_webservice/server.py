@@ -12,11 +12,17 @@ name= "Čovječe"
 
 
 # Get data
-def BP_OSOBLJE(sql):
+def BP_DataRow(sql):
     vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
-    return str(MainKursor.fetchone())[2:-3]
+    return MainKursor.fetchone()
+
+def BP_DataAll(sql):
+    vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
+    MainKursor = vojska.cursor()
+    MainKursor.execute(sql)
+    return MainKursor.fetchall()
     
 
 def RandomImageGenerator():
@@ -51,15 +57,13 @@ def login():
 
         else:
 
-            kopnenaVojskaText=     BP_OSOBLJE("select opis from sektor where id=1;")
-            zrakoplovnaVojskaText= BP_OSOBLJE("select opis from sektor where id=2;")
-            pomorskaVojskaText=    BP_OSOBLJE("select opis from sektor where id=3;")
-            vojnaPolicija=         BP_OSOBLJE("select opis from sektor where id=4;")
+            VojskaText = BP_DataAll("select opis from sektor;")
+            print(VojskaText)
             global randimg
             randimg = RandomImageGenerator()
             
             print(randimg)
-            return render_template('index.html',randimg=randimg,ime=name,kopnenaVojskaText=kopnenaVojskaText,zrakoplovnaVojskaText=zrakoplovnaVojskaText,pomorskaVojskaText=pomorskaVojskaText,vojnaPolicija=vojnaPolicija)
+            return render_template('index.html',randimg=randimg,ime=name,VojskaText=VojskaText)
     
     return render_template('Login.html')
 
@@ -67,30 +71,29 @@ def login():
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
-  
-
-    vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
-    MainKursor = vojska.cursor()
-    MainKursor.execute("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
-    osoblje=MainKursor.fetchone()
-
-    #MainKursor.execute("select sektor.naziv from login,osoblje,sektor where lozinka = md5(concat('"+name+"','+"+UpisLozinka+"')) and osoblje.ime = '"+name+"' and osoblje.prezime='"+UpisLozinka+"' and id_sektor = sektor.id;")
-    #sektor=MainKursor.fetchone()
-    sektor="err"
     
-    
+    osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
+    sektor = BP_DataRow("select sektor.naziv from login,osoblje,sektor where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"' and osoblje.prezime='"+UpisLozinka+"' and id_sektor = sektor.id;")
 
-    return render_template('profile.html',randimg=randimg,osoblje=osoblje,sektor=sektor)
+    if sektor[0]== "Hrvatska ratna mornarica":
+        cin = str(osoblje[2]) +"_p"
+
+    elif sektor[0]== "Hrvatsko ratno zrakoplovstvo":
+        cin = str(osoblje[2]) +"_z"
+    else:
+        cin = str(osoblje[2])
+
+    return render_template('profile.html',randimg=randimg,osoblje=osoblje,sektor=sektor,cin=cin)
         
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('404.html',err="404 error ",note="programur profesional",desc="What are you looking for here silly?",ime=name,)
+    return render_template('404.html',err="4o4 error ",note="programur profesional",desc="What are you looking for here silly?",ime=name,)
 
 
 
-@app.errorhandler(505)  #Exception
+@app.errorhandler(Exception)  #Exception
 def page_not_found(error):
     
     return render_template('404.html',err="PlEaSe ReFrEsH eVeRyThInG",note=error,desc="brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",ime=name,)    
