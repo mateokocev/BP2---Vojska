@@ -18,24 +18,15 @@
     
     {%block content%}    
     <topMainbar>
-        <img  src="../static/img/menuicon.png">
-        <h1>Dobro došao, {{ime}} </h1>
-    
-       <img  src="../static/img/profilecircle.png">
-            
-
-
-
-       <form action="/profile">
-            <button>Profile</button>           
-       </form>
-      
-       
-
-
-
-
         
+            <img  action="/profile" src="../static/img/menuicon.png">
+       
+      
+        
+        <h1>Dobro došao, {{ime}} </h1>
+        <div class="imgalign">
+        <a href="/profile"><img  src="{{randimg}}"></a> 
+        </div>
     </topMainbar>
    
    

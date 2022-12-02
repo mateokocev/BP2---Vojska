@@ -141,6 +141,22 @@ podstranica3{
     margin-top: -5%;
     }
 
+.imgalign{
+     
+      
+
+}
+
+.imgalign img{
+      width: 50px;
+      margin-top: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(8,7,16,0.6);
+      
+      
+
+}
+
 .textHolder{
     width: 100%;
     margin-left: 20%;

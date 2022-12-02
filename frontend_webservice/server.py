@@ -1,4 +1,5 @@
 from flask import Flask, render_template,url_for, request,redirect
+from random import randrange
 import mysql.connector
 #sve=mycursor.fetchmany(size=4) kolicina podataka
 #sve=mycursor.fetchone() jedan red 
@@ -18,6 +19,10 @@ def BP_OSOBLJE(sql):
     return str(MainKursor.fetchone())[2:-3]
     
 
+def RandomImageGenerator():
+    x= str(randrange(3))
+    return "/static/img/profPictures/"+x+".png"
+
 
 
 
@@ -29,7 +34,11 @@ def login():
     error = ""
 
     if request.method == 'POST':
+
         global name
+
+
+
         global UpisLozinka
         name = request.form['username']
         UpisLozinka = request.form['password']
@@ -46,8 +55,11 @@ def login():
             zrakoplovnaVojskaText= BP_OSOBLJE("select opis from sektor where id=2;")
             pomorskaVojskaText=    BP_OSOBLJE("select opis from sektor where id=3;")
             vojnaPolicija=         BP_OSOBLJE("select opis from sektor where id=4;")
+            global randimg
+            randimg = RandomImageGenerator()
             
-            return render_template('index.html',ime=name,kopnenaVojskaText=kopnenaVojskaText,zrakoplovnaVojskaText=zrakoplovnaVojskaText,pomorskaVojskaText=pomorskaVojskaText,vojnaPolicija=vojnaPolicija)
+            print(randimg)
+            return render_template('index.html',randimg=randimg,ime=name,kopnenaVojskaText=kopnenaVojskaText,zrakoplovnaVojskaText=zrakoplovnaVojskaText,pomorskaVojskaText=pomorskaVojskaText,vojnaPolicija=vojnaPolicija)
     
     return render_template('Login.html')
 
@@ -61,10 +73,14 @@ def profile():
     MainKursor = vojska.cursor()
     MainKursor.execute("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
     osoblje=MainKursor.fetchone()
+
+    #MainKursor.execute("select sektor.naziv from login,osoblje,sektor where lozinka = md5(concat('"+name+"','+"+UpisLozinka+"')) and osoblje.ime = '"+name+"' and osoblje.prezime='"+UpisLozinka+"' and id_sektor = sektor.id;")
+    #sektor=MainKursor.fetchone()
+    sektor="err"
     
     
 
-    return render_template('profile.html',osoblje=osoblje)
+    return render_template('profile.html',randimg=randimg,osoblje=osoblje,sektor=sektor)
         
 
 

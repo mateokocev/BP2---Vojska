@@ -10,7 +10,7 @@ CREATE TABLE sektor(
     opis TEXT,
     ukupni_proracun DECIMAL(12,2) NOT NULL
 );
--- DROP TABLE sektor;
+ DROP TABLE sektor;
 
 
 
@@ -38,7 +38,7 @@ CREATE TABLE osoblje(
     krvna_grupa CHAR(3) NOT NULL,
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
--- DROP TABLE osoblje;
+DROP TABLE osoblje;
 
 
 
@@ -442,7 +442,7 @@ CREATE TRIGGER kriptiranje
  BEFORE INSERT ON osoblje
  FOR EACH ROW
 BEGIN
- INSERT INTO login VALUES (new.id,new.ime,md5(new.ime));
+ INSERT INTO login VALUES (new.id,new.ime,md5(concat(new.ime,new.prezime)));
  -- SET new.lozinka = MD5(new.lozinka);
         
 END//
@@ -457,8 +457,11 @@ CREATE TABLE login(
 );
 DROP TABLE login;
 -- za kriptiranje lozinke
+select* from login;
+select * from login where lozinka = md5(concat("Eliza","Eliza")) and login.ime = "Eliza";
+Eliza" , "Vuković"
 
-
+select * from login;
 INSERT INTO misija VALUES
 (,"","","",,,,);
 -- id 1000-1070,naziv,vrijeme_pocetka,vrijeme_kraja,FOREIGNid_lokacija,FOREIGNid_tura,ishod,trosak_misije
@@ -1890,5 +1893,4 @@ INSERT INTO osoblje VALUES
  ( 10996 , 3 , "Marina" , "Marjanović" , "Skupnik" , STR_TO_DATE("27.3.1952.", "%d.%m.%Y.") , STR_TO_DATE("19.6.2003.", "%d.%m.%Y.") , "Neaktivan" , "AB+" ),
  ( 10997 , 1 , "Felicija" , "Herceg" , "Pozornik" , STR_TO_DATE("10.1.1958.", "%d.%m.%Y.") , STR_TO_DATE("29.4.2007.", "%d.%m.%Y.") , "Umirovljen" , "B+" ),
  ( 10998 , 3 , "Božana" , "Galić" , "Narednik" , STR_TO_DATE("1.6.1968.", "%d.%m.%Y.") , STR_TO_DATE("19.10.1995.", "%d.%m.%Y.") , "Mrtav" , "AB-" ),
- ( 10999 , 3 , "Pavle" , "Dujmović" , "Razvodnik" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Neaktivan" , "A+" ),
- ( 11000 , 3 , "admin" , "admin" , "Pozornik" , STR_TO_DATE("5.3.1968.", "%d.%m.%Y.") , STR_TO_DATE("21.3.2002.", "%d.%m.%Y.") , "Pokojan u duši" , "AB-" );
+ ( 10999 , 3 , "admin" , "admin" , "Razvodnik" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Pokojan u duši" , "A+" );

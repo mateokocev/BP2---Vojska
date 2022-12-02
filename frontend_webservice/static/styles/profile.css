@@ -45,10 +45,12 @@ body
    text-align: center;
 }
 
+
+
 .grid2
 {
     display: grid;
-    grid-template-columns: 20px 100px 240px 250px;
+    grid-template-columns: 40px 174px 169px 250px;
    
     height: 100px;
 
@@ -103,11 +105,25 @@ body
 
 
 .profileimg
-{   position: absolute;
+{  
+     position: absolute;
     left: 28%;
     top: 10%;
+    
+  
    
 }
+
+.profileimg img
+{
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+}
+
+
+
+
+
 .profileimg img
 {   width: 150px;
 }
