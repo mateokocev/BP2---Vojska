@@ -26,7 +26,7 @@ def BP_DataAll(sql):
     
 
 def RandomImageGenerator():
-    x= str(randrange(3))
+    x= str(randrange(5))
     return "/static/img/profPictures/"+x+".png"
 
 
@@ -80,6 +80,7 @@ def profile():
 
     elif sektor[0]== "Hrvatsko ratno zrakoplovstvo":
         cin = str(osoblje[2]) +"_z"
+
     else:
         cin = str(osoblje[2])
 
@@ -87,16 +88,35 @@ def profile():
         
 
 
-@app.errorhandler(404)
+@app.route('/kopnena', methods=['GET', 'POST'])
+def kopnenaVojska():
+    data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
+    
+    return render_template('kopnenaVojska.html',data=data,len=len(data))
+
+
+@app.route('/kopnena/<data>')  #Exception
+def informacije (data):
+    return render_template('informacije.html',data=data)
+
+
+
+
+                            # Errors
+@app.errorhandler(505)
 def page_not_found(error):
     return render_template('404.html',err="4o4 error ",note="programur profesional",desc="What are you looking for here silly?",ime=name,)
 
 
 
-@app.errorhandler(Exception)  #Exception
-def page_not_found(error):
-    
+@app.errorhandler(505)  #Exception
+def page_not_found(error):  
     return render_template('404.html',err="PlEaSe ReFrEsH eVeRyThInG",note=error,desc="brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",ime=name,)    
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

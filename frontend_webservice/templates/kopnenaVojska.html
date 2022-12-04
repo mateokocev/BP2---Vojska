@@ -8,29 +8,48 @@
     <title>Kopnena Vojska</title>
 </head>
 <body>
-    
-     
-    
 
-        <div class="grid-container">
-         
-            {%for x in sve%}   
+    <div class="topBar">
+        <h1>ime</h1>
+        <h1>kopnena Vojska</h1>
+        <h1>profile</h1>
+    </div>
+    <div class="cover">
+        <h1>Kopnena Vojska</h1>
+    </div>
+    <div class="databox">
+        <div class="shadow"></div>
+        <h1>Ture</h1>
+        
+        <div class="data">
             
-            
-            <cube>
-              
-                <div class="cijena">
-                    <h4>{{x}}</h4>
-                  </div>
-            </cube>
-            
+            {%for i in range(0, len)%}
+  
+  
+
+       
+            <a href="kopnena/{{data[i][0]}}">
+                <div  class="cube">
+                   
+                    <div class="naslov">{{data[i][0]}}</div>
+                    <div class="nazivmisije">{{data[i][1]}}</div>
+                    <div class="vrijemepocetka">{{data[i][2]}}</div>
+                    <div class="vrijemekraja">{{data[i][3]}}</div>
+                    
+                </div>
+                <div class="cubeimg"><p>v</p></div>
+            </a>
+
             {%endfor%}
             
-        
-           
             
-          </div>
-       
+
+        </div>
+    </div>
+    <div class="cover">
+        <h1>test</h1>
+   
+    </div>
     
     
 </body>
