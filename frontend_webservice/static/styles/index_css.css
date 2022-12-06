@@ -193,6 +193,7 @@ podstranica3{
      -webkit-user-select: none;
      touch-action: manipulation;
      vertical-align: middle;}
+     
    .button-24:hover,
    .button-24:active {
      background-color: initial;
