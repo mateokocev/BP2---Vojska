@@ -71,10 +71,21 @@ body
     font-size: 10px;
     display: grid;
     margin-left: 100px;
-   
+    
     grid-template-columns: auto auto auto;
 }
 
+
+.grid2
+{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    font-size: 10px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: auto auto;
+}
 .opis
 {   margin-top: 94%;
     
@@ -115,3 +126,15 @@ body
     left: 20px;
     list-style-type: none;
   }
+
+  .newcube
+  { 
+    width: 95%;
+    
+    height: 500px;
+    box-shadow: 0 0 20px rgba(8,7,16,0.6);
+    backdrop-filter: blur(50px);
+    border-radius: 5px;
+    background-color: rgb(53, 53, 53);
+}
+  

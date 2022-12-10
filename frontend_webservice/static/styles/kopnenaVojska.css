@@ -3,7 +3,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 body
-{ background-color: #936F4F;
+{ background: rgb(89,89,89);
 
 }
 .cube
@@ -27,15 +27,17 @@ body
 
 .cubeimg
 {   position: relative;
-    transform:translateY(50%);
+   
     width: 100%;
     height: 40%;
     background-position-y: 50%;
-    transform: translate(0%,-70%);
+    transform: translate(0%,-60%);
     background-image: url(/static/img/Ture/1.jpg);
     border-radius: 20px;
     filter: blur(3px);
     z-index: -1;
+    transform:translateY(-40%);
+    
     transition: 0.5s ease-out;
     
     box-shadow: 0 0 40px rgba(8,7,16,0.6); 
@@ -51,10 +53,11 @@ body
 }
 
 .cubeimg:hover 
-{   transition: 0.8s ease-out;
+{   transition-delay: 5s;
+    transition: 0.4s ease-out;
     cursor: pointer;
     filter: blur(0px);
-
+   
     transform: translate(0%,-10%);
    
     
@@ -71,7 +74,7 @@ body
 .shadow
 {
     
-    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(42, 40, 40));
+    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(0, 0, 0));
     height: 50px;
 
 }
@@ -144,12 +147,13 @@ body
     margin-top: -20px;
     margin-left: -10px;
     margin-right: -10px;
-    
+    height: 50px;
+    font-size: 10px    ;
     display: grid;
     column-gap: 30px;
     grid-template-columns: auto auto auto;
     width: auto;
-    background-color: rgb(115, 93, 36);
+    background: rgb(30, 30, 30);
     
     
 }
@@ -174,7 +178,7 @@ body
 {
     background-image: url(../img/kopnena_back.png);
     background-repeat: no-repeat;
-    height: 250px;
+    height: 550px;
     padding-top: 150px;
     margin-left: -10px;
     margin-right: -10px;
@@ -194,7 +198,7 @@ body
     margin-left: -10px;
     margin-top: -15px;
     margin-right: -10px;
-    background-color: #cb9c73;
+    background: rgb(30, 30, 30);
     background-repeat:initial;
  
     background-size:     cover; 
@@ -215,9 +219,8 @@ body
 
 .data
 {   
-    margin-left: 2%;
-    margin-right: 10%;
    
+    margin: 10px;
     overflow-x: hidden;
     padding: 80px;
     display: grid;
@@ -264,4 +267,89 @@ a
     z-index: 5;
     color: black;
     text-decoration: none;
+}
+
+
+
+
+
+
+
+.grid3 
+{   margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 250px;
+    
+    display: grid;
+    grid-gap: 50px;
+    grid-template-columns: auto auto auto auto;
+    
+}
+
+.newcube
+{ 
+  margin-bottom: 150px;
+  width: 100%;
+  height: 500px;
+  background-color: rgb(53, 53, 53);
+  box-shadow: 0 0 20px rgba(8,7,16,0.6);
+  backdrop-filter: blur(50px);
+  border-radius: 5px;
+  box-shadow: 0 0 40px rgba(8,7,16,0.6);
+  
+  color: white;
+ 
+  
+  
+}
+.newcubeNaslov
+{
+    text-align: center;
+    font-size: 1vw;
+}
+.newcubeDatumPocetka
+{   text-align: center;
+    width: 100%;
+    display: grid;
+    font-size: 1vw;
+    grid-template-columns: auto auto;
+}
+.newcuveImg
+{
+    background-image: url(/static/img/Ture/1.jpg);
+    position: absolute;
+    top: 25%;
+    width: 100%;
+    z-index: 1;
+    height: 78%;
+    border-radius: 10px;
+    transition: 0.5s ease-in;
+}
+
+.newcuveImg:hover
+{
+    z-index: 1;
+    transform:translateY(50%);
+    transition: 0.5s ease-out;
+}
+
+.cover2
+{   
+    margin-left: -10px;
+    margin-top: -30px;
+    margin-right: -10px;
+    margin-bottom: -20px;
+    background: rgb(30, 30, 30);
+    background-repeat:initial;
+    background-size:     cover; 
+    
+    
+}
+
+.newcubeOpis
+{
+    text-align: left;
+    font-size: 1vw;
+    overflow: hidden;
+    padding: 20px;
 }

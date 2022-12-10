@@ -6,32 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/styles/informacije.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <title>Document</title>
+    <title>Misije</title>
 </head>
 <body>
    <div class="cover"><h1 style="font-size: 80px; color: white;">{{data}}</h1></div>
-    <h2>Misije</h2>
+   <div class="shadow"></div>
+    <div class="naslov">Misije</div>
     
 
-    <div style=" margin-left: 25%; margin-right:  10px;" class="grids">
-
+    <div style=" margin-left: 5%; margin-right: 5%;" class="grids">
+        {%for i in range(0, len)%}
+       
         <div class="cards">
             <img src="/static/img/kopnena_back.png" >
-            <h1>test</h1>
-            <div class="opis">Lorem Ip sheets contaiare like Aldus PageMakerheets contaiiare like Aldus PageMakerheets ciare like Aldus Paiare like Aldus PageMakerheets coniare like Aldus PageMakerheets coniare like Aldus PageMakerheets congeMakerheets coniare like Aldus PageMakerheets cononiare like Aldus PageMakerheets coniare like Aldus PageMakerheets coniare like Aldus PageMakerheets conare like Aldus PageMaker including ver</div>
+            <h1>{{misije[i][0]}}</h1>
+            <div class="opis">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore blanditiis exercitationem rem, delectus ipsam ab dicta praesentium hic harum ullam culpa, necessitatibus deserunt repellendus ad, fugit veniam nesciunt. Nobis, voluptate!</div>
             <div class="bottomText">
-                <p>test</p>
-                <p>test</p>
-                <p>test</p>
+                <p>{{misije[i][2]}}</p>
+                <p>{{misije[i][3]}}</p>
+                <p>{{misije[i][4]}}</p>
             </div>
         </div>
+        {%endfor%}
+    </div>
+     
 
-        </div>
+       
 
-
-<h1 style="text-align: center; margin-top: 60px;">Vozila na misiji</h1>
+<div class="naslov">Vozila na misiji</div>
     
-<div style=" margin-right:  250px;margin-left:  250px;" class="grids">
+<div style=" margin-right: 5%;margin-left:  5%;" class="grids">
 
     <div class="cards">
         <img src="/static/img/kopnena_back.png" >
@@ -45,20 +49,28 @@
     </div>
 
 </div>
-<h1 style="text-align: center; margin-top: 60px;">Osoblje na Turi</h1>
+<div class="naslov">Osoblje na Misiji</div>
 
-<div style=" margin-right:  250px;margin-left:  250px;" class="grids">
+<div style=" margin-right:  5%;margin-left:  5%;" class="grids">
 
-    <div class="cards">
-        <img src="/static/img/kopnena_back.png" >
-        <h1>test</h1>
-        <div class="opis">Lorem Ip sheets contaiare like Aldus PageMakerheets contaiiare like Aldus PageMakerheets ciare like Aldus Paiare like Aldus PageMakerheets coniare like Aldus PageMakerheets coniare like Aldus PageMakerheets congeMakerheets coniare like Aldus PageMakerheets cononiare like Aldus PageMakerheets coniare like Aldus PageMakerheets coniare like Aldus PageMakerheets conare like Aldus PageMaker including ver</div>
-        <div class="bottomText">
-            <p>test</p>
-            <p>test</p>
-            <p>test</p>
+    {% for i in range(0, len2) %}
+       
+        <div class="cards">
+            <img src="/static/img/kopnena_back.png" >
+            <h1>{{osoblje[i][0]+" "+osoblje[i][1]}}</h1>
+           
+            <img style=" width: auto;  margin-left: 43%;" src="/static/img/cin/{{osoblje[i][2]}}.png">
+            <div class="bottomText">
+                <p>{{osoblje[i][2]}}</p>
+                <p>{{osoblje[i][4]}}</p>
+                <p>{{osoblje[i][3]}}</p>
+
+              
+            </div>
         </div>
-    </div>
+        {%endfor%}
+
+
 
 </div>
 </body>

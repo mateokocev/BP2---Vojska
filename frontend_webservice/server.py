@@ -97,7 +97,10 @@ def kopnenaVojska():
 
 @app.route('/kopnena/<data>')  #Exception
 def informacije (data):
-    return render_template('informacije.html',data=data)
+    misije = BP_DataAll("select misija.naziv,misija.ishod,DATE(misija.vrijeme_pocetka),misija.trosak_misije,DATE(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura;")
+    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa,misija.naziv from osoblje ,osoblje_na_misiji,misija where osoblje.id = osoblje_na_misiji.id_osoblje and misija.id = osoblje_na_misiji.id_misija;")
+
+    return render_template('informacije.html',data=data,misije=misije,len=len(misije),osoblje=osoblje, len2=len(osoblje))
 
 
 

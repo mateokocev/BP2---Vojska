@@ -17,6 +17,30 @@
     <div class="cover">
         <h1>Kopnena Vojska</h1>
     </div>
+    
+    
+    <div class="cover2">
+        <div class="shadow"></div>
+        <h1 style="text-align: center;margin-top: 250px; color: white; font-size: 80px;">TURE</h1>
+        <div class="grid3">
+            {%for i in range(0, len)%}
+            <a href="kopnena/{{data[i][0]}}">
+                <div class="newcube">
+                    <div class="newcubeNaslov">{{data[i][0]}}</div>
+                    
+                    <div class="newcubeDatumPocetka"><p>{{data[i][2]}}</p> <p>{{data[i][3]}}</p></div>
+                    <div class="newcubeOpis"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur expedita ullam sapiente laboriosam, consectetur ab quia adipisci quae fuga velit illo magni, officia, cupiditate dolorum recusandae quas odit vitae quod.</p></div>
+                    <div class="newcuveImg"></div>
+                 
+                   </div>
+            </a>
+         
+           
+           {%endfor%}
+        </div>
+    </div>
+    
+    
     <div class="databox">
         <div class="shadow"></div>
         <h1>Ture</h1>
@@ -24,10 +48,6 @@
         <div class="data">
             
             {%for i in range(0, len)%}
-  
-  
-
-       
             <a href="kopnena/{{data[i][0]}}">
                 <div  class="cube">
                    
@@ -46,10 +66,7 @@
 
         </div>
     </div>
-    <div class="cover">
-        <h1>test</h1>
-   
-    </div>
+  
     
     
 </body>
