@@ -2483,20 +2483,53 @@ INNER JOIN osoblje AS o
 WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN
 (SELECT id_osoblje FROM vozilo_na_turi AS vt INNER JOIN osoblje_na_turi AS ot ON vt.id_odgovorni = ot.id);
 -- jan
--- navedi sva imena i prezimena ozlijedenih vojnika kojima lijecenje kosta vise od 500 i manje od 5000
-select id,ime,prezime,misija
+-- navedi sva imena i prezimena ozlijedenih vojnika na misiji kojima lijecenje kosta vise od 500 i manje od 5000
+select o.id,o.ime,o.prezime
 from osoblje_na_misiji as onm
-right join lijecenje as l on l.id_osoblje= onm.id
-where trosak_lijecenja>500 and trosak_lijecenja<5000;
+inner join osoblje as o 
+on onm.id_osoblje= o.id
+inner join lijecenje as l
+on l.id_osoblje = o.id
+where l.trosak_lijecenja>10000;
 
--- navedi koliko se samokresa koristi u mornarici
-select count(id)
-from izdana_oprema as i
-join osoblje_na_misiji as o on i.id=o.id
-join
+-- navedi koliko se izdanih samokresa na misiji koristi od strane mornarice
+select sum(izo.izdana_kolicina) as samokresa_u_mornarici
+from izdana_oprema as izo
+inner join oprema as op
+on op.id= izo.id_oprema
+inner join osoblje_na_misiji as onm
+on onm.id=izo.id_osoblje_na_misiji
+inner join osoblje as o
+on o.id=onm.id_osoblje
+inner join sektor as s
+on s.id=o.id_sektor
+where s.naziv= "Hrvatska ratna mornarica" and op.vrsta="Samokres";
 
+-- Hrvatska ratna mornarica
 -- nabroji sva vozila na popravku koja su ujedno i na misiji te ih nabroji koliko ih je
+select sum(ukupna_kolicina) as totalni_br
+from vozila as v
+inner join vozilo_na_misiji as vnm
+on v.id=vnm.id_vozilo
+inner join misija as m
+on m.id=vnm.id_misija
+where m.naziv="UNOCI";
 
--- sve misije u ohiu ako ih nema onda da prikazuje sve misije u vezi sarajeva
-
--- svo osoblje krvne grupe 0+ koje je na lijecenju
+-- svo osoblje koje je na misiji u ohiu
+Select * 
+from osoblje as o
+inner join osoblje_na_misiji as onm
+on onm.id_osoblje= o.id
+inner join misija as m
+on onm.id_misija= m.id
+inner join lokacija as l
+on l.id=m.id_lokacija
+where l.naziv="Ohio";
+-- svi idevi osoblja krvne grupe 0+ koje je na lijecenju i u sektoru je "Hrvatska kopnena vojska"
+Select l.id_osoblje, o.ime, o.prezime
+from lijecenje as l
+inner join osoblje as o
+on l.id_osoblje= o.id
+inner join sektor as s
+on s.id=o.id_sektor
+where o.krvna_grupa="0+" and s.naziv="Hrvatska kopnena vojska";
