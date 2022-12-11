@@ -2353,11 +2353,105 @@ INSERT INTO lijecenje VALUES
 
 
 
+-- UPITI:
+
+-- Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje na listi
+-- je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu. 
+
+
+SELECT os.id, ime, prezime
+FROM osoblje_na_treningu AS o
+INNER JOIN trening AS t
+	ON o.id_trening = t.id
+INNER JOIN osoblje AS os
+	ON os.id = o.id_osoblje
+INNER JOIN osoblje_na_misiji AS om
+	ON om.id_osoblje = os.id
+INNER JOIN misija AS m
+	ON om.id_misija = m.id
+WHERE 12 - MONTH(m.vrijeme_pocetka) <= TIMESTAMPDIFF(MONTH, m.vrijeme_pocetka, m.vrijeme_kraja) 
+ORDER BY performans DESC
+LIMIT 10;
 
 
 
 
+-- Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Gusjenična oklopna vozila" 
+-- koje je bilo na najviše popravaka. 
+
+
+SELECT ime, prezime, cin
+FROM
+	(SELECT ime, prezime, cin, COUNT(*) AS broj_popravka
+	FROM popravak AS p
+	INNER JOIN vozilo_na_misiji AS vm
+		ON p.id_vozilo_na_misiji = vm.id
+	INNER JOIN vozila AS v
+		ON v.id = vm.id_vozilo
+	INNER JOIN vozilo_na_turi AS vt
+		ON vt.id_vozilo = v.id
+	INNER JOIN osoblje AS o
+		ON o.id = vt.id_odgovorni
+	WHERE v.vrsta = "Gusjenična oklopna vozila"
+	GROUP BY v.id) AS l
+    ORDER BY broj_popravka DESC
+    LIMIT 1;
+
+
+
+-- Prikazi naziv ture kod koje je izdano najmanje opreme
+
+SELECT naziv
+FROM
+	(SELECT t.naziv, SUM(izdana_kolicina) AS izdano_na_turi
+	FROM izdana_oprema AS i
+	INNER JOIN osoblje_na_misiji AS om
+		ON i.id_osoblje_na_misiji = om.id
+	INNER JOIN misija AS m
+		ON om.id_misija = m.id
+	INNER JOIN tura AS t
+		ON t.id = m.id_tura
+	GROUP BY t.id) AS l
+    ORDER BY izdano_na_turi ASC
+    LIMIT 1;
+ 
+ 
+ 
+ -- Prikaži ukupni proracun sektora koji ima drugi najveci broj osoblja koji nisu bili na lijecenju niti jedanput te koji su sudjelovali
+ -- na najmanje jednom treningu ciji datum pocetka nije bio prije 23 godinu dana od sada.
+ 
+ 
+SELECT ukupni_proracun
+FROM
+	(SELECT ukupni_proracun, COUNT(*) AS br_osoblja_uvjeti
+	FROM osoblje AS o
+	INNER JOIN sektor AS s
+		ON o.id_sektor = s.id
+	INNER JOIN osoblje_na_treningu AS ot
+		ON ot.id_osoblje = o.id
+	INNER JOIN trening AS t
+		ON t.id = ot.id_trening
+	WHERE o.id NOT IN (SELECT id_osoblje FROM lijecenje) AND DATE(vrijeme_pocetka) + INTERVAL 23 YEAR >= NOW()
+	GROUP BY id_sektor) AS l
+    ORDER BY br_osoblja_uvjeti DESC
+    LIMIT 1, 1;
  
  
  
  
+ -- Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije 
+ -- od 31 godinu i koje je bilo odgovorno za najmanje jedno vozilo u nekoj turi.
+ 
+SELECT m.naziv AS naziv_misije, l.naziv AS naziv_lokacije
+FROM lokacija AS l
+INNER JOIN misija AS m
+	ON m.id_lokacija = l.id
+INNER JOIN osoblje_na_misiji AS om
+	ON om.id_misija = m.id
+INNER JOIN osoblje AS o
+	ON o.id = om.id_osoblje
+WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN 
+(SELECT id_osoblje FROM vozilo_na_turi AS vt INNER JOIN osoblje_na_turi AS ot ON vt.id_odgovorni = ot.id);
+
+ 
+
