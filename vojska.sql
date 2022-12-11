@@ -437,7 +437,7 @@ CREATE TRIGGER kriptiranje
 BEGIN
  INSERT INTO login VALUES (new.id,new.ime,md5(concat(new.ime,new.prezime)));
  -- SET new.lozinka = MD5(new.lozinka);
-        
+
 END//
 DELIMITER ;
 drop trigger kriptiranje;
@@ -452,7 +452,7 @@ DROP TABLE login;
 -- za kriptiranje lozinke
 select* from login;
 select * from login where lozinka = md5(concat("Eliza","Eliza")) and login.ime = "Eliza";
-"Eliza" , "Vuković"	
+"Eliza" , "Vuković"
 select * from login;
 */
 
@@ -1495,7 +1495,7 @@ INSERT INTO osoblje VALUES
  ( 10997 , 1 , "Felicija" , "Herceg" , "Pozornik" , STR_TO_DATE("10.1.1958.", "%d.%m.%Y.") , STR_TO_DATE("29.4.2007.", "%d.%m.%Y.") , "Umirovljen" , "B+" ),
  ( 10998 , 3 , "Božana" , "Galić" , "Narednik" , STR_TO_DATE("1.6.1968.", "%d.%m.%Y.") , STR_TO_DATE("19.10.1995.", "%d.%m.%Y.") , "Mrtav" , "AB-" ),
  ( 10999 , 3 , "admin" , "admin" , "Razvodnik" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Pokojan u duši" , "A+" );
- 
+
 
 
 
@@ -2386,7 +2386,7 @@ INSERT INTO lijecenje VALUES
 -- UPITI:
 
 -- Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje na listi
--- je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu. 
+-- je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu.
 
 
 SELECT os.id, ime, prezime
@@ -2399,15 +2399,15 @@ INNER JOIN osoblje_na_misiji AS om
 	ON om.id_osoblje = os.id
 INNER JOIN misija AS m
 	ON om.id_misija = m.id
-WHERE 12 - MONTH(m.vrijeme_pocetka) <= TIMESTAMPDIFF(MONTH, m.vrijeme_pocetka, m.vrijeme_kraja) 
+WHERE 12 - MONTH(m.vrijeme_pocetka) <= TIMESTAMPDIFF(MONTH, m.vrijeme_pocetka, m.vrijeme_kraja)
 ORDER BY performans DESC
 LIMIT 10;
 
 
 
 
--- Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Gusjenična oklopna vozila" 
--- koje je bilo na najviše popravaka. 
+-- Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Gusjenična oklopna vozila"
+-- koje je bilo na najviše popravaka.
 
 
 SELECT ime, prezime, cin
@@ -2427,6 +2427,8 @@ FROM
     ORDER BY broj_popravka DESC
     LIMIT 1;
 
+
+
 -- Prikazi naziv ture kod koje je izdano najmanje opreme
 
 SELECT naziv
@@ -2442,13 +2444,13 @@ FROM
 	GROUP BY t.id) AS l
     ORDER BY izdano_na_turi ASC
     LIMIT 1;
- 
- 
- 
+
+
+
  -- Prikaži ukupni proracun sektora koji ima drugi najveci broj osoblja koji nisu bili na lijecenju niti jedanput te koji su sudjelovali
  -- na najmanje jednom treningu ciji datum pocetka nije bio prije 23 godinu dana od sada.
- 
- 
+
+
 SELECT ukupni_proracun
 FROM
 	(SELECT ukupni_proracun, COUNT(*) AS br_osoblja_uvjeti
@@ -2463,13 +2465,13 @@ FROM
 	GROUP BY id_sektor) AS l
     ORDER BY br_osoblja_uvjeti DESC
     LIMIT 1, 1;
- 
- 
- 
- 
- -- Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije 
+
+
+
+
+ -- Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije
  -- od 31 godinu i koje je bilo odgovorno za najmanje jedno vozilo u nekoj turi.
- 
+
 SELECT m.naziv AS naziv_misije, l.naziv AS naziv_lokacije
 FROM lokacija AS l
 INNER JOIN misija AS m
@@ -2478,7 +2480,7 @@ INNER JOIN osoblje_na_misiji AS om
 	ON om.id_misija = m.id
 INNER JOIN osoblje AS o
 	ON o.id = om.id_osoblje
-WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN 
+WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN
 (SELECT id_osoblje FROM vozilo_na_turi AS vt INNER JOIN osoblje_na_turi AS ot ON vt.id_odgovorni = ot.id);
 -- jan
 -- navedi sva imena i prezimena ozlijedenih vojnika kojima lijecenje kosta vise od 500 i manje od 5000
@@ -2488,7 +2490,7 @@ right join lijecenje as l on l.id_osoblje= onm.id
 where trosak_lijecenja>500 and trosak_lijecenja<5000;
 
 -- navedi koliko se samokresa koristi u mornarici
-select count(id) 
+select count(id)
 from izdana_oprema as i
 join osoblje_na_misiji as o on i.id=o.id
 join
@@ -2498,6 +2500,3 @@ join
 -- sve misije u ohiu ako ih nema onda da prikazuje sve misije u vezi sarajeva
 
 -- svo osoblje krvne grupe 0+ koje je na lijecenju
-
-
- 
