@@ -2406,7 +2406,7 @@ LIMIT 10;
 
 
 
--- Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Gusjenična oklopna vozila"
+-- Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Helikopteri"
 -- koje je bilo na najviše popravaka.
 
 
@@ -2420,11 +2420,13 @@ FROM
 		ON v.id = vm.id_vozilo
 	INNER JOIN vozilo_na_turi AS vt
 		ON vt.id_vozilo = v.id
+	INNER JOIN osoblje_na_turi AS ot
+		ON ot.id = vt.id_odgovorni
 	INNER JOIN osoblje AS o
-		ON o.id = vt.id_odgovorni
-	WHERE v.vrsta = "Gusjenična oklopna vozila"
+		ON o.id = ot.id_osoblje
+	WHERE v.vrsta = "Helikopteri"
 	GROUP BY v.id) AS l
-    ORDER BY broj_popravka DESC
+	ORDER BY broj_popravka DESC
     LIMIT 1;
 
 
