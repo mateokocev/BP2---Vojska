@@ -7,8 +7,9 @@ CREATE TABLE sektor(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(60) NOT NULL,
     datum_osnivanja DATE NOT NULL,
-    opis TEXT,
-    ukupni_proracun DECIMAL(12,2) NOT NULL
+    opis TEXT NOT NULL,
+    ukupni_proracun DECIMAL(12,2) NOT NULL,
+    CHECK(ukupni_proracun >= 0),
 );
  -- DROP TABLE sektor;
 
@@ -16,10 +17,10 @@ CREATE TABLE sektor(
 
 CREATE TABLE lokacija(
     id INTEGER PRIMARY KEY,
-    id_sektor INTEGER,
+    id_sektor INTEGER NOT NULL,
     naziv VARCHAR(60) NOT NULL,
-    zemljopisna_duzina DECIMAL(10, 7),
-    zemljopisna_sirina DECIMAL(10, 7),
+    zemljopisna_duzina DECIMAL(10, 7) NOT NULL,
+    zemljopisna_sirina DECIMAL(10, 7) NOT NULL,
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 -- DROP TABLE lokacija;
@@ -28,7 +29,7 @@ CREATE TABLE lokacija(
 
 CREATE TABLE osoblje(
     id INTEGER PRIMARY KEY,
-    id_sektor INTEGER,
+    id_sektor INTEGER NOT NULL,
     ime VARCHAR(30) NOT NULL,
     prezime VARCHAR(30) NOT NULL,
     cin VARCHAR(20) NOT NULL,
@@ -61,7 +62,8 @@ CREATE TABLE misija(
     id_lokacija INTEGER NOT NULL,
     id_tura INTEGER NOT NULL,
     ishod TEXT,   -- vratit NOT NULL
-    trosak_misije NUMERIC(15, 2),
+    trosak_misije NUMERIC(15, 2) NOT NULL,
+    CHECK(trosak_misije >= 1),
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id)
 );
@@ -70,8 +72,8 @@ CREATE TABLE misija(
 
 CREATE TABLE osoblje_na_misiji(
     id INTEGER PRIMARY KEY,
-    id_osoblje INTEGER,
-    id_misija INTEGER,
+    id_osoblje INTEGER NOT NULL,
+    id_misija INTEGER NOT NULL,
     FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
     FOREIGN KEY (id_misija) REFERENCES misija(id)
 );
@@ -81,8 +83,8 @@ CREATE TABLE osoblje_na_misiji(
 
 CREATE TABLE osoblje_na_turi(
     id INTEGER PRIMARY KEY,
-    id_osoblje INTEGER,
-    id_tura INTEGER,
+    id_osoblje INTEGER NOT NULL,
+    id_tura INTEGER NOT NULL,
     datum_pocetka DATETIME NOT NULL,
     datum_kraja DATETIME,
     FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
@@ -97,7 +99,9 @@ CREATE TABLE vozila(
     naziv VARCHAR(60) NOT NULL,
     vrsta VARCHAR(50) NOT NULL,
     ukupna_kolicina INTEGER NOT NULL,
-    kapacitet INTEGER NOT NULL -- leo je rekao da mu ne pase, zasto je to tu? ko je to dodao? zasto smo zivi? di mi je pistolj? auto increment?
+    kapacitet INTEGER NOT NULL,
+    CHECK(ukupna_kolicina >= 1 AND kapacitet >= 1)
+
 );
 -- DROP TABLE vozila;
 
@@ -105,9 +109,10 @@ CREATE TABLE vozila(
 
 CREATE TABLE vozilo_na_misiji(
     id INTEGER PRIMARY KEY,
-    id_vozilo INTEGER,
-    kolicina INTEGER,
-    id_misija INTEGER,
+    id_vozilo INTEGER NOT NULL,
+    kolicina INTEGER NOT NULL,
+    id_misija INTEGER NOT NULL,
+    CHECK(kolicina >= 1),
     FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
     FOREIGN KEY (id_misija) REFERENCES misija(id)
 );
@@ -131,11 +136,12 @@ CREATE TABLE vozilo_na_turi(
 
 CREATE TABLE popravak(
     id INTEGER PRIMARY KEY,
-    id_vozilo_na_misiji INTEGER,
+    id_vozilo_na_misiji INTEGER NOT NULL,
     opis_stete TEXT NOT NULL,
     pocetak_popravka DATETIME NOT NULL,
     kraj_popravka DATETIME,
-    trosak_popravka NUMERIC(15,2),
+    trosak_popravka NUMERIC(15,2) NOT NULL,
+    CHECK(trosak_popravka >= 0),
     FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id)
 );
 -- DROP TABLE popravak;
@@ -146,7 +152,8 @@ CREATE TABLE oprema(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
     vrsta VARCHAR(50) NOT NULL,
-    ukupna_kolicina INTEGER NULL
+    ukupna_kolicina INTEGER NOT NULL,
+    CHECK(ukupna_kolicina >= 1),
 );
 -- DROP TABLE oprema;
 
@@ -154,8 +161,8 @@ CREATE TABLE oprema(
 
 CREATE TABLE izdana_oprema(
     id INTEGER PRIMARY KEY,
-    id_oprema INTEGER,
-    id_osoblje_na_misiji INTEGER,
+    id_oprema INTEGER NOT NULL,
+    id_osoblje_na_misiji INTEGER NOT NULL,
     izdana_kolicina INTEGER DEFAULT 1,
     FOREIGN KEY (id_oprema) REFERENCES oprema(id),
     FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
@@ -180,8 +187,8 @@ CREATE TABLE osoblje_na_treningu(
 	id_trening INTEGER NOT NULL,
 	performans INTEGER NOT NULL,
 	CHECK(performans >= 0 AND performans < 11),
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-    FOREIGN KEY (id_trening) REFERENCES trening(id)
+        FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
+        FOREIGN KEY (id_trening) REFERENCES trening(id)
 );
 -- DROP TABLE osoblje_na_treningu;
 
@@ -189,11 +196,12 @@ CREATE TABLE osoblje_na_treningu(
 CREATE TABLE lijecenje(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER,
-    status_lijecenja TEXT NOT NULL,  -- interaktivno ongoing completed itd. ako je ongoing datum kraja je null / possible trigger?
+    status_lijecenja TEXT NOT NULL,  
     pocetak_lijecenja DATETIME NOT NULL,
     kraj_lijecenja DATETIME,
     opis_ozljede TEXT NOT NULL,
     trosak_lijecenja NUMERIC(15,2),
+    CHECK(trosak_lijecenja >= 0),
     FOREIGN KEY (id_osoblje) REFERENCES osoblje(id)
 );
 -- DROP TABLE lijecenje;
