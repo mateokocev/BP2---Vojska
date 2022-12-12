@@ -2492,6 +2492,9 @@ INNER JOIN osoblje AS o
 	ON o.id = om.id_osoblje
 WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN
 (SELECT id_osoblje FROM vozilo_na_turi AS vt INNER JOIN osoblje_na_turi AS ot ON vt.id_odgovorni = ot.id);
+
+
+
 -- jan
 -- navedi sva imena i prezimena ozlijedenih vojnika na misiji kojima lijecenje kosta vise od 500 i manje od 5000
 select o.id,o.ime,o.prezime
