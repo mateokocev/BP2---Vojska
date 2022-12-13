@@ -25,8 +25,14 @@
   
     {%block content%}    
     <topMainbar>
-        <h1></h1>
-        <h1>Dobro došao, {{ime}} </h1>
+        <h1>
+
+        {% if cin %}
+            <button style="margin-left: 20px;" class="button-24" role="button">Uredi</button>
+        {% endif %}
+
+        </h1>
+        <h1>Dobro došao, {{ime}} {{cin}}</h1>
         <div class="imgalign">
 
             <ul class="wrapper">

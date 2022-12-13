@@ -27,8 +27,9 @@ body
     overflow-x: hidden;
     grid-template-columns: 25% 25% 25% 25% ;
     grid-auto-rows: 500px;
-    height: auto;
+    height: 500px;
    
+    overflow-y: scroll;
 
 
     box-shadow: 0 0 20px rgba(8,7,16,0.6); 

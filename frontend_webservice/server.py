@@ -32,6 +32,7 @@ def RandomImageGenerator():
 
 
 
+
 # Route for handling the login page logic
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -56,14 +57,18 @@ def login():
             error = 'Kriva lozinka pokusaj ponovno!'
 
         else:
-
+            osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
+            if osoblje[2] != "Razvodnik":
+                dozvola = None
+            else :
+                dozvola = osoblje[2]
             VojskaText = BP_DataAll("select opis from sektor;")
             print(VojskaText)
             global randimg
             randimg = RandomImageGenerator()
             
             print(randimg)
-            return render_template('index.html',randimg=randimg,ime=name,VojskaText=VojskaText)
+            return render_template('index.html',randimg=randimg,ime=name,VojskaText=VojskaText,cin = dozvola)
     
     return render_template('Login.html')
 
@@ -74,6 +79,8 @@ def profile():
     
     osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
     sektor = BP_DataRow("select sektor.naziv from login,osoblje,sektor where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"' and osoblje.prezime='"+UpisLozinka+"' and id_sektor = sektor.id;")
+
+  
 
     if sektor[0]== "Hrvatska ratna mornarica":
         cin = str(osoblje[2]) +"_p"
@@ -94,11 +101,22 @@ def kopnenaVojska():
     
     return render_template('kopnenaVojska.html',data=data,len=len(data))
 
+@app.route('/database', methods=['GET', 'POST'])
+def database():
+    if request.method == 'GET':
+        status="postano"
+    else:
+        status="nije postano"
+  
+   
+    return render_template('database.html',status=status)
+
 
 @app.route('/kopnena/<data>')  #Exception
 def informacije (data):
     misije = BP_DataAll("select misija.naziv,misija.ishod,DATE(misija.vrijeme_pocetka),misija.trosak_misije,DATE(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura;")
     osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa,misija.naziv from osoblje ,osoblje_na_misiji,misija where osoblje.id = osoblje_na_misiji.id_osoblje and misija.id = osoblje_na_misiji.id_misija;")
+
 
     return render_template('informacije.html',data=data,misije=misije,len=len(misije),osoblje=osoblje, len2=len(osoblje))
 
@@ -106,7 +124,7 @@ def informacije (data):
 
 
                             # Errors
-@app.errorhandler(505)
+@app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html',err="4o4 error ",note="programur profesional",desc="What are you looking for here silly?",ime=name,)
 
