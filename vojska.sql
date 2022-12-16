@@ -1522,62 +1522,86 @@ INSERT INTO tura VALUES
 (14, "SAD tura", "Mirovna tura", STR_TO_DATE("01.12.2012","%d.%m.%Y."), STR_TO_DATE("28.09.2013","%d.%m.%Y."));
 
 
-
+   --  id INTEGER PRIMARY KEY,
+    -- naziv VARCHAR(50) NOT NULL,
+    -- vrijeme_pocetka DATETIME NOT NULL,
+    -- vrijeme_kraja DATETIME,
+    -- id_lokacija INTEGER NOT NULL,
+    -- id_tura INTEGER NOT NULL,
+    -- ishod TEXT,   -- vratit NOT NULL
+    -- trosak_misije NUMERIC(15, 2) NOT NULL
+  
 INSERT INTO misija VALUES
- ( 3001 , "UNAVEM III" , STR_TO_DATE("7.12.1996.", "%d.%m.%Y.") , STR_TO_DATE("24.6.2003.", "%d.%m.%Y.") , 29 , 10 , null, 5507101 ),
- ( 3002 , "UNAVEM II" , STR_TO_DATE("18.11.1995.", "%d.%m.%Y.") , STR_TO_DATE("20.2.2022.", "%d.%m.%Y.") , 20 , 10 , null, 6541048 ),
- ( 3003 , "UNTAET" , STR_TO_DATE("17.3.1997.", "%d.%m.%Y.") , STR_TO_DATE("6.5.1992.", "%d.%m.%Y.") , 36 , 7 , null, 3855871 ),
- ( 3004 , "UNMISET" , STR_TO_DATE("23.5.2016.", "%d.%m.%Y.") , STR_TO_DATE("3.9.1999.", "%d.%m.%Y.") , 19 , 12 , null, 1680718 ),
- ( 3005 , "UNMIT" , STR_TO_DATE("14.7.2005.", "%d.%m.%Y.") , STR_TO_DATE("11.3.2001.", "%d.%m.%Y.") , 38 , 1 , null, 6079519 ),
- ( 3006 , "UNCRO" , STR_TO_DATE("1.2.2001.", "%d.%m.%Y.") , STR_TO_DATE("17.3.1992.", "%d.%m.%Y.") , 27 , 13 , null, 3381107 ),
- ( 3007 , "UNFICYP" , STR_TO_DATE("13.9.2017.", "%d.%m.%Y.") , STR_TO_DATE("11.12.2018.", "%d.%m.%Y.") , 22 , 13 , null, 5970893 ),
- ( 3008 , "MONUA" , STR_TO_DATE("27.10.2004.", "%d.%m.%Y.") , STR_TO_DATE("24.8.2030.", "%d.%m.%Y.") , 28 , 7 , null, 6807180 ),
- ( 3009 , "MINURCA" , STR_TO_DATE("15.7.2010.", "%d.%m.%Y.") , STR_TO_DATE("23.10.2032.", "%d.%m.%Y.") , 27 , 10 , null, 2975836 ),
- ( 3010 , "MONUC UN" , STR_TO_DATE("22.6.2029.", "%d.%m.%Y.") , STR_TO_DATE("18.1.1997.", "%d.%m.%Y.") , 41 , 2 , null, 8709357 ),
- ( 3011 , "UNYOM" , STR_TO_DATE("5.3.2010.", "%d.%m.%Y.") , STR_TO_DATE("22.1.2023.", "%d.%m.%Y.") , 20 , 11 , null, 9916296 ),
+ ( 3001 , "UNAVEM III" , STR_TO_DATE("7.12.1996.", "%d.%m.%Y.") , STR_TO_DATE("24.6.2003.", "%d.%m.%Y.") , 29 , 10 ,"Verifikacijska misija Ujedinjenih naroda Angola III bila je mirovna misija koja je počela djelovati u Angoli u veljači 1995. tijekom građanskog rata. Ustanovilo ga je Vijeće sigurnosti Ujedinjenih naroda Rezolucijom 976, a svoju misiju je završilo u lipnju 1997. ", 5507101 ),
+ ( 3002 , "UNAVEM II" , STR_TO_DATE("18.11.1995.", "%d.%m.%Y.") , STR_TO_DATE("20.2.2022.", "%d.%m.%Y.") , 20 , 10 ," Verifikacijska misija Ujedinjenih naroda u Angoli II, uspostavljena u svibnju 1991. i trajala do veljače 1995., bila je druga mirovna misija Ujedinjenih naroda, od ukupno četiri, raspoređene u Angoli tijekom Angolskog građanskog rata, najdužeg rata u modernoj afričkoj povijesti. ", 6541048 ),
+ ( 3003 , "UNTAET" , STR_TO_DATE("17.3.1997.", "%d.%m.%Y.") , STR_TO_DATE("6.5.1992.", "%d.%m.%Y.") , 36 , 7 , "Prijelazna uprava Ujedinjenih naroda u Istočnom Timoru, bila je misija Ujedinjenih naroda u Istočnom Timoru koja je imala za cilj riješiti desetljećima dugu istočnotimorsku krizu na području koje je okupirala indonezijska vojska.", 3855871 ),
+ ( 3004 , "UNMISET" , STR_TO_DATE("23.5.2016.", "%d.%m.%Y.") , STR_TO_DATE("3.9.1999.", "%d.%m.%Y.") , 19 , 12 ," Misija potpore Ujedinjenih naroda Istočnom Timoru trajala je od 20. svibnja 2002. do 20. svibnja 2005., kada ju je zamijenio Ured Ujedinjenih naroda u Istočnom Timoru. Osnovan je kada je Istočni Timor postao međunarodno priznata neovisna država i kada je Prijelazna uprava Ujedinjenih naroda u Istočnom Timoru završila.", 1680718 ),
+ ( 3005 , "UNMIT" , STR_TO_DATE("14.7.2005.", "%d.%m.%Y.") , STR_TO_DATE("11.3.2001.", "%d.%m.%Y.") , 38 , 1 ,"Integrirana misija Ujedinjenih naroda u Istočnom Timoru osnovana je 25. kolovoza 2006. Rezolucijom Vijeća sigurnosti UN-a 1704. ", 6079519 ),
+ ( 3006 , "UNCRO" , STR_TO_DATE("1.2.2001.", "%d.%m.%Y.") , STR_TO_DATE("17.3.1992.", "%d.%m.%Y.") , 27 , 13 ,"UNCRO ili Operacija Ujedinjenih naroda za obnovu povjerenja u Hrvatskoj naziv je za mirovnu operaciju Ujedinjenih naroda u Hrvatskoj. Mirovna operacija oformljena je Rezolucijom Vijeća sigurnosti UN-a broj 981 od 31. ožujka 1995., kao slijednica UNPROFOR-a. ", 3381107 ),
+ ( 3007 , "UNFICYP" , STR_TO_DATE("13.9.2017.", "%d.%m.%Y.") , STR_TO_DATE("11.12.2018.", "%d.%m.%Y.") , 22 , 13 ,"Mirovne snage Ujedinjenih naroda na Cipru (UNFICYP) mirovne su snage Ujedinjenih naroda koje su osnovane Rezolucijom 186 Vijeća sigurnosti Ujedinjenih naroda 1964. kako bi spriječile ponovne borbe nakon nasilja među zajednicama između ciparskih Grka i ciparskih Turaka, kako bi pridonijele održavanju i ponovnu uspostavu zakona i reda i olakšati povratak u normalne uvjete." , 5970893 ),
+ ( 3008 , "MONUA" , STR_TO_DATE("27.10.2004.", "%d.%m.%Y.") , STR_TO_DATE("24.8.2030.", "%d.%m.%Y.") , 28 , 7 ,"Promatračka misija Ujedinjenih naroda u Angoli osnovana je Rezolucijom Vijeća sigurnosti Ujedinjenih naroda 1118 od 30. lipnja 1997. Zbog kolapsa mirovnog procesa u Angoli, glavni tajnik UN-a preporučio je Vijeću sigurnosti UN-a da se mandat MONUA-e ne obnavlja." , 6807180 ),
+ ( 3009 , "MINURCA" , STR_TO_DATE("15.7.2010.", "%d.%m.%Y.") , STR_TO_DATE("23.10.2032.", "%d.%m.%Y.") , 27 , 10 ,"Misija Ujedinjenih naroda u Srednjoafričkoj Republici, poznatija kao MINURCA, bile su mirovne snage Ujedinjenih naroda u Srednjoafričkoj Republici. Misija od 1350 vojnika uspostavljena je Rezolucijom Vijeća sigurnosti Ujedinjenih naroda 1159 u ožujku 1998." , 2975836 ),
+ ( 3010 , "MONUC UN" , STR_TO_DATE("22.6.2029.", "%d.%m.%Y.") , STR_TO_DATE("18.1.1997.", "%d.%m.%Y.") , 41 , 2 ,"MONUC svojom rezolucijom od 30. studenoga 1999., u početku planirati promatranje primirja i razdruživanje snaga i održavati vezu sa svim stranama Sporazuma o prekidu vatre. Kasnije u nizu rezolucija, Vijeće je proširilo mandat MONUC-a na nadzor provedbe Sporazuma o prekidu vatre i dodijelilo više povezanih dodatnih zadaća." , 8709357 ),
+ ( 3011 , "UNYOM" , STR_TO_DATE("5.3.2010.", "%d.%m.%Y.") , STR_TO_DATE("22.1.2023.", "%d.%m.%Y.") , 20 , 11 ,"Promatračka misija UN-a u Jemenu osnovana je 1963. godine. Sjeverni Jemen je 1962. ušao u stanje građanskog rata. Jemen se pridružio Egiptu 1958., a zatim se 1962. ponovno razdvojio, što je izazvalo sukob." , 9916296 ),
+ -- new
  ( 3012 , "MINURCA" , STR_TO_DATE("24.5.2025.", "%d.%m.%Y.") , STR_TO_DATE("9.8.2022.", "%d.%m.%Y.") , 31 , 14 , null, 5019551 ),
- ( 3013 , "UNOMIG" , STR_TO_DATE("17.3.2013.", "%d.%m.%Y.") , STR_TO_DATE("14.11.2004.", "%d.%m.%Y.") , 32 , 4 , null, 2062168 ),
- ( 3014 , "UNMIL" , STR_TO_DATE("9.2.2002.", "%d.%m.%Y.") , STR_TO_DATE("7.1.2029.", "%d.%m.%Y.") , 21 , 13 , null, 8728552 ),
- ( 3015 , "UNMOGIP" , STR_TO_DATE("8.8.2018.", "%d.%m.%Y.") , STR_TO_DATE("7.7.2006.", "%d.%m.%Y.") , 23 , 4 , null, 3318084 ),
- ( 3016 , "MINURCAT" , STR_TO_DATE("7.11.2021.", "%d.%m.%Y.") , STR_TO_DATE("21.4.2004.", "%d.%m.%Y.") , 34 , 8 , null, 1692847 ),
- ( 3017 , "UNAMID" , STR_TO_DATE("17.12.1999.", "%d.%m.%Y.") , STR_TO_DATE("14.3.1994.", "%d.%m.%Y.") , 39 , 8 , null, 8843818 ),
- ( 3018 , "UNAMSIL" , STR_TO_DATE("4.8.2026.", "%d.%m.%Y.") , STR_TO_DATE("20.2.1994.", "%d.%m.%Y.") , 27 , 4 , null, 3493087 ),
- ( 3019 , "UNASOG" , STR_TO_DATE("23.3.2001.", "%d.%m.%Y.") , STR_TO_DATE("3.5.2012.", "%d.%m.%Y.") , 34 , 5 , null, 2149934 ),
- ( 3020 , "UNPROFOR" , STR_TO_DATE("1.6.1995.", "%d.%m.%Y.") , STR_TO_DATE("1.12.2022.", "%d.%m.%Y.") , 28 , 1 , null, 5557034 ),
- ( 3021 , "MINUGUA" , STR_TO_DATE("6.3.2005.", "%d.%m.%Y.") , STR_TO_DATE("23.6.1995.", "%d.%m.%Y.") , 21 , 12 , null, 4525460 ),
- ( 3022 , "UNOMIL" , STR_TO_DATE("2.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("14.10.2033.", "%d.%m.%Y.") , 41 , 7 , null, 4644302 ),
- ( 3023 , "UNTMIH" , STR_TO_DATE("7.12.2019.", "%d.%m.%Y.") , STR_TO_DATE("15.3.2034.", "%d.%m.%Y.") , 27 , 11 , null, 6720729 ),
- ( 3024 , "UNMIBH" , STR_TO_DATE("21.3.1999.", "%d.%m.%Y.") , STR_TO_DATE("19.9.2027.", "%d.%m.%Y.") , 26 , 12 , null, 2760791 ),
- ( 3025 , "ONUSAL" , STR_TO_DATE("9.3.2009.", "%d.%m.%Y.") , STR_TO_DATE("11.1.1999.", "%d.%m.%Y.") , 20 , 12 , null, 2505324 ),
+ 
+ ( 3013 , "UNOMIG" , STR_TO_DATE("17.3.2013.", "%d.%m.%Y.") , STR_TO_DATE("14.11.2004.", "%d.%m.%Y.") , 32 , 4 ,"Promatračka misija Ujedinjenih naroda u Gruziji (UNOMIG) osnovana je Rezolucijom 858 Vijeća sigurnosti Ujedinjenih naroda u kolovozu 1993. Kako bi provjerila usklađenost sa sporazumom o prekidu vatre od 27. srpnja 1993. između Republike Gruzije i snaga u Abhaziji, s posebnompozornošću na situacija u gradu Sukhumi, Gruzija. Također je trebalo istražiti izvješća o kršenjima primirja, pokušati riješiti takve incidente sa uključenim stranama i izvijestiti glavnog tajnika Ujedinjenih naroda o provedbi svog mandata. 88 vojnih savjetnika bilo je ovlašteno za raspoređivanje u regiji. Završila je 15. lipnja 2009., kada je Rusija stavila veto na produljenje misije. Posljednji promatrači napustili su regiju 15. srpnja 2009." , 2062168 ),
+ ( 3014 , "UNMIL" , STR_TO_DATE("9.2.2002.", "%d.%m.%Y.") , STR_TO_DATE("7.1.2029.", "%d.%m.%Y.") , 21 , 13 ,"Misija Ujedinjenih naroda u Liberiji bila je mirovna operacija uspostavljena u rujnu 2003. za praćenje sporazuma o prekidu vatre u Liberiji nakon ostavke predsjednika Charlesa Taylora i završetka Drugog liberijskog građanskog rata." , 8728552 ),
+ ( 3015 , "UNMOGIP" , STR_TO_DATE("8.8.2018.", "%d.%m.%Y.") , STR_TO_DATE("7.7.2006.", "%d.%m.%Y.") , 23 , 4 ,"Prva skupina vojnih promatrača Ujedinjenih naroda stigla je u područje misije 24. siječnja 1949. kako bi nadgledali prekid vatre između Indije i Pakistana u državi Jammu i Kashmir. Ovi promatrači, pod zapovjedništvom vojnog savjetnika kojeg je imenovao glavni tajnik UN-a, činili su jezgru Vojne promatračke skupine Ujedinjenih naroda u Indiji i Pakistanu (UNMOGIP).", 3318084 ),
+ ( 3016 , "MINURCAT" , STR_TO_DATE("7.11.2021.", "%d.%m.%Y.") , STR_TO_DATE("21.4.2004.", "%d.%m.%Y.") , 34 , 8 ,"MINURCAT je završio svoj mandat 31. prosinca 2010., u skladu s rezolucijom Vijeća sigurnosti 1923 (2010) i na zahtjev čadske vlade, koja je preuzela punu odgovornost za zaštitu civila na svom teritoriju. Nakon povlačenja, tim UN-a u zemlji i Integrirani ured UN-a za izgradnju mira u Srednjoafričkoj Republici (BINUCA) ostali su u zemlji kako bi nastavili raditi za dobrobit naroda Čada." , 1692847 ),
+ ( 3017 , "UNAMID" , STR_TO_DATE("17.12.1999.", "%d.%m.%Y.") , STR_TO_DATE("14.3.1994.", "%d.%m.%Y.") , 39 , 8 ,"Hibridna operacija Afričke unije i Ujedinjenih naroda u Darfuru (poznata po akronimu UNAMID) zajednička je mirovna misija Afričke unije (AU) i Ujedinjenih naroda (UN) službeno odobrena Rezolucijom 1769 Vijeća sigurnosti Ujedinjenih naroda 31. srpnja 2007. Donijeti stabilnost u ratom razorenu regiju Darfur u Sudanu dok traju mirovni pregovori o konačnom rješenju." , 8843818 ),
+ ( 3018 , "UNAMSIL" , STR_TO_DATE("4.8.2026.", "%d.%m.%Y.") , STR_TO_DATE("20.2.1994.", "%d.%m.%Y.") , 27 , 4 ,"Misija Ujedinjenih naroda u Sierra Leoneu bila je mirovna operacija Ujedinjenih naroda u Sierra Leoneu od 1999. do 2006. Osnovalo ju je Vijeće sigurnosti Ujedinjenih naroda u listopadu 1999. kako bi pomoglo u provedbi Mirovnog sporazuma iz Loméa, sporazuma koji je trebao okončati Građanski rat u Sijera Leoneu." , 3493087 ),
+ ( 3019 , "UNASOG" , STR_TO_DATE("23.3.2001.", "%d.%m.%Y.") , STR_TO_DATE("3.5.2012.", "%d.%m.%Y.") , 34 , 5 ,"Promatračka skupina Ujedinjenih naroda u pojasu Aouzou bila je promatračka misija Ujedinjenih naroda koja je bila raspoređena u pojasu Aouzou, u Republici Čad. ", 2149934 ),
+ ( 3020 , "UNPROFOR" , STR_TO_DATE("1.6.1995.", "%d.%m.%Y.") , STR_TO_DATE("1.12.2022.", "%d.%m.%Y.") , 28 , 1 ,"UNPROFOR je akronim za 'United Nations PROtection FORces' osnovane 21. veljače 1992. Rezolucijom 743 Vijeća sigurnosti, a raspuštene 31. ožujka 1995. Ti su naoružani 'čuvari mira' UN-a bili pod kontrolom Vijeća sigurnosti, a od oko 39.000 UNPROFOR-ovih vojnika iz svih zemalja svijeta, u misiji ih je poginulo 320." , 5557034 ),
+ ( 3021 , "MINUGUA" , STR_TO_DATE("6.3.2005.", "%d.%m.%Y.") , STR_TO_DATE("23.6.1995.", "%d.%m.%Y.") , 21 , 12 ,"MINUGUA je bila humanitarna misija Ujedinjenih naroda u Gvatemali koja je uključivala, u najkritičnijoj točki mirovnog procesa, tromjesečnu mirovnu misiju. Izvorni naziv ove operacije bio je Misija Ujedinjenih naroda za provjeru ljudskih prava i poštivanja Sveobuhvatnog sporazuma o ljudskim pravima u Gvatemali." , 4525460 ),
+ ( 3022 , "UNOMIL" , STR_TO_DATE("2.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("14.10.2033.", "%d.%m.%Y.") , 41 , 7 ,"Promatračka misija Ujedinjenih naroda u Liberiji bila je mirovna misija Ujedinjenih naroda u Liberiji. Osnovan je Rezolucijom 866 sa sjedištem u glavnom gradu Monroviji.", 4644302 ),
+ -- new
+  ( 3023 , "UNTMIH" , STR_TO_DATE("7.12.2019.", "%d.%m.%Y.") , STR_TO_DATE("15.3.2034.", "%d.%m.%Y.") , 27 , 11 , null, 6720729 ),
+ 
+ ( 3024 , "UNMIBH" , STR_TO_DATE("21.3.1999.", "%d.%m.%Y.") , STR_TO_DATE("19.9.2027.", "%d.%m.%Y.") , 26 , 12 ,"Misija Ujedinjenih naroda u Bosni i Hercegovini bila je međunarodna organizacija osnovana Rezolucijom 1035 Vijeća sigurnosti Ujedinjenih naroda 21. prosinca 1995. godine. Svoj mandat završila je 31. prosinca 2002. godine, kada ju je naslijedila Policijska misija Europske unije u Bosni i Hercegovini." , 2760791 ),
+ ( 3025 , "ONUSAL" , STR_TO_DATE("9.3.2009.", "%d.%m.%Y.") , STR_TO_DATE("11.1.1999.", "%d.%m.%Y.") , 20 , 12 ,"ONUCA i ONUSAL bile su dvije mirovne misije Ujedinjenih naroda raspoređene u Srednjoj Americi tijekom kasnih 1980-ih i ranih 1990-ih.", 2505324 ),
+ 
+ -- new
  ( 3026 , "MINOPUH UN" , STR_TO_DATE("23.5.2026.", "%d.%m.%Y.") , STR_TO_DATE("20.1.1996.", "%d.%m.%Y.") , 34 , 13 , null, 8658669 ),
- ( 3027 , "UNMIH" , STR_TO_DATE("1.12.1995.", "%d.%m.%Y.") , STR_TO_DATE("24.11.2003.", "%d.%m.%Y.") , 17 , 14 , null, 2674440 ),
+ 
+ ( 3027 , "UNMIH" , STR_TO_DATE("1.12.1995.", "%d.%m.%Y.") , STR_TO_DATE("24.11.2003.", "%d.%m.%Y.") , 17 , 14 ,"Misija Ujedinjenih naroda na Haitiju bila je mirovna operacija koju su Ujedinjeni narodi provodili između rujna 1993. i lipnja 1996. Misija je ponovno uspostavljena u travnju 2004., nakon što je pobuna zauzela veći dio Haitija i predsjednik Bertrand Aristide dao ostavku." , 2674440 ),
+ 
+ -- new
  ( 3028 , "MONUA" , STR_TO_DATE("14.3.2003.", "%d.%m.%Y.") , STR_TO_DATE("8.6.2023.", "%d.%m.%Y.") , 18 , 6 , null, 8566407 ),
  ( 3029 , "UNAMSIL" , STR_TO_DATE("25.2.1996.", "%d.%m.%Y.") , STR_TO_DATE("11.1.2001.", "%d.%m.%Y.") , 21 , 12 , null, 8550255 ),
  ( 3030 , "UNAMSIL" , STR_TO_DATE("14.11.1992.", "%d.%m.%Y.") , STR_TO_DATE("27.1.2028.", "%d.%m.%Y.") , 19 , 5 , null, 9865296 ),
  ( 3031 , "UNMIH" , STR_TO_DATE("21.7.1997.", "%d.%m.%Y.") , STR_TO_DATE("11.8.2014.", "%d.%m.%Y.") , 29 , 2 , null, 7109438 ),
- ( 3032 , "ONUC" , STR_TO_DATE("12.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2004.", "%d.%m.%Y.") , 27 , 5 , null, 1903659 ),
- ( 3033 , "UNOCI" , STR_TO_DATE("2.11.2030.", "%d.%m.%Y.") , STR_TO_DATE("24.2.1995.", "%d.%m.%Y.") , 17 , 13 , null, 611531 ),
+ 
+ ( 3032 , "ONUC" , STR_TO_DATE("12.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2004.", "%d.%m.%Y.") , 27 , 5 ,"Operacija Ujedinjenih naroda u Kongu bile su mirovne snage Ujedinjenih naroda raspoređene u Republici Kongo 1960. kao odgovor na krizu u Kongu. ONUC je bila prva mirovna misija UN-a sa značajnim vojnim sposobnostima i ostaje jedna od najvećih UN-ovih operacija i po opsegu i po operativnom opsegu." , 1903659 ),
+ ( 3033 , "UNOCI" , STR_TO_DATE("2.11.2030.", "%d.%m.%Y.") , STR_TO_DATE("24.2.1995.", "%d.%m.%Y.") , 17 , 13 ,"Operacija Ujedinjenih naroda u Obali Bjelokosti (UNOCI) (francuski: Opération des Nations Unies en Côte d'Ivoire (UNOCI)) bila je mirovna misija UN-a i NATO-a u Obali Bjelokosti (Côte d'Ivoire) čiji je cilj bio 'olakšati provedbu mirovnog sporazuma koji su potpisale u siječnju 2003. od strane stranaka u Bjelokosti' (koji je imao za cilj okončanje građanskog rata u Bjelokosti). Dvije glavne stranke Bjelokosti bile su vladine snage Bjelokosti koje su kontrolirale jug zemlje i Nove snage (bivši pobunjenici) koje su kontrolirale sjever. Misija UNOCI-ja imala je za cilj kontrolirati 'zonu povjerenja' u središtu zemlje koja je razdvajala dvije strane. Šef misije i posebni predstavnik glavnog tajnika bio je Aïchatou Mindaoudou Souleymane iz Nigera. Ona je 2013. naslijedila Berta Koendersa iz Nizozemske, koji je 2011. naslijedio Choi Young-jina iz Južne Koreje. Misija je službeno završila 30. lipnja 2017." , 611531 ),
+ 
  ( 3034 , "UNSMIH" , STR_TO_DATE("25.5.2019.", "%d.%m.%Y.") , STR_TO_DATE("22.7.2009.", "%d.%m.%Y.") , 20 , 6 , null, 3860340 ),
- ( 3035 , "UNMOP" , STR_TO_DATE("19.7.2022.", "%d.%m.%Y.") , STR_TO_DATE("3.3.2023.", "%d.%m.%Y.") , 24 , 7 , null, 5264104 ),
- ( 3036 , "UNMIK" , STR_TO_DATE("24.10.2001.", "%d.%m.%Y.") , STR_TO_DATE("28.12.2004.", "%d.%m.%Y.") , 36 , 3 , null, 473290 ),
+ ( 3035 , "UNMOP" , STR_TO_DATE("19.7.2022.", "%d.%m.%Y.") , STR_TO_DATE("3.3.2023.", "%d.%m.%Y.") , 24 , 7 ,"Promatračka misija UN-a na Prevlaci uspostavljena je 15. siječnja 1996. godine Rezolucijom 1038 Vijeća sigurnosti kao mirovna misija za praćenje demilitarizacije spornog poluotoka Prevlaka obavljanjem svakodnevnih pješačkih i kolskih ophodnji s obje strane granice između Hrvatske i SR Jugoslavije." , 5264104 ),
+ ( 3036 , "UNMIK" , STR_TO_DATE("24.10.2001.", "%d.%m.%Y.") , STR_TO_DATE("28.12.2004.", "%d.%m.%Y.") , 36 , 3 ,"Privremena administrativna misija Ujedinjenih naroda na Kosovu ili UNMIK je privremena civilna uprava na Kosovu pod vodstvom Ujedinjenih naroda. Misija je osnovana 10. lipnja 1999. rezolucijom 1244 Vijeća sigurnosti Ujedinjenih naroda." , 473290 ),
+ -- new
  ( 3037 , "UNMOGIP" , STR_TO_DATE("19.8.2026.", "%d.%m.%Y.") , STR_TO_DATE("26.4.2004.", "%d.%m.%Y.") , 30 , 10 , null, 7519572 ),
  ( 3038 , "UNMISET" , STR_TO_DATE("9.9.2002.", "%d.%m.%Y.") , STR_TO_DATE("11.9.2027.", "%d.%m.%Y.") , 24 , 1 , null, 9840396 ),
- ( 3039 , "UNGOMAP" , STR_TO_DATE("19.9.2009.", "%d.%m.%Y.") , STR_TO_DATE("13.1.2026.", "%d.%m.%Y.") , 28 , 11 , null, 9966801 ),
- ( 3040 , "UNAMIC" , STR_TO_DATE("16.11.2017.", "%d.%m.%Y.") , STR_TO_DATE("28.10.2018.", "%d.%m.%Y.") , 36 , 8 , null, 172465 ),
- ( 3041 , "UNOCI" , STR_TO_DATE("23.11.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.12.1998.", "%d.%m.%Y.") , 22 , 5 , null, 7220839 ),
- ( 3042 , "UNOMSIL" , STR_TO_DATE("11.12.2005.", "%d.%m.%Y.") , STR_TO_DATE("28.6.2011.", "%d.%m.%Y.") , 33 , 8 , null, 3998984 ),
- ( 3043 , "UNIPOM" , STR_TO_DATE("19.1.1995.", "%d.%m.%Y.") , STR_TO_DATE("4.1.2001.", "%d.%m.%Y.") , 40 , 6 , null, 6122253 ),
- ( 3044 , "UNTAC" , STR_TO_DATE("12.9.2012.", "%d.%m.%Y.") , STR_TO_DATE("20.3.2007.", "%d.%m.%Y.") , 31 , 10 , null, 3957457 ),
- ( 3045 , "DOMREP" , STR_TO_DATE("21.7.2001.", "%d.%m.%Y.") , STR_TO_DATE("15.7.2032.", "%d.%m.%Y.") , 16 , 13 , null, 1087331 ),
- ( 3046 , "UNSF" , STR_TO_DATE("8.4.2001.", "%d.%m.%Y.") , STR_TO_DATE("28.5.1994.", "%d.%m.%Y.") , 36 , 11 , null, 853626 ),
+ 
+ ( 3039 , "UNGOMAP" , STR_TO_DATE("19.9.2009.", "%d.%m.%Y.") , STR_TO_DATE("13.1.2026.", "%d.%m.%Y.") , 28 , 11 ,"Misija dobrih ureda Ujedinjenih naroda u Afganistanu i Pakistanu osnovana je u svibnju 1988., tijekom sovjetsko-afganistanskog rata, kako bi pomogla u osiguravanju provedbe sporazuma o rješavanju situacije u vezi s Afganistanom te istražila i prijavila moguća kršenja bilo kojeg od odredbe sporazuma." , 9966801 ),
+ ( 3040 , "UNAMIC" , STR_TO_DATE("16.11.2017.", "%d.%m.%Y.") , STR_TO_DATE("28.10.2018.", "%d.%m.%Y.") , 36 , 8 ,"UNAMIC je osnovan kako bi pomogao kambodžanskim stranama u održavanju primirja tijekom razdoblja prije uspostave Prijelazne vlasti Ujedinjenih naroda u Kambodži (UNTAC) i za pokretanje obuke civilnog stanovništva o upozoravanju na mine. Kasnije je mandat proširen kako bi uključio obuku u čišćenju mina i pokretanje programa čišćenja mina. UNTAC je u ožujku 1992. preuzeo misiju i njezine funkcije." , 172465 ),
+ -- new
+ (3041 , "UNOCI" , STR_TO_DATE("23.11.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.12.1998.", "%d.%m.%Y.") , 22 , 5 , null, 7220839 ),
+ 
+ ( 3042 , "UNOMSIL" , STR_TO_DATE("11.12.2005.", "%d.%m.%Y.") , STR_TO_DATE("28.6.2011.", "%d.%m.%Y.") , 33 , 8 ,"Promatračka misija Ujedinjenih naroda u Sierra Leoneu bila je mirovna operacija Ujedinjenih naroda u Sierra Leoneu od 1998. do 1999. godine koja je uspostavljena donošenjem Rezolucije Vijeća sigurnosti Ujedinjenih naroda 1181. Njezina je misija bila praćenje vojne i sigurnosne situacije u Sierra Leoneu." , 3998984 ),
+ ( 3043 , "UNIPOM" , STR_TO_DATE("19.1.1995.", "%d.%m.%Y.") , STR_TO_DATE("4.1.2001.", "%d.%m.%Y.") , 40 , 6 ,"UNIPOM je osnovan u rujnu 1965. kako bi nadzirao prekid vatre duž indijsko-pakistanske granice osim u državi Jammu i Kašmir i povlačenje cjelokupnog naoružanog osoblja na položaje koje je držalo prije 5. kolovoza 1965. Nakon povlačenja indijskih trupa i Pakistan je bio dovršen, UNIPOM je ukinut." , 6122253 ),
+ ( 3044 , "UNTAC" , STR_TO_DATE("12.9.2012.", "%d.%m.%Y.") , STR_TO_DATE("20.3.2007.", "%d.%m.%Y.") , 31 , 10 ,"Prijelazna uprava Ujedinjenih naroda u Kambodži bila je mirovna operacija Ujedinjenih naroda u Kambodži 1992–93., formirana nakon Pariškog mirovnog sporazuma 1991." , 3957457 ),
+ ( 3045 , "DOMREP" , STR_TO_DATE("21.7.2001.", "%d.%m.%Y.") , STR_TO_DATE("15.7.2032.", "%d.%m.%Y.") , 16 , 13 ,"DOMREP je osnovan u svibnju 1965. kako bi promatrao situaciju i izvještavao o kršenjima primirja između dviju de facto vlasti u Dominikanskoj Republici. Nakon dogovora o novoj Vladi, DOMREP je povučen" , 1087331 ),
+ ( 3046 , "UNSF" , STR_TO_DATE("8.4.2001.", "%d.%m.%Y.") , STR_TO_DATE("28.5.1994.", "%d.%m.%Y.") , 36 , 11 ,"Privremeno izvršno tijelo Ujedinjenih naroda i Sigurnosne snage Ujedinjenih naroda u zapadnoj Novoj Gvineji osnovane su tijekom listopada 1962. u skladu s Rezolucijom 1752 Opće skupštine kako se zahtijeva u članku 2 Njujorškog sporazuma za upravljanje bivšom Nizozemskom Novom Gvinejom." , 853626 ),
  ( 3047 , "MONUA" , STR_TO_DATE("24.7.2017.", "%d.%m.%Y.") , STR_TO_DATE("1.10.2013.", "%d.%m.%Y.") , 25 , 9 , null, 6286138 ),
  ( 3048 , "UNOGIL" , STR_TO_DATE("17.8.2030.", "%d.%m.%Y.") , STR_TO_DATE("3.5.2029.", "%d.%m.%Y.") , 40 , 10 , null, 8778437 ),
  ( 3049 , "UNPREDEP" , STR_TO_DATE("22.9.2009.", "%d.%m.%Y.") , STR_TO_DATE("7.11.1994.", "%d.%m.%Y.") , 21 , 1 , null, 6568915 ),
- ( 3050 , "UNPREDEP" , STR_TO_DATE("11.5.2018.", "%d.%m.%Y.") , STR_TO_DATE("14.5.2033.", "%d.%m.%Y.") , 24 , 14 , null, 8606804 ),
- ( 3051 , "UNOMUR" , STR_TO_DATE("26.10.2004.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2032.", "%d.%m.%Y.") , 22 , 8 , null, 2569626 ),
- ( 3052 , "UNAMIR" , STR_TO_DATE("3.9.2024.", "%d.%m.%Y.") , STR_TO_DATE("17.8.2022.", "%d.%m.%Y.") , 32 , 5 , null, 1502835 ),
- ( 3053 , "UNOSOM I" , STR_TO_DATE("17.7.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.5.2028.", "%d.%m.%Y.") , 22 , 11 , null, 1358647 ),
- ( 3054 , "UNOGIL" , STR_TO_DATE("25.6.2017.", "%d.%m.%Y.") , STR_TO_DATE("10.2.2007.", "%d.%m.%Y.") , 40 , 11 , null, 8713394 ),
+ ( 3050 , "UNPREDEP" , STR_TO_DATE("11.5.2018.", "%d.%m.%Y.") , STR_TO_DATE("14.5.2033.", "%d.%m.%Y.") , 24 , 14 ,"Snage Ujedinjenih naroda za preventivno raspoređivanje osnovane su 31. ožujka 1995. Rezolucijom 983 Vijeća sigurnosti kako bi zamijenile Zaštitne snage Ujedinjenih naroda u Republici Sjevernoj Makedoniji." , 8606804 ),
+ ( 3051 , "UNOMUR" , STR_TO_DATE("26.10.2004.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2032.", "%d.%m.%Y.") , 22 ,  8    ,"Promatračka misija Ujedinjenih naroda Uganda-Ruanda bila je mirovna misija koju je uspostavilo Vijeće sigurnosti Ujedinjenih naroda Rezolucijom 846 i trajala je od lipnja 1993. do rujna 1994. Njezina je misija bila 'nadzirati granicu između Ugande i Ruande i provjeriti da nije bilo vojne pomoći pruža se preko njega'", 2569626 ),
+ ( 3052 , "UNAMIR" , STR_TO_DATE("3.9.2024.", "%d.%m.%Y.") , STR_TO_DATE("17.8.2022.", "%d.%m.%Y.") , 32 , 5 ,"Misija Ujedinjenih naroda za pomoć Ruandi uspostavljena je Rezolucijom 872 Vijeća sigurnosti Ujedinjenih naroda od 5. listopada 1993. Namjera joj je bila pomoći u provedbi sporazuma iz Arushe, potpisanog 4. kolovoza 1993., koji je trebao okončati građanski rat u Ruandi." , 1502835 ),
+ ( 3053 , "UNOSOM I" , STR_TO_DATE("17.7.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.5.2028.", "%d.%m.%Y.") , 22 , 11 ,"Operacija Ujedinjenih naroda u Somaliji I bila je prvi dio napora pod pokroviteljstvom Ujedinjenih naroda za pružanje, olakšanje i osiguranje humanitarne pomoći u Somaliji, kao i za praćenje prvog prekida vatre u sukobu u građanskom ratu u Somaliji početkom 1990-ih, uz posredovanje UN-a." , 1358647 ),
+ ( 3054 , "UNOGIL" , STR_TO_DATE("25.6.2017.", "%d.%m.%Y.") , STR_TO_DATE("10.2.2007.", "%d.%m.%Y.") , 40 , 11 ,"Promatračku skupinu Ujedinjenih naroda u Libanonu osnovali su Ujedinjeni narodi Rezolucijom 128 Vijeća sigurnosti 11. lipnja 1958. kao odgovor na libanonsku krizu 1958. godine. ", 8713394 ),
+-- new
  ( 3055 , "UNAMSIL" , STR_TO_DATE("6.2.2017.", "%d.%m.%Y.") , STR_TO_DATE("22.7.2033.", "%d.%m.%Y.") , 31 , 5 , null, 7138853 );
 
 INSERT INTO osoblje_na_misiji VALUES
