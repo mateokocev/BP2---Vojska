@@ -3,7 +3,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 body
-{ background: rgb(89,89,89);
+{ background: #be9764;
 
 }
 .cube
@@ -74,7 +74,7 @@ body
 .shadow
 {
     
-    background-image: linear-gradient(to top, rgba(255,0,0,0), rgb(0, 0, 0));
+    background-image: linear-gradient(to top, rgb(170, 139, 86,0), rgb(170, 139, 86));
     height: 50px;
 
 }
@@ -174,9 +174,23 @@ body
     grid-auto-rows: 200px;
 }
 
+.fade
+{   
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    
+    margin-top: -40px;
+    background-image: linear-gradient(to top, rgb(170, 139, 86), rgb(170, 139, 86,0));
+    height: 40px;
+   
+   
+}
+
 .cover
-{
-    background-image: url(../img/kopnena_back.png);
+{ 
+  
+    background-image:url(../img/kopnena_back.png);
     background-repeat: no-repeat;
     height: 550px;
     padding-top: 150px;
@@ -184,11 +198,11 @@ body
     margin-right: -10px;
     text-align: center;
     background-attachment: fixed;
-     background-size:     cover; 
+    background-size:     cover; 
 }
 
 .cover h1
-{
+{   margin-bottom: 100px;
     font-size: 100px;
     color: aliceblue;
 }
@@ -279,7 +293,7 @@ a
 {   margin-left: 20px;
     margin-right: 20px;
     margin-top: 250px;
-    
+    padding: 30px;
     display: grid;
     grid-gap: 50px;
     grid-template-columns: auto auto auto auto;
@@ -290,14 +304,14 @@ a
 { 
   margin-bottom: 150px;
   width: 100%;
-  height: 500px;
-  background-color: rgb(53, 53, 53);
+  height: 100%;
+  background-color: #6a5133;
   box-shadow: 0 0 20px rgba(8,7,16,0.6);
   backdrop-filter: blur(50px);
   border-radius: 5px;
   box-shadow: 0 0 40px rgba(8,7,16,0.6);
   
-  color: white;
+  color: rgb(255, 255, 255);
  
   
   
@@ -334,12 +348,13 @@ a
 }
 
 .cover2
-{   
+{   position: relative;
     margin-left: -10px;
-    margin-top: -30px;
+    margin-top: -250px;
     margin-right: -10px;
     margin-bottom: -20px;
-    background: rgb(30, 30, 30);
+    background: #54432b;
+    background: linear-gradient(to top, #be9764, #000000);
     background-repeat:initial;
     background-size:     cover; 
     
@@ -352,4 +367,14 @@ a
     font-size: 1vw;
     overflow: hidden;
     padding: 20px;
+}
+.sticky
+{   z-index: 3;
+    font-size: 20px;
+    top: 50%;
+    left: 14px;
+    text-align: center;
+    color: white;
+    list-style-type: none;
+    position: fixed;
 }

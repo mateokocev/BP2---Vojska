@@ -8,21 +8,33 @@
     <title>Kopnena Vojska</title>
 </head>
 <body>
+    <div class="sticky">
+        <li>K</li>
+        <li>O</li>
+        <li>P</li>
+        <li>N</li>
+        <li>E</li>
+        <li>N</li>
+        <li>A</li>
+        <p></p>
+        <li>V</li>
+        <li>O</li>
+        <li>J</li>
+        <li>S</li>
+        <li>K</li>
+        <li>A</li>
+      </div>
 
-    <div class="topBar">
-        <h1>ime</h1>
-        <h1>kopnena Vojska</h1>
-        <h1>profile</h1>
-    </div>
-    <div class="cover">
-        <h1>Kopnena Vojska</h1>
-    </div>
+  
     
     
     <div class="cover2">
-        <div class="shadow"></div>
-        <h1 style="text-align: center;margin-top: 250px; color: white; font-size: 80px;">TURE</h1>
-        <div class="grid3">
+        
+        <div style="padding-top: 350px;"></div>
+        
+        <h1 style="text-align: center; color: white; font-size: 150px; margin-top: 250px;">TURE</h1>
+        <h5 style="text-align: center; color: white; font-size: 20px;">Kopnena Vojska</h3>
+        <div class="grid3" style="margin-top: 800px; margin-bottom: 400px;">
             {%for i in range(0, len)%}
             <a href="kopnena/{{data[i][0]}}">
                 <div class="newcube">
@@ -39,33 +51,12 @@
            {%endfor%}
         </div>
     </div>
-    
-    
-    <div class="databox">
-        <div class="shadow"></div>
-        <h1>Ture</h1>
+
+            
+            
+
         
-        <div class="data">
-            
-            {%for i in range(0, len)%}
-            <a href="kopnena/{{data[i][0]}}">
-                <div  class="cube">
-                   
-                    <div class="naslov">{{data[i][0]}}</div>
-                    <div class="nazivmisije">{{data[i][1]}}</div>
-                    <div class="vrijemepocetka">{{data[i][2]}}</div>
-                    <div class="vrijemekraja">{{data[i][3]}}</div>
-                    
-                </div>
-                <div class="cubeimg"><p>v</p></div>
-            </a>
-
-            {%endfor%}
-            
-            
-
-        </div>
-    </div>
+   
   
     
     
