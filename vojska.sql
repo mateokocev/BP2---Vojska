@@ -9,7 +9,7 @@ CREATE TABLE sektor(
     datum_osnivanja DATE NOT NULL,
     opis TEXT NOT NULL,
     ukupni_proracun DECIMAL(12,2) NOT NULL,
-    CHECK(ukupni_proracun >= 0)
+    CHECK(ukupni_proracun >= 0),
 );
  -- DROP TABLE sektor;
 
@@ -153,7 +153,7 @@ CREATE TABLE oprema(
     naziv VARCHAR(50) NOT NULL,
     vrsta VARCHAR(50) NOT NULL,
     ukupna_kolicina INTEGER NOT NULL,
-    CHECK(ukupna_kolicina >= 1)
+    CHECK(ukupna_kolicina >= 1),
 );
 -- DROP TABLE oprema;
 
@@ -433,16 +433,10 @@ DELIMITER ;
 
 SELECT visak() AS visak FROM DUAL;
 
-*/
+
 
 -- BACKEND:
 
-CREATE TABLE login(
-    id INTEGER primary KEY,  -- autoincrement
-	ime varchar(100),
-    lozinka varchar(100)
-);
--- DROP TABLE login;
 
 DELIMITER //
 CREATE TRIGGER kriptiranje
@@ -454,12 +448,21 @@ BEGIN
 
 END//
 DELIMITER ;
--- drop trigger kriptiranje;
+drop trigger kriptiranje;
 
 
-
-
-
+CREATE TABLE login(
+    id INTEGER primary KEY,  -- autoincrement
+	ime varchar(100),
+    lozinka varchar(100)
+);
+DROP TABLE login;
+-- za kriptiranje lozinke
+select* from login;
+select * from login where lozinka = md5(concat("Eliza","Eliza")) and login.ime = "Eliza";
+"Eliza" , "Vuković"
+select * from login;
+*/
 
 
 INSERT INTO sektor VALUES
@@ -471,32 +474,32 @@ INSERT INTO sektor VALUES
 
 
 INSERT INTO lokacija VALUES
-(16,3,"Jaipur",26.922070,75.778885),
-(17,1,"Islamabad",33.738045,73.084488),
-(18,2,"Kabul",34.543896,69.160652),
-(19,1,"Herat",34.343044,62.199074),
-(20,1,"Kholm",51.14312320,23.47119860),
-(21,4,"Charikar",35.013058,69.168892),
-(22,3,"Solun",40.64361,22.93086),
-(23,1,"Patras",38.246639,21.734573),
-(24,2,"Kijev",50.450001,30.523333),
-(25,1,"Nikolajev",46.96591,31.9974),
-(26,3,"Pretorija",-25.731340,28.218370),
-(27,2,"Kaapstad",-33.918861,18.423300),
-(28,4,"Taipei",25.105497,121.597366),
-(29,4,"Kaohsiung",22.633333,120.266670),
-(30,1,"Ulsan",35.549999,129.316666),
-(31,2,"Busan",35.166668,129.066666),
-(32,2,"Sarajevo",43.856430,18.413029),
-(33,4,"Bihac",44.811962,15.868565),
-(34,3,"Caracas",10.500000,-66.916664),
-(35,2,"Maracaibo",10.653860,-71.645966),
-(36,1,"Stavanger",58.969975,5.733107),
-(37,4,"Narvik",68.438499,17.427261),
-(38,4,"Bern",46.947456,7.451123),
-(39,1,"Chur",46.8499,9.5329),
-(40,3,"Ohio",40.367474,-82.996216),
-(41,2,"Columbus",39.983334,-82.983330);
+(16,null,"Jaipur",26.922070,75.778885),
+(17,null,"Islamabad",33.738045,73.084488),
+(18,null,"Kabul",34.543896,69.160652),
+(19,null,"Herat",34.343044,62.199074),
+(20,null,"Kholm",51.14312320,23.47119860),
+(21,null,"Charikar",35.013058,69.168892),
+(22,null,"Solun",40.64361,22.93086),
+(23,null,"Patras",38.246639,21.734573),
+(24,null,"Kijev",50.450001,30.523333),
+(25,null,"Nikolajev",46.96591,31.9974),
+(26,null,"Pretorija",-25.731340,28.218370),
+(27,null,"Kaapstad",-33.918861,18.423300),
+(28,null,"Taipei",25.105497,121.597366),
+(29,null,"Kaohsiung",22.633333,120.266670),
+(30,null,"Ulsan",35.549999,129.316666),
+(31,null,"Busan",35.166668,129.066666),
+(32,null,"Sarajevo",43.856430,18.413029),
+(33,null,"Bihac",44.811962,15.868565),
+(34,null,"Caracas",10.500000,-66.916664),
+(35,null,"Maracaibo",10.653860,-71.645966),
+(36,null,"Stavanger",58.969975,5.733107),
+(37,null,"Narvik",68.438499,17.427261),
+(38,null,"Bern",46.947456,7.451123),
+(39,null,"Chur",46.8499,9.5329),
+(40,null,"Ohio",40.367474,-82.996216),
+(41,null,"Columbus",39.983334,-82.983330);
 
 
 
