@@ -265,14 +265,6 @@ body
 
 }
 
-.dataitem
-{
- 
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    
-    font-size: 30px;
-    text-align: center; 
-}
 
 
 
@@ -304,13 +296,13 @@ a
 { 
   margin-bottom: 150px;
   width: 100%;
-  height: 100%;
+  height: 50%;
   background-color: #6a5133;
   box-shadow: 0 0 20px rgba(8,7,16,0.6);
   backdrop-filter: blur(50px);
   border-radius: 5px;
   box-shadow: 0 0 40px rgba(8,7,16,0.6);
-  
+
   color: rgb(255, 255, 255);
  
   
@@ -326,7 +318,7 @@ a
     width: 100%;
     display: grid;
     font-size: 1vw;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto auto;
 }
 .newcuveImg
 {
@@ -334,7 +326,7 @@ a
     position: absolute;
     top: 25%;
     width: 100%;
-    z-index: 1;
+    z-index: -10;
     height: 78%;
     border-radius: 10px;
     transition: 0.5s ease-in;
@@ -377,4 +369,16 @@ a
     color: white;
     list-style-type: none;
     position: fixed;
+}
+
+.saznaj
+{
+    width: auto;
+    height: fit-content;
+    margin-top: 8%;
+  
+    border-radius: 10px;
+    text-align: center;
+    padding: 8px;
+    background-color: #1c1c1c;
 }
