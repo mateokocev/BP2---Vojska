@@ -37,16 +37,22 @@
     
 <div style=" margin-right: 5%;margin-left:  5%;" class="grids">
 
+    {% for i in range(0, lenVozila) %}
+       
     <div class="cards">
         <img src="/static/img/kopnena_back.png" >
-        <h1>test</h1>
-        <div class="opis">Lorem Ip sheets contaiare like Aldus PageMakerheets contaiiare like Aldus PageMakerheets ciare like Aldus Paiare like Aldus PageMakerheets coniare like Aldus PageMakerheets coniare like Aldus PageMakerheets congeMakerheets coniare like Aldus PageMakerheets cononiare like Aldus PageMakerheets coniare like Aldus PageMakerheets coniare like Aldus PageMakerheets conare like Aldus PageMaker including ver</div>
+        <h1>{{vozila[i][0]}}</h1>
+       
+        
         <div class="bottomText">
-            <p>test</p>
-            <p>test</p>
-            <p>test</p>
+            <p>{{vozila[i][2]}}</p>
+            <p>{{vozila[i][4]}}</p>
+            <p>{{vozila[i][3]}}</p>
+
+          
         </div>
     </div>
+    {%endfor%}
 
 </div>
 <div class="naslov">Osoblje na Misiji</div>

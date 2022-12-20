@@ -35,13 +35,13 @@ def pie(title,mySql,fileName="test",color="winter",fileType="png",font=15):
     
 
     # prosjek imena
-pie("imena","select count(*),ime from osoblje where ime = 'Ela' union  select count(*),ime from osoblje where ime = 'Ivan';",fileType="svg")
+#pie("imena","select count(*),ime from osoblje where ime = 'Ela' union  select count(*),ime from osoblje where ime = 'Ivan';",fileType="svg")
 
     # cinovi
-pie("cinovi","select SUM(cin='Razvodnik') as razvodnik ,'Razvodnik' from osoblje union select SUM(cin='Pozornik') as Pozornik,'Pozornik' from osoblje union select SUM(cin='Skupnik') as Pozornik,'Skupnik' from osoblje union select SUM(cin='narednik') as Pozornik,'narednik' from osoblje union select SUM(cin='poručnik') as Pozornik,'poručnik' from osoblje union select SUM(cin='satnik') as Pozornik,'satnik' from osoblje union select SUM(cin='bojnik') as Pozornik,'bojnik' from osoblje union select SUM(cin='pukovnik') as Pozornik,'pukovnik' from osoblje union select SUM(cin='brigadir') as Pozornik,'brigadir' from osoblje;",fileType="svg")
+#pie("cinovi","select SUM(cin='Razvodnik') as razvodnik ,'Razvodnik' from osoblje union select SUM(cin='Pozornik') as Pozornik,'Pozornik' from osoblje union select SUM(cin='Skupnik') as Pozornik,'Skupnik' from osoblje union select SUM(cin='narednik') as Pozornik,'narednik' from osoblje union select SUM(cin='poručnik') as Pozornik,'poručnik' from osoblje union select SUM(cin='satnik') as Pozornik,'satnik' from osoblje union select SUM(cin='bojnik') as Pozornik,'bojnik' from osoblje union select SUM(cin='pukovnik') as Pozornik,'pukovnik' from osoblje union select SUM(cin='brigadir') as Pozornik,'brigadir' from osoblje;",fileType="svg")
 
     # kolicina ljudi po sektoru
-pie("ljudiPoSektoru","select count(*),sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id and sektor.naziv ='Hrvatska kopnena vojska' union (select count(*),sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id and sektor.naziv ='Hrvatska ratna mornarica') union (select count(*),sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id and sektor.naziv ='Hrvatsko ratno zrakoplovstvo') union (select count(*),sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id and sektor.naziv ='Hrvatska vojna policija');",fileType="svg")
+#pie("ljudiPoSektoru","select count(*),sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id and sektor.naziv ='Hrvatska kopnena vojska' union (select count(*),sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id and sektor.naziv ='Hrvatska ratna mornarica') union (select count(*),sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id and sektor.naziv ='Hrvatsko ratno zrakoplovstvo') union (select count(*),sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id and sektor.naziv ='Hrvatska vojna policija');",fileType="svg")
 
     # status osoblja
 pie("Status_osoblja","select SUM(status_osoblja='Mrtav'),'Mrtav' from osoblje union select SUM(status_osoblja='Neaktivan'),'Neaktivan'from osoblje union select SUM(status_osoblja='Umirovljen'), 'Umirovljen' from osoblje union select SUM(status_osoblja='Aktivan'), 'Aktivan' from osoblje;",fileType="svg")

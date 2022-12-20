@@ -95,7 +95,7 @@ def profile():
         
 
 
-@app.route('/kopnena', methods=['GET', 'POST'])
+#@app.route('/kopnena', methods=['GET', 'POST'])
 def kopnenaVojska():
     data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
     
@@ -112,19 +112,27 @@ def database():
     return render_template('database.html',status=status)
 
 
-@app.route('/kopnena/<data>')  #Exception
+@app.route('/informacije/<data>')  #Exception
 def informacije (data):
+    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and  misija.naziv = '"+data+"' ;")
     misije = BP_DataAll("select misija.naziv,misija.ishod,DATE(misija.vrijeme_pocetka),misija.trosak_misije,DATE(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura;")
-    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa,misija.naziv from osoblje ,osoblje_na_misiji,misija where osoblje.id = osoblje_na_misiji.id_osoblje and misija.id = osoblje_na_misiji.id_misija;")
+    vozila = BP_DataAll("select vozila.naziv,vozila.vrsta,vozila.ukupna_kolicina,vozila.kapacitet from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = '"+data+"';")
 
 
-    return render_template('informacije.html',data=data,misije=misije,len=len(misije),osoblje=osoblje, len2=len(osoblje))
+    return render_template('informacije.html',data=data,misije=misije,vozila=vozila,len=len(misije),osoblje=osoblje, len2=len(osoblje), lenVozila= len (vozila)  )
 
 
-
+@app.route('/kopnena/<misija>') 
+def KopnenaNew (misija):
+    data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
+    
+    MisijenaTuri= BP_DataAll("select * from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
+    MisijenaTuriDatumi= BP_DataAll("select date(misija.vrijeme_pocetka), date(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
+    return render_template('testnewdesign.html',MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
+    
 
                             # Errors
-@app.errorhandler(404)
+@app.errorhandler(505)
 def page_not_found(error):
     return render_template('404.html',err="4o4 error ",note="programur profesional",desc="What are you looking for here silly?",ime=name,)
 

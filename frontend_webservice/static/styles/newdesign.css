@@ -6,135 +6,137 @@
 }
 
 
+
 body
 {
-  
-    background: rgb(89,89,89);
-    background: linear-gradient(0deg, rgba(89,89,89,1) 11%, rgba(0,0,0,1) 100%);
+   
+    background: #be9764;
+    background: linear-gradient(0deg, rgba(89,89,89,1) 11%, #be9764 100%);
 }
     .cover
 {
-   
-    
-    height: 1000px;
-    padding-top: 150px;
-    margin-left: -10px;
-    margin-top: -20px;
-    margin-right: -10px;
-    text-align: center;
     background-attachment:scroll;
   
 }
-.cover2
-{
-    
-    height: 1000px;
-    padding-top: 150px;
-    margin-left: -10px;
-    margin-top: -20px;
-    margin-right: -10px;
-    text-align: center;
-    background-attachment:scroll;
-     background-size:     cover; 
-}
-.navbar
-{   position: absolute;
-    width: 98%;
-    font-size: 10px;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    
-    height: 100px;
-
-    grid-auto-rows: 200px;
-}
-
 .cover h1
 {
  font-size: 160px;
 }
-
-.card
-{
-    background-image: url(../img/policija_back.jpg);
-    background-position-x: right;
-    border-radius: 5px;
-    height: 500px;
-    width: 500px;
-    
-}
-
 .grid3
 {
    
-    width: 90%;
+    width: 95%;
     font-size: 10px;
     display: grid;
-    margin-left: 100px;
+    grid-gap: 10px;
     
     grid-template-columns: auto auto auto;
 }
-
-
-.grid2
-{
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
-    font-size: 10px;
-    margin: auto;
-    display: grid;
-    grid-template-columns: auto auto;
-}
-.opis
-{   margin-top: 94%;
-    
-    font-size: 50px;
-}
-
-
-
-.tipka {
-    min-width: 130px;
-    height: 40px;
-    color: #fff;
-    padding: 5px 10px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    display: inline-block;
-    outline: none;
-    border-radius: 5px;
-    border: none;
-    background: #343a40;
-    box-shadow: 0 5px #212529;
-  }
-  .tipka:hover {
-    box-shadow: 0 3px #212529;
-    top: 1px;
-  }
-  .tipka:active {
-    box-shadow: 0 0 #212529;
-    top: 5px;
-  }
-
-  .name
-  { position: fixed;
-    top: 30px;
+  
+.sidebar
+{   
+    position: absolute;
+    top: 0px;
+    position: fixed;
+    overflow-y: scroll;
+    background-color: #232323;
     text-align: center;
-    left: 20px;
-    list-style-type: none;
-  }
-
-  .newcube
-  { 
-    width: 95%;
-    
-    height: 500px;
-    box-shadow: 0 0 20px rgba(8,7,16,0.6);
-    backdrop-filter: blur(50px);
-    border-radius: 5px;
-    background-color: rgb(53, 53, 53);
+    margin-left: -20px;
+    width: 250px;
+    height: 100%;
+    padding: 30px;
 }
   
+.item
+{
+    background-color: #4d535a;
+    
+    font-size: 0.7em;
+    border-color: #181818;
+    transition: 0.3s ease-in;
+    border:  1px solid #414141;
+   
+}
+.item:hover
+{
+    background-color: #777f89;
+    
+    transition: 0.1s ease-out;
+    transform: translate(0%,-10%);
+}
+hr
+{
+    border: 1px solid #2a2a2a;
+}
+.main
+{
+    margin-left: 20%;
+}
+.cover2
+{   position: relative;
+    
+  
+    
+    
+}
+.newcube
+{ 
+  margin-bottom: 150px;
+  width: 100%;
+  height: fit-content;
+  background-color: #6a5133;
+  box-shadow: 0 0 20px rgba(8,7,16,0.6);
+  backdrop-filter: blur(50px);
+  border-radius: 5px;
+  box-shadow: 0 0 40px rgba(8,7,16,0.6);
+  color: rgb(255, 255, 255);
+  transition: 0.1s ease-out;
+  
+}
+.newcube:hover
+{
+    
+    transition: 0.1s ease-out;
+    transform: translate(0%,-10%);
+}
+.newcubeNaslov
+{
+    text-align: center;
+    font-size: 1vw;
+}
+.newcubedata
+{   text-align: center;
+    width: 100%;
+    display: grid;
+    font-size: 1vw;
+    grid-template-columns: auto auto auto;
+}
+.opis
+{   
+    
+    text-align: center;
+    font-size: medium;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #be9764;
+    padding: 10px;
+}
+.saznaj
+{
+    width: auto;
+    height: fit-content;
+    margin-top: 8%;
+  
+    border-radius: 100px;
+    text-align: center;
+    padding: 8px;
+    background-color: #1c1c1c;
+}
+a 
+{   
+    z-index: 5;
+    color: black;
+    text-decoration: none;
+}
+  
+
