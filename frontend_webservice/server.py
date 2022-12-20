@@ -1,5 +1,6 @@
-from flask import Flask, render_template,url_for, request,redirect
+from flask import Flask, render_template, url_for, request, redirect
 from random import randrange
+import sqlite3 as sql
 import mysql.connector
 #sve=mycursor.fetchmany(size=4) kolicina podataka
 #sve=mycursor.fetchone() jedan red 
@@ -13,20 +14,20 @@ name= "Čovječe"
 
 # Get data
 def BP_DataRow(sql):
-    vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
+    vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
     return MainKursor.fetchone()
 
 def BP_DataAll(sql):
-    vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
+    vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
     return MainKursor.fetchall()
     
 
 def RandomImageGenerator():
-    x= str(randrange(5))
+    x = str(randrange(5))
     return "/static/img/profPictures/"+x+".png"
 
 
@@ -34,18 +35,15 @@ def RandomImageGenerator():
 
 
 # Route for handling the login page logic
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods = ['GET', 'POST'])
 def login():
-    vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
+    vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     krusor = vojska.cursor()
     error = ""
 
     if request.method == 'POST':
 
         global name
-
-
-
         global UpisLozinka
         name = request.form['username']
         UpisLozinka = request.form['password']
@@ -68,13 +66,13 @@ def login():
             randimg = RandomImageGenerator()
             
             print(randimg)
-            return render_template('index.html',randimg=randimg,ime=name,VojskaText=VojskaText,cin = dozvola)
+            return render_template('index.html', randimg = randimg , ime = name, VojskaText = VojskaText, cin = dozvola)
     
     return render_template('Login.html')
 
 
 
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/profile', methods = ['GET', 'POST'])
 def profile():
     
     osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
@@ -82,41 +80,42 @@ def profile():
 
   
 
-    if sektor[0]== "Hrvatska ratna mornarica":
+    if sektor[0] == "Hrvatska ratna mornarica":
         cin = str(osoblje[2]) +"_p"
 
-    elif sektor[0]== "Hrvatsko ratno zrakoplovstvo":
+    elif sektor[0] == "Hrvatsko ratno zrakoplovstvo":
         cin = str(osoblje[2]) +"_z"
 
     else:
         cin = str(osoblje[2])
 
-    return render_template('profile.html',randimg=randimg,osoblje=osoblje,sektor=sektor,cin=cin)
+    return render_template('profile.html', randimg = randimg, osoblje = osoblje, sektor = sektor, cin = cin)
         
 
 
-#@app.route('/kopnena', methods=['GET', 'POST'])
+@app.route('/kopnena', methods=['GET', 'POST'])
 def kopnenaVojska():
     data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
     
-    return render_template('kopnenaVojska.html',data=data,len=len(data))
+    return render_template('testnewdesign.html',data=data,len=len(data))
 
-@app.route('/database', methods=['GET', 'POST'])
+@app.route('/database', methods = ['GET', 'POST'])
 def database():
     if request.method == 'GET':
-        status="postano"
+        status = "postano"
     else:
-        status="nije postano"
+        status = "nije postano"
   
    
-    return render_template('database.html',status=status)
+    return render_template('database.html', status = status)
 
 
 @app.route('/informacije/<data>')  #Exception
 def informacije (data):
     osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and  misija.naziv = '"+data+"' ;")
     misije = BP_DataAll("select misija.naziv,misija.ishod,DATE(misija.vrijeme_pocetka),misija.trosak_misije,DATE(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura;")
-    vozila = BP_DataAll("select vozila.naziv,vozila.vrsta,vozila.ukupna_kolicina,vozila.kapacitet from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = '"+data+"';")
+    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa,misija.naziv from osoblje ,osoblje_na_misiji,misija where osoblje.id = osoblje_na_misiji.id_osoblje and misija.id = osoblje_na_misiji.id_misija;")
+    return render_template('informacije.html',data=data,misije=misije,len=len(misije),osoblje=osoblje, len2=len(osoblje))
 
 
     return render_template('informacije.html',data=data,misije=misije,vozila=vozila,len=len(misije),osoblje=osoblje, len2=len(osoblje), lenVozila= len (vozila)  )
@@ -129,18 +128,20 @@ def KopnenaNew (misija):
     MisijenaTuri= BP_DataAll("select * from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     MisijenaTuriDatumi= BP_DataAll("select date(misija.vrijeme_pocetka), date(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     return render_template('testnewdesign.html',MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
-    
+
+
+
 
                             # Errors
 @app.errorhandler(505)
 def page_not_found(error):
-    return render_template('404.html',err="4o4 error ",note="programur profesional",desc="What are you looking for here silly?",ime=name,)
+    return render_template('404.html', err = "4o4 error ", note = "programur profesional", desc = "What are you looking for here silly?", ime = name,)
 
 
 
 @app.errorhandler(505)  #Exception
 def page_not_found(error):  
-    return render_template('404.html',err="PlEaSe ReFrEsH eVeRyThInG",note=error,desc="brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",ime=name,)    
+    return render_template('404.html', err = "PlEaSe ReFrEsH eVeRyThInG", note = error, desc = "brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",ime=name,)    
 
 
 
@@ -148,6 +149,6 @@ def page_not_found(error):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug = True)
 
 
