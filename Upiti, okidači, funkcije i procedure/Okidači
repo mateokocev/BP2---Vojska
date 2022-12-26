@@ -1,5 +1,22 @@
--- MATEOVI TRIGGERI
+-- struktura:
+/*
+DROP TRIGGER IF EXISTS ime_okidaca;
 
+DELIMITER //
+CREATE TRIGGER ime_okidaca
+	BEFORE INSERT ON naziv_tablice
+    FOR EACH ROW
+BEGIN
+
+
+
+END//
+DELIMITER ;
+*/
+
+
+
+-- MK
 -- TRIGGER za popravljanje datuma učlanjenja
 DELIMITER //
 CREATE TRIGGER legalno_u_vojski
@@ -20,4 +37,164 @@ BEGIN
 
         
 END //
+DELIMITER ;
+
+
+
+
+
+-- DK
+-- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
+-- korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi
+/*
+DROP TRIGGER IF EXISTS postoji;
+
+DELIMITER //
+CREATE TRIGGER postoji
+    AFTER INSERT ON oprema
+    FOR EACH ROW
+BEGIN
+    DECLARE br INTEGER;
+
+    SELECT COUNT(*) INTO br
+    FROM oprema
+    WHERE naziv = new.naziv;
+
+
+    IF br > 1 THEN
+        UPDATE oprema SET ukupna_kolicina = ukupna_kolicina + new.ukupna_kolicina WHERE naziv = new.naziv;
+    END IF;
+
+    DELETE FROM oprema WHERE id = new.id;
+END//
+DELIMITER ;
+
+
+
+
+-- DK
+-- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme tijekom insert-a
+
+DROP TRIGGER IF EXISTS kop;
+
+DELIMITER //
+CREATE TRIGGER kop
+    BEFORE INSERT ON izdana_oprema
+    FOR EACH ROW
+BEGIN
+    DECLARE br INTEGER;
+    DECLARE uk INTEGER;
+
+    SELECT SUM(izdana_kolicina) INTO br
+    FROM izdana_oprema
+    WHERE id_oprema = new.id_oprema;
+
+    SELECT ukupna_kolicina INTO uk
+    FROM oprema
+    WHERE id = new.id_oprema;
+
+    IF br + new.izdana_kolicina > uk THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Oprema koju zelite unijeti nije dostupna u zeljenoj kolicini!';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+
+
+
+-- DK
+-- Prati se da zbroj izdane kolicine ne bude veci od sveukupne moguce kolicine opreme tijekom update-a
+
+DROP TRIGGER IF EXISTS ukop;
+
+DELIMITER //
+CREATE TRIGGER ukop
+    BEFORE UPDATE ON izdana_oprema
+    FOR EACH ROW
+BEGIN
+    DECLARE br INTEGER;
+    DECLARE uk INTEGER;
+
+    SELECT SUM(izdana_kolicina) INTO br
+    FROM izdana_oprema
+    WHERE id_oprema = new.id_oprema;
+
+
+    SELECT ukupna_kolicina INTO uk
+    FROM oprema
+    WHERE id = new.id_oprema;
+
+    IF (br - old.izdana_kolicina) + new.izdana_kolicina > uk THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Ne mozete promijenit kolicinu zeljene opreme koja je izdana osobi zato jer nije dostupna u toj kolicini!';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+
+
+-- DK
+-- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
+-- Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
+
+DROP TRIGGER IF EXISTS vr_po;
+
+DELIMITER //
+CREATE TRIGGER vr_po
+    BEFORE INSERT ON popravak
+    FOR EACH ROW
+BEGIN
+	IF DATE(new.pocetak_popravka) >= DATE(new.kraj_popravka) AND new.kraj_popravka != NULL THEN
+		SIGNAL SQLSTATE '40000'
+                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
+        END IF;
+END//
+DELIMITER ;
+
+
+
+
+
+
+-- DK
+-- Vrijeme pocetka ne smije biti isto ili manje kao vrijeme kraja te trening bi najmanje trebao trajat 20 min(jos vidjet s Stevanom)
+
+DROP TRIGGER IF EXISTS vr_tr;
+
+DELIMITER //
+CREATE TRIGGER vr_tr
+    BEFORE INSERT ON trening
+    FOR EACH ROW
+BEGIN
+    IF DATE(new.vrijeme_pocetka) >= DATE(new.vrijeme_kraja) OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+
+
+-- DK
+-- Datetime pocetka lijecenja ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
+-- Ak je kraj NULL to znaci da je lijecenje jos uvijek u tijeku
+DROP TRIGGER IF EXISTS vrli;
+
+DELIMITER //
+CREATE TRIGGER vrli
+    BEFORE INSERT ON lijecenje
+    FOR EACH ROW
+BEGIN
+    IF DATE(new.pocetak_lijecenja) >= DATE(new.kraj_lijecenja) AND new.kraj_lijecenja != NULL THEN
+	 SIGNAL SQLSTATE '40000'
+         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
+    END IF;
+END//
 DELIMITER ;
