@@ -1,0 +1,64 @@
+# Prikaz zauzetih ideja za upite, okidače, funkcije i procedure(kako bi se izbjegli duplikati)
+## **UPITI**:
+- Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje na listi
+  je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu.
+  
+- Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Helikopteri"
+  koje je bilo na najviše popravaka.
+  
+- Prikazi naziv ture kod koje je izdano najmanje opreme
+
+- Prikaži ukupni proracun sektora koji ima drugi najveci broj osoblja koji nisu bili na lijecenju niti jedanput te koji su sudjelovali
+  na najmanje jednom treningu ciji datum pocetka nije bio prije 23 godinu dana od sada.
+
+- Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije
+  od 31 godinu i koje je bilo odgovorno za najmanje jedno vozilo u nekoj turi.
+
+- navedi sva imena i prezimena ozlijedenih vojnika na misiji kojima lijecenje kosta vise od 500 i manje od 5000
+
+- navedi koliko se izdanih samokresa na misiji koristi od strane mornarice
+
+- nabroji sva vozila na popravku koja su ujedno i na misiji te ih nabroji koliko ih je
+
+- svo osoblje koje je na misiji u ohiu
+
+- svi idevi osoblja krvne grupe 0+ koje je na lijecenju i u sektoru je "Hrvatska kopnena vojska"
+
+- ...
+
+
+
+## **OKIDAČI**:
+- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
+  korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi
+  
+- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme tijekom insert-a
+
+- Prati se da zbroj izdane kolicine ne bude veci od sveukupne moguce kolicine opreme tijekom update-a
+
+- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
+  Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
+  
+- Vrijeme pocetka ne smije biti isto ili manje kao vrijeme kraja te trening bi najmanje trebao trajat 20 min(jos vidjet s Stevanom)
+
+- Datetime pocetka lijecenja ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
+  Ak je kraj NULL to znaci da je lijecenje jos uvijek u tijeku
+
+- ...
+
+
+
+## **FUNKCIJE**:
+- Funkcija vraca ukupni trosak(zbroj troskova iz svih tablica)
+
+- Funkcija racuna koliko je novca ostalo "viska" iz proracuna(u ovoj funkciji se koristila prethodna funkcija)
+
+- ...
+
+
+
+## **PROCEDURE**:
+- ...
+
+
+
