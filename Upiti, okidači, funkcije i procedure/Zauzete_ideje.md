@@ -58,6 +58,7 @@
 
 
 ## **PROCEDURE**:
+- Ispisati koliki je broj osoblja, vozila, opreme trenutačno dostupno(3 vrijednosti) u danom intervalu (dva datuma koje korisnik izabere kao ulazne argumente)
 - ...
 
 
