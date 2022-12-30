@@ -33,6 +33,8 @@
 - odraditi do kraja prikaz svih podataka :x:
 - odrediti odredeni pristup podataka samo korisnicima s ovlasti. :x:
 - napraviti za ostale sektore webstranice :x:
+
+
 *David*
 - Doradit upite uzimajuci u obzir da budu jos slozeniji te optimizaciju uzet u obzir  :x:
 - Napravit još okidača   :x:
