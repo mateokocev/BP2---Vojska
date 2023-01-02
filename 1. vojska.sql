@@ -9,7 +9,7 @@ CREATE TABLE sektor(
     datum_osnivanja DATE NOT NULL,
     opis TEXT NOT NULL,
     ukupni_proracun DECIMAL(12,2) NOT NULL,
-    CHECK(ukupni_proracun >= 0),
+    CHECK(ukupni_proracun >= 0)
 );
  -- DROP TABLE sektor;
 
@@ -17,10 +17,11 @@ CREATE TABLE sektor(
 
 CREATE TABLE lokacija(
     id INTEGER PRIMARY KEY,
-    id_sektor INTEGER NOT NULL,
+    id_sektor INTEGER,
     naziv VARCHAR(60) NOT NULL,
     zemljopisna_duzina DECIMAL(10, 7) NOT NULL,
     zemljopisna_sirina DECIMAL(10, 7) NOT NULL,
+    UNIQUE(zemljopisna_duzina, zemljopisna_sirina),
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 -- DROP TABLE lokacija;
@@ -63,7 +64,7 @@ CREATE TABLE misija(
     id_tura INTEGER NOT NULL,
     ishod TEXT,   -- vratit NOT NULL
     trosak_misije NUMERIC(15, 2) NOT NULL,
-    CHECK(trosak_misije >= 1),
+    CHECK(trosak_misije >= 0),
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id)
 );
@@ -100,7 +101,7 @@ CREATE TABLE vozila(
     vrsta VARCHAR(50) NOT NULL,
     ukupna_kolicina INTEGER NOT NULL,
     kapacitet INTEGER NOT NULL,
-    CHECK(ukupna_kolicina >= 1 AND kapacitet >= 1)
+    CHECK(ukupna_kolicina > 0 AND kapacitet > 0)
 
 );
 -- DROP TABLE vozila;
@@ -112,7 +113,7 @@ CREATE TABLE vozilo_na_misiji(
     id_vozilo INTEGER NOT NULL,
     kolicina INTEGER NOT NULL,
     id_misija INTEGER NOT NULL,
-    CHECK(kolicina >= 1),
+    CHECK(kolicina > 0),
     FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
     FOREIGN KEY (id_misija) REFERENCES misija(id)
 );
@@ -126,6 +127,7 @@ CREATE TABLE vozilo_na_turi(
     id_tura INTEGER,
     id_odgovorni INTEGER NOT NULL,
     kolicina INTEGER,
+    CHECK(kolicina > 0),
     FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id),
     FOREIGN KEY (id_odgovorni) REFERENCES osoblje_na_turi(id)
@@ -153,7 +155,7 @@ CREATE TABLE oprema(
     naziv VARCHAR(50) NOT NULL,
     vrsta VARCHAR(50) NOT NULL,
     ukupna_kolicina INTEGER NOT NULL,
-    CHECK(ukupna_kolicina >= 1),
+    CHECK(ukupna_kolicina > 0)
 );
 -- DROP TABLE oprema;
 
@@ -163,7 +165,8 @@ CREATE TABLE izdana_oprema(
     id INTEGER PRIMARY KEY,
     id_oprema INTEGER NOT NULL,
     id_osoblje_na_misiji INTEGER NOT NULL,
-    izdana_kolicina INTEGER DEFAULT 1,
+    izdana_kolicina INTEGER DEFAULT 1,          -- stavit konkretne vrijednost. ne default!!!
+    CHECK(izdana_kolicina > 0),
     FOREIGN KEY (id_oprema) REFERENCES oprema(id),
     FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
 );
@@ -187,8 +190,8 @@ CREATE TABLE osoblje_na_treningu(
 	id_trening INTEGER NOT NULL,
 	performans INTEGER NOT NULL,
 	CHECK(performans >= 0 AND performans < 11),
-        FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-        FOREIGN KEY (id_trening) REFERENCES trening(id)
+	FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
+	FOREIGN KEY (id_trening) REFERENCES trening(id)
 );
 -- DROP TABLE osoblje_na_treningu;
 
@@ -213,29 +216,134 @@ CREATE TABLE lijecenje(
 
 
 
--- OKIDACI
+-- OKIDAČI:
 
--- tekst zadataka ce bit jos restrukturiran, ovo je okvirno
+																															    /*
+Datum početka ture ne može biti veći ili jednak od datuma kraja ture.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je tura još uvijek u tijeku. Riječ je o UPDATE-u.                                                              */
 
--- struktura je ova:
-/*
-DROP TRIGGER IF EXISTS ime_okidaca;
+DROP TRIGGER IF EXISTS u_tura_vrijeme;
 
 DELIMITER //
-CREATE TRIGGER ime_okidaca
-	BEFORE INSERT ON naziv_tablice
+CREATE TRIGGER u_tura_vrijeme
+    BEFORE UPDATE ON tura
     FOR EACH ROW
 BEGIN
-
-
-
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND new.vrijeme_kraja != NULL THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja misije';
+    END IF;
 END//
 DELIMITER ;
-*/
+
+		
+                                                                                                                                  /*
+Datum početka misije ne može biti veći ili jednak od datuma kraja misije.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je misija još uvijek u tijeku. Riječ je o UPDATE-u.                                                             */
+
+DROP TRIGGER IF EXISTS u_mis_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER u_mis_vrijeme
+    BEFORE UPDATE ON misija
+    FOR EACH ROW
+BEGIN
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND new.vrijeme_kraja != NULL THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja misije';
+    END IF;
+END//
+DELIMITER ;
 
 
 
--- DK
+																																	  /*
+Datum početka sudjelovanja osoblja na turi ne može biti veći ili jednak od datuma kraja sudjelovanja.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da osoba još uvijek sudjeluje u turi. Riječ je o UPDATE-u.                                                              */
+
+DROP TRIGGER IF EXISTS u_ont_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER u_ont_vrijeme
+    BEFORE UPDATE ON osoblje_na_turi
+    FOR EACH ROW
+BEGIN
+	IF new.datum_pocetka >= new.datum_kraja AND new.datum_kraja != NULL THEN
+		SIGNAL SQLSTATE '40000'
+                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja sudjelovanja osoblja na turi!';
+        END IF;
+END//
+DELIMITER ;
+
+
+
+																																	/*
+Datum početka popravka ne može biti veći ili jednak od datuma kraja popravka.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je popravak još uvijek u tijeku. Riječ je o INSERT-u.                                                            */
+
+DROP TRIGGER IF EXISTS i_po_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER i_po_vrijeme
+    BEFORE INSERT ON popravak
+    FOR EACH ROW
+BEGIN
+	IF new.pocetak_popravka >= new.kraj_popravka AND new.kraj_popravka != NULL THEN
+		SIGNAL SQLSTATE '40000'
+                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
+        END IF;
+END//
+DELIMITER ;
+
+
+
+																																 /*
+Datum početka treninga ne može biti veći ili jednak od datuma kraja treninga te trening bi najmanje trebao trajat 20 min.
+Riječ o INSERT-u.                                                                                                                */
+
+DROP TRIGGER IF EXISTS i_tr_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER i_tr_vrijeme
+    BEFORE INSERT ON trening
+    FOR EACH ROW
+BEGIN
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+                                                                                                                                    /*
+Datum početka lijecenja ne može biti veći ili jednak od datuma kraja liječenja kada je riječ o INSERT-u. 
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.
+U slučaju je datum kraja liječenja NULL to znači da je liječenje još uvijek u tijeku.                                                */
+
+DROP TRIGGER IF EXISTS i_li_vrijeme;                                                                                                      
+
+DELIMITER //
+CREATE TRIGGER li_vrijeme
+    BEFORE INSERT ON lijecenje
+    FOR EACH ROW
+BEGIN
+    IF new.pocetak_lijecenja >= new.kraj_lijecenja AND new.kraj_lijecenja != NULL THEN
+	 SIGNAL SQLSTATE '40000'
+         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+
+
 -- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
 -- korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi
 /*
@@ -260,12 +368,11 @@ BEGIN
     DELETE FROM oprema WHERE id = new.id;
 END//
 DELIMITER ;
+*/
 
 
 
-
--- DK
--- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme tijekom insert-a
+-- Prati se da zbroj izdane količine željene opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a
 
 DROP TRIGGER IF EXISTS kop;
 
@@ -296,9 +403,7 @@ DELIMITER ;
 
 
 
-
--- DK
--- Prati se da zbroj izdane kolicine ne bude veci od sveukupne moguce kolicine opreme tijekom update-a
+-- Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a
 
 DROP TRIGGER IF EXISTS ukop;
 
@@ -329,140 +434,6 @@ DELIMITER ;
 
 
 
-
--- DK
--- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
--- Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
-
-DROP TRIGGER IF EXISTS vr_po;
-
-DELIMITER //
-CREATE TRIGGER vr_po
-    BEFORE INSERT ON popravak
-    FOR EACH ROW
-BEGIN
-	IF DATE(new.pocetak_popravka) >= DATE(new.kraj_popravka) AND new.kraj_popravka != NULL THEN
-		SIGNAL SQLSTATE '40000'
-                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
-        END IF;
-END//
-DELIMITER ;
-
-
-
-
-
-
--- DK
--- Vrijeme pocetka ne smije biti isto ili manje kao vrijeme kraja te trening bi najmanje trebao trajat 20 min(jos vidjet s Stevanom)
-DROP TRIGGER IF EXISTS vr_tr;
-
-DELIMITER //
-CREATE TRIGGER vr_tr
-    BEFORE INSERT ON trening
-    FOR EACH ROW
-BEGIN
-    IF DATE(new.vrijeme_pocetka) >= DATE(new.vrijeme_kraja) OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
-	SIGNAL SQLSTATE '40000'
-        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
-    END IF;
-END//
-DELIMITER ;
-
-
-
-
-
--- DK
--- Datetime pocetka lijecenja ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
--- Ak je kraj NULL to znaci da je lijecenje jos uvijek u tijeku
-DROP TRIGGER IF EXISTS vrli;
-
-DELIMITER //
-CREATE TRIGGER vrli
-    BEFORE INSERT ON lijecenje
-    FOR EACH ROW
-BEGIN
-    IF DATE(new.pocetak_lijecenja) >= DATE(new.kraj_lijecenja) AND new.kraj_lijecenja != NULL THEN
-	 SIGNAL SQLSTATE '40000'
-         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
-    END IF;
-END//
-DELIMITER ;
-
-
--- Funkcija vraca ukupni trosak
-
-DELIMITER //
-CREATE FUNCTION trosak() RETURNS DECIMAL(12,2)
-DETERMINISTIC
-BEGIN
-    DECLARE ukupno_misija, ukupni_popravak, ukupno_lijecenje DECIMAL(8,2);
-
-    SELECT SUM(trosak_misije) INTO ukupno_misija
-    FROM misija;
-
-    SELECT SUM(trosak_popravka) INTO ukupni_popravak
-    FROM popravak;
-
-    SELECT SUM(trosak_lijecenja) INTO ukupno_lijecenje
-    FROM lijecenje;
-
-    RETURN ukupno_misija + ukupni_popravak + ukupno_lijecenje;
-END//
-DELIMITER ;
-
-SELECT trosak() AS ukupni_trosak FROM DUAL;
-
-
-
--- Funkcija racuna koliko je novca ostalo "viska" iz proracuna:
-
-DELIMITER //
-CREATE FUNCTION visak() RETURNS DECIMAL(12,2)
-DETERMINISTIC
-BEGIN
-    DECLARE proracun_svih_sektora DECIMAL(12,2);
-
-    SELECT SUM(ukupni_proracun) INTO proracun_svih_sektora
-    FROM sektor;
-
-    RETURN proracun_svih_sektora - trosak();
-END//
-DELIMITER ;
-
-SELECT visak() AS visak FROM DUAL;
-
-
-
--- BACKEND:
-
-
-DELIMITER //
-CREATE TRIGGER kriptiranje
- BEFORE INSERT ON osoblje
- FOR EACH ROW
-BEGIN
- INSERT INTO login VALUES (new.id,new.ime,md5(concat(new.ime,new.prezime)));
- -- SET new.lozinka = MD5(new.lozinka);
-
-END//
-DELIMITER ;
-drop trigger kriptiranje;
-
-
-CREATE TABLE login(
-    id INTEGER primary KEY,  -- autoincrement
-	ime varchar(100),
-    lozinka varchar(100)
-);
-DROP TABLE login;
--- za kriptiranje lozinke
-select* from login;
-select * from login where lozinka = md5(concat("Eliza","Eliza")) and login.ime = "Eliza";
-"Eliza" , "Vuković"
-select * from login;
-*/
 
 
 INSERT INTO sektor VALUES
@@ -2538,6 +2509,7 @@ on onm.id_misija= m.id
 inner join lokacija as l
 on l.id=m.id_lokacija
 where l.naziv="Ohio";
+
 -- svi idevi osoblja krvne grupe 0+ koje je na lijecenju i u sektoru je "Hrvatska kopnena vojska"
 Select l.id_osoblje, o.ime, o.prezime
 from lijecenje as l
@@ -2546,3 +2518,257 @@ on l.id_osoblje= o.id
 inner join sektor as s
 on s.id=o.id_sektor
 where o.krvna_grupa="0+" and s.naziv="Hrvatska kopnena vojska";
+
+
+
+SELECT SUM(kol_d_opreme) AS br_d_opreme 
+	FROM
+	(SELECT (ukupna_kolicina - izdana_kolicina) AS kol_d_opreme
+	FROM oprema
+	INNER JOIN izdana_oprema
+	ON oprema.id = izdana_oprema.id_oprema
+	UNION
+	SELECT ukupna_kolicina AS kol_d_opreme
+	FROM oprema
+	WHERE id NOT IN (SELECT id_oprema FROM izdana_oprema)) AS l;
+
+
+
+
+-- Funkcija vraca ukupni trosak
+
+DELIMITER //
+CREATE FUNCTION trosak() RETURNS DECIMAL(12,2)
+DETERMINISTIC
+BEGIN
+    DECLARE ukupno_misija, ukupni_popravak, ukupno_lijecenje DECIMAL(8,2);
+
+    SELECT SUM(trosak_misije) INTO ukupno_misija
+    FROM misija;
+
+    SELECT SUM(trosak_popravka) INTO ukupni_popravak
+    FROM popravak;
+
+    SELECT SUM(trosak_lijecenja) INTO ukupno_lijecenje
+    FROM lijecenje;
+
+    RETURN ukupno_misija + ukupni_popravak + ukupno_lijecenje;
+END//
+DELIMITER ;
+
+SELECT trosak() AS ukupni_trosak FROM DUAL;
+
+
+
+-- Funkcija racuna koliko je novca ostalo "viska" iz proracuna:
+
+DELIMITER //
+CREATE FUNCTION visak() RETURNS DECIMAL(12,2)
+DETERMINISTIC
+BEGIN
+    DECLARE proracun_svih_sektora DECIMAL(12,2);
+
+    SELECT SUM(ukupni_proracun) INTO proracun_svih_sektora
+    FROM sektor;
+
+    RETURN proracun_svih_sektora - trosak();
+END//
+DELIMITER ;
+
+SELECT visak() AS visak FROM DUAL;
+
+
+
+/*
+SELECT ukupna_kolicina AS kol_d_opreme
+FROM oprema
+WHERE id NOT IN (SELECT id_oprema FROM izdana_oprema)
+UNION
+SELECT (ukupna_kolicina - izdana_kolicina) AS kol_d_opreme
+FROM oprema
+INNER JOIN
+(SELECT id_oprema, izdana_kolicina
+FROM izdana_oprema
+INNER JOIN
+(SELECT *
+FROM
+(SELECT osoblje_na_misiji.id AS id_onm, vrijeme_pocetka, vrijeme_kraja
+FROM misija
+INNER JOIN osoblje_na_misiji
+ON misija.id = osoblje_na_misiji.id_misija) AS e
+WHERE (DATETIME(vrijeme_pocetka) > DATETIME(datum_poc) AND DATETIME(vrijeme_pocetka) < DATETIME(datum_kr)) 
+   OR (DATETIME(vrijeme_kraja) > DATETIME(datum_poc) AND DATETIME(vrijeme_kraja) < DATETIME(datum_kr))) AS l
+ON izdana_oprema.id_osoblje_na_misiji = l.id_onm) AS n
+ON oprema.id = n.id_oprema
+UNION
+;
+*/
+
+-- PROCEDURE:
+
+-- Ispisati koliki je broj osoblja, vozila, opreme trenutačno dostupno(3 vrijednosti) u danom intervalu (dva datuma
+-- koje korisnik izabere kao ulazne argumente)
+/*
+DROP FUNCTION IF EXISTS d_osoblje;
+
+DELIMITER //
+CREATE FUNCTION d_osoblje(datum_p DATETIME, datum_k DATETIME) RETURNS INTEGER
+DETERMINISTIC
+BEGIN
+    DECLARE br_d_osoblje INTEGER;
+
+    SELECT COUNT(*) INTO br_d_osoblje
+	FROM osoblje
+	WHERE id NOT IN
+	(SELECT id_osoblje
+	FROM osoblje_na_turi
+	WHERE (datum_p > datum_pocetka AND datum_p < datum_kraja)
+    OR (datum_k > datum_pocetka AND datum_k < datum_kraja));
+
+    RETURN br_d_osoblje;
+END//
+DELIMITER ;
+
+-- Provjera
+SELECT d_osoblje(STR_TO_DATE("1.10.1991.  12:37:13", "%d.%m.%Y. %H:%i:%s"), 
+STR_TO_DATE("1.10.2013.  12:37:13", "%d.%m.%Y. %H:%i:%s")) AS broj_dostupnog_osoblja
+FROM DUAL;
+
+
+ 
+DROP FUNCTION IF EXISTS d_vozila;
+
+DELIMITER //
+CREATE FUNCTION d_vozila(datum_p DATETIME, datum_k DATETIME) RETURNS INTEGER
+DETERMINISTIC
+BEGIN
+    DECLARE br_d_vozila INTEGER;
+    DECLARE nisu_u_vnt INTEGER;
+
+	SELECT SUM(ukupna_kolicina) INTO nisu_u_vnt
+    FROM vozila
+    WHERE id NOT IN (SELECT id_vozilo FROM vozilo_na_turi);
+    
+
+    SELECT COUNT(*) INTO br_d_vozila
+	FROM vozila
+	WHERE id NOT IN
+	(SELECT id_vozilo
+	FROM vozilo_na_turi
+    INNER JOIN tura
+    ON tura.id = vozilo_na_turi.id_tura
+	WHERE (datum_p > vrijeme_pocetka AND datum_p < vrijeme_kraja)
+    OR (datum_k > vrijeme_pocetka AND datum_k < vrijeme_kraja));
+
+    RETURN br_d_vozila;
+END//
+DELIMITER ;
+
+-- Provjera
+SELECT d_vozila(STR_TO_DATE("1.10.1991.  12:37:13", "%d.%m.%Y. %H:%i:%s"), 
+STR_TO_DATE("1.10.2013.  12:37:13", "%d.%m.%Y. %H:%i:%s")) AS broj_dostupnih_vozila
+FROM DUAL;
+
+
+
+SELECT *
+FROM popravak
+WHERE 
+*/
+
+/*
+DROP PROCEDURE IF EXISTS br_ovo;
+
+DELIMITER //
+CREATE PROCEDURE br_ovo(IN datum_poc DATETIME, IN datum_kr DATETIME, OUT d_osoblje INTEGER, OUT d_vozila INTEGER, OUT d_oprema INTEGER)
+BEGIN
+
+	SELECT SUM(kol_d_opreme) AS br_d_opreme INTO d_oprema
+	FROM
+	(SELECT (ukupna_kolicina - izdana_kolicina) AS kol_d_opreme
+	FROM oprema
+	INNER JOIN izdana_oprema
+	ON oprema.id = izdana_oprema.id_oprema
+	UNION
+	SELECT ukupna_kolicina AS kol_d_opreme
+	FROM oprema
+	WHERE id NOT IN (SELECT id_oprema FROM izdana_oprema)) AS l;
+    
+	SET rezultat = a + b;
+
+END //
+DELIMITER ;
+
+CALL br_ovo(, ,@s_os, @s_vo, @s_op);
+SELECT @s_os AS br_dostupnog_osoblja, @s_vo AS br_dostupnih_vozila, @s_op AS br_dostupne_opreme FROM DUAL;
+
+*/
+
+
+
+/*
+Za dva vremenski intervala (pojedini će biti određen s dvije datumske vrijednosti) se mora odrediti  pojedinačni 
+ukupni trošak za misije, ukupni trošak za popravak, ukupni trošak za liječenje te usporedit. 
+Ispis treba biti u obliku:
+	Vremensko razdoblje od 1.10.1991. do 11.07.1998. ima manji trošak kada je riječ o misijama u usporedbi s razdobljem od 23.04.1997. do 2.12.2001..
+    Vremensko razdoblje od 23.04.1997. do 2.12.2001. ima manji trošak kada je riječ o popravcima u usporedbi s razdobljem od 1.10.1991. do 11.07.1998..
+    Vremensko razdoblje od 1.10.1991. do  11.07.1998. ima manji trošak kada je riječ liječenju u usporedbi s razdobljem od 23.04.1997. do 2.12.2001..
+*/
+
+/*
+DROP PROCEDURE IF EXISTS usporedba;
+
+DELIMITER //
+CREATE PROCEDURE usporedba(IN datum_poc DATETIME, IN datum_kr DATETIME, OUT rez_misija VARCHAR(200), OUT rez_popravci VARCHAR(200), OUT rez_lijecenje VARCHAR(200))
+BEGIN
+
+	SELECT *
+    FROM popravak
+    WHERE datum_poc > pocetak_popravka AND datum_poc < kraj_popravka;
+
+END //
+DELIMITER ;
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+-- BACKEND:
+
+
+DELIMITER //
+CREATE TRIGGER kriptiranje
+ BEFORE INSERT ON osoblje
+ FOR EACH ROW
+BEGIN
+ INSERT INTO login VALUES (new.id,new.ime,md5(concat(new.ime,new.prezime)));
+ -- SET new.lozinka = MD5(new.lozinka);
+
+END//
+DELIMITER ;
+drop trigger kriptiranje;
+
+
+CREATE TABLE login(
+    id INTEGER primary KEY,  -- autoincrement
+	ime varchar(100),
+    lozinka varchar(100)
+);
+DROP TABLE login;
+-- za kriptiranje lozinke
+select* from login;
+select * from login where lozinka = md5(concat("Eliza","Eliza")) and login.ime = "Eliza";
+"Eliza" , "Vuković"
+select * from login;
+*/
