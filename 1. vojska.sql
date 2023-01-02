@@ -66,7 +66,7 @@ CREATE TABLE misija(
     trosak_misije NUMERIC(15, 2) NOT NULL,
     CHECK(trosak_misije >= 0),
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
-    FOREIGN KEY (id_tura) REFERENCES tura(id)
+    FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE
 );
 -- DROP TABLE misija;
 
@@ -75,8 +75,8 @@ CREATE TABLE osoblje_na_misiji(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER NOT NULL,
     id_misija INTEGER NOT NULL,
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-    FOREIGN KEY (id_misija) REFERENCES misija(id)
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_misija) REFERENCES misija(id) ON DELETE CASCADE
 );
 -- DROP TABLE osoblje_na_misiji;
 
@@ -88,8 +88,8 @@ CREATE TABLE osoblje_na_turi(
     id_tura INTEGER NOT NULL,
     datum_pocetka DATETIME NOT NULL,
     datum_kraja DATETIME,
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-    FOREIGN KEY (id_tura) REFERENCES tura(id)
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE
 );
 -- DROP TABLE osoblje_na_turi;
 
@@ -114,8 +114,8 @@ CREATE TABLE vozilo_na_misiji(
     kolicina INTEGER NOT NULL,
     id_misija INTEGER NOT NULL,
     CHECK(kolicina > 0),
-    FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
-    FOREIGN KEY (id_misija) REFERENCES misija(id)
+    FOREIGN KEY (id_vozilo) REFERENCES vozila(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_misija) REFERENCES misija(id) ON DELETE CASCADE
 );
 -- DROP TABLE vozilo_na_misiji;
 
@@ -128,8 +128,8 @@ CREATE TABLE vozilo_na_turi(
     id_odgovorni INTEGER NOT NULL,
     kolicina INTEGER,
     CHECK(kolicina > 0),
-    FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
-    FOREIGN KEY (id_tura) REFERENCES tura(id),
+    FOREIGN KEY (id_vozilo) REFERENCES vozila(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE,
     FOREIGN KEY (id_odgovorni) REFERENCES osoblje_na_turi(id)
 );
 -- DROP TABLE vozilo_na_turi;
@@ -144,7 +144,7 @@ CREATE TABLE popravak(
     kraj_popravka DATETIME,
     trosak_popravka NUMERIC(15,2) NOT NULL,
     CHECK(trosak_popravka >= 0),
-    FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id)
+    FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id) ON DELETE CASCADE
 );
 -- DROP TABLE popravak;
 
@@ -155,7 +155,7 @@ CREATE TABLE oprema(
     naziv VARCHAR(50) NOT NULL,
     vrsta VARCHAR(50) NOT NULL,
     ukupna_kolicina INTEGER NOT NULL,
-    CHECK(ukupna_kolicina > 0)
+    CHECK(ukupna_kolicina > 0) 
 );
 -- DROP TABLE oprema;
 
@@ -167,7 +167,7 @@ CREATE TABLE izdana_oprema(
     id_osoblje_na_misiji INTEGER NOT NULL,
     izdana_kolicina INTEGER DEFAULT 1,          -- stavit konkretne vrijednost. ne default!!!
     CHECK(izdana_kolicina > 0),
-    FOREIGN KEY (id_oprema) REFERENCES oprema(id),
+    FOREIGN KEY (id_oprema) REFERENCES oprema(id) ON DELETE CASCADE,
     FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
 );
 -- DROP TABLE izdana_oprema;
@@ -190,8 +190,8 @@ CREATE TABLE osoblje_na_treningu(
 	id_trening INTEGER NOT NULL,
 	performans INTEGER NOT NULL,
 	CHECK(performans >= 0 AND performans < 11),
-	FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-	FOREIGN KEY (id_trening) REFERENCES trening(id)
+	FOREIGN KEY (id_osoblje) REFERENCES osoblje(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_trening) REFERENCES trening(id) ON DELETE CASCADE
 );
 -- DROP TABLE osoblje_na_treningu;
 
@@ -205,7 +205,7 @@ CREATE TABLE lijecenje(
     opis_ozljede TEXT NOT NULL,
     trosak_lijecenja NUMERIC(15,2),
     CHECK(trosak_lijecenja >= 0),
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id)
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id) ON DELETE CASCADE
 );
 -- DROP TABLE lijecenje;
 
