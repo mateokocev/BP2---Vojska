@@ -29,20 +29,28 @@
 
 
 ## **OKIDAČI**:
+- Datum početka ture ne može biti veći ili jednak od datuma kraja ture. Idemo ih uspoređivat samo uz uvjet da kraj nije NULL. 
+  U slučaju da je kraj NULL to znači da je tura još uvijek u tijeku. Riječ je o UPDATE-u.                                                               
+                                                                                                                            
+- Datum početka misije ne može biti veći ili jednak od datuma kraja misije. Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+  U slučaju da je kraj NULL to znači da je misija još uvijek u tijeku. Riječ je o UPDATE-u.                                                             
+
+- Datum početka sudjelovanja osoblja na turi ne može biti veći ili jednak od datuma kraja sudjelovanja. Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.             U slučaju da je kraj NULL to znači da osoba još uvijek sudjeluje u turi. Riječ je o UPDATE-u.                                                            
+																				
+- Datum početka popravka ne može biti veći ili jednak od datuma kraja popravka. Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+  U slučaju da je kraj NULL to znači da je popravak još uvijek u tijeku. Riječ je o INSERT-u.                                                          
+
+- Datum početka treninga ne može biti veći ili jednak od datuma kraja treninga te trening bi najmanje trebao trajat 20 min. Riječ je o INSERT-u.                                                                                                                
+- Datum početka lijecenja ne može biti veći ili jednak od datuma kraja liječenja kada je riječ o INSERT-u. 
+  Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.
+  U slučaju je datum kraja liječenja NULL to znači da je liječenje još uvijek u tijeku.                                               
+
 - imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
-  korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi
-  
-- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme tijekom insert-a
+  korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi -> doradit!!!
 
-- Prati se da zbroj izdane kolicine ne bude veci od sveukupne moguce kolicine opreme tijekom update-a
+- Prati se da zbroj izdane količine željene opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a
 
-- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
-  Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
-  
-- Vrijeme pocetka ne smije biti isto ili manje kao vrijeme kraja te trening bi najmanje trebao trajat 20 min(jos vidjet s Stevanom)
-
-- Datetime pocetka lijecenja ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
-  Ak je kraj NULL to znaci da je lijecenje jos uvijek u tijeku
+- Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a
 
 - ...
 
@@ -60,7 +68,7 @@
 ## **PROCEDURE**:
 - Ispisati koliki je broj osoblja, vozila, opreme trenutačno dostupno(3 vrijednosti) u danom intervalu (dva datuma koje korisnik izabere kao ulazne argumente)
 
--Za dva vremenski intervala (pojedini će biti određen s dvije datumske vrijednosti) se mora odrediti  pojedinačni 
+- Za dva vremenski intervala (pojedini će biti određen s dvije datumske vrijednosti) se mora odrediti  pojedinačni 
  ukupni trošak za misije, ukupni trošak za popravak, ukupni trošak za liječenje te usporedit. 
  Ispis treba biti u obliku:
 	Vremensko razdoblje od 1.10.1991. do 11.07.1998. ima manji trošak kada je riječ o misijama u usporedbi s razdobljem od 23.04.1997. do 2.12.2001..
