@@ -1,20 +1,3 @@
--- struktura:
-/*
-DROP TRIGGER IF EXISTS ime_okidaca;
-
-DELIMITER //
-CREATE TRIGGER ime_okidaca
-	BEFORE INSERT ON naziv_tablice
-    FOR EACH ROW
-BEGIN
-
-
-
-END//
-DELIMITER ;
-*/
-
-
 
 -- MK
 -- TRIGGER za popravljanje datuma učlanjenja
@@ -43,7 +26,133 @@ DELIMITER ;
 
 
 
+
 -- DK
+Datum početka ture ne može biti veći ili jednak od datuma kraja ture.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je tura još uvijek u tijeku. Riječ je o UPDATE-u.                                                              */
+
+DROP TRIGGER IF EXISTS u_tura_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER u_tura_vrijeme
+    BEFORE UPDATE ON tura
+    FOR EACH ROW
+BEGIN
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND new.vrijeme_kraja != NULL THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja misije';
+    END IF;
+END//
+DELIMITER ;
+
+		
+                                                                                                                                  /*
+Datum početka misije ne može biti veći ili jednak od datuma kraja misije.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je misija još uvijek u tijeku. Riječ je o UPDATE-u.                                                             */
+
+DROP TRIGGER IF EXISTS u_mis_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER u_mis_vrijeme
+    BEFORE UPDATE ON misija
+    FOR EACH ROW
+BEGIN
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND new.vrijeme_kraja != NULL THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja misije';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+																																	  /*
+Datum početka sudjelovanja osoblja na turi ne može biti veći ili jednak od datuma kraja sudjelovanja.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da osoba još uvijek sudjeluje u turi. Riječ je o UPDATE-u.                                                              */
+
+DROP TRIGGER IF EXISTS u_ont_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER u_ont_vrijeme
+    BEFORE UPDATE ON osoblje_na_turi
+    FOR EACH ROW
+BEGIN
+	IF new.datum_pocetka >= new.datum_kraja AND new.datum_kraja != NULL THEN
+		SIGNAL SQLSTATE '40000'
+                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja sudjelovanja osoblja na turi!';
+        END IF;
+END//
+DELIMITER ;
+
+
+
+																																	/*
+Datum početka popravka ne može biti veći ili jednak od datuma kraja popravka.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je popravak još uvijek u tijeku. Riječ je o INSERT-u.                                                            */
+
+DROP TRIGGER IF EXISTS i_po_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER i_po_vrijeme
+    BEFORE INSERT ON popravak
+    FOR EACH ROW
+BEGIN
+	IF new.pocetak_popravka >= new.kraj_popravka AND new.kraj_popravka != NULL THEN
+		SIGNAL SQLSTATE '40000'
+                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
+        END IF;
+END//
+DELIMITER ;
+
+
+
+																																 /*
+Datum početka treninga ne može biti veći ili jednak od datuma kraja treninga te trening bi najmanje trebao trajat 20 min.
+Riječ o INSERT-u.                                                                                                                */
+
+DROP TRIGGER IF EXISTS i_tr_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER i_tr_vrijeme
+    BEFORE INSERT ON trening
+    FOR EACH ROW
+BEGIN
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+                                                                                                                                    /*
+Datum početka lijecenja ne može biti veći ili jednak od datuma kraja liječenja kada je riječ o INSERT-u. 
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.
+U slučaju je datum kraja liječenja NULL to znači da je liječenje još uvijek u tijeku.                                                */
+
+DROP TRIGGER IF EXISTS i_li_vrijeme;                                                                                                      
+
+DELIMITER //
+CREATE TRIGGER li_vrijeme
+    BEFORE INSERT ON lijecenje
+    FOR EACH ROW
+BEGIN
+    IF new.pocetak_lijecenja >= new.kraj_lijecenja AND new.kraj_lijecenja != NULL THEN
+	 SIGNAL SQLSTATE '40000'
+         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+
+
 -- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
 -- korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi
 /*
@@ -68,12 +177,11 @@ BEGIN
     DELETE FROM oprema WHERE id = new.id;
 END//
 DELIMITER ;
+*/
 
 
 
-
--- DK
--- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme tijekom insert-a
+-- Prati se da zbroj izdane količine željene opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a
 
 DROP TRIGGER IF EXISTS kop;
 
@@ -104,9 +212,7 @@ DELIMITER ;
 
 
 
-
--- DK
--- Prati se da zbroj izdane kolicine ne bude veci od sveukupne moguce kolicine opreme tijekom update-a
+-- Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a
 
 DROP TRIGGER IF EXISTS ukop;
 
@@ -135,66 +241,3 @@ END//
 DELIMITER ;
 
 
-
-
-
--- DK
--- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
--- Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
-
-DROP TRIGGER IF EXISTS vr_po;
-
-DELIMITER //
-CREATE TRIGGER vr_po
-    BEFORE INSERT ON popravak
-    FOR EACH ROW
-BEGIN
-	IF DATE(new.pocetak_popravka) >= DATE(new.kraj_popravka) AND new.kraj_popravka != NULL THEN
-		SIGNAL SQLSTATE '40000'
-                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
-        END IF;
-END//
-DELIMITER ;
-
-
-
-
-
-
--- DK
--- Vrijeme pocetka ne smije biti isto ili manje kao vrijeme kraja te trening bi najmanje trebao trajat 20 min(jos vidjet s Stevanom)
-
-DROP TRIGGER IF EXISTS vr_tr;
-
-DELIMITER //
-CREATE TRIGGER vr_tr
-    BEFORE INSERT ON trening
-    FOR EACH ROW
-BEGIN
-    IF DATE(new.vrijeme_pocetka) >= DATE(new.vrijeme_kraja) OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
-	SIGNAL SQLSTATE '40000'
-        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
-    END IF;
-END//
-DELIMITER ;
-
-
-
-
-
--- DK
--- Datetime pocetka lijecenja ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
--- Ak je kraj NULL to znaci da je lijecenje jos uvijek u tijeku
-DROP TRIGGER IF EXISTS vrli;
-
-DELIMITER //
-CREATE TRIGGER vrli
-    BEFORE INSERT ON lijecenje
-    FOR EACH ROW
-BEGIN
-    IF DATE(new.pocetak_lijecenja) >= DATE(new.kraj_lijecenja) AND new.kraj_lijecenja != NULL THEN
-	 SIGNAL SQLSTATE '40000'
-         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
-    END IF;
-END//
-DELIMITER ;
