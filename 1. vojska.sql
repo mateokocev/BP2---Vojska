@@ -214,8 +214,6 @@ CREATE TABLE lijecenje(
 
 
 
-
-
 -- OKIDAČI:
 
 																															    /*
@@ -343,10 +341,11 @@ DELIMITER ;
 
 
 
+																																	/*
+Napraviti okidač koji će u slučaju da korisnik unese opremu koja je već unešena zbrojit količinu opreme.
+Npr u skladištu već postoji (1330, "RBG-6", "Bacač granata", 124) te korisnik unosi (1370, "RBG-6", "Bacač granata", 6).
+To je "nepotrebno" te stoga okidač pridodaje dodatnu količinu onoj već postojećoj tj (1330, "RBG-6", "Bacač granata", 130).         */
 
--- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
--- korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi
-/*
 DROP TRIGGER IF EXISTS postoji;
 
 DELIMITER //
@@ -360,34 +359,40 @@ BEGIN
     FROM oprema
     WHERE naziv = new.naziv;
 
-
     IF br > 1 THEN
         UPDATE oprema SET ukupna_kolicina = ukupna_kolicina + new.ukupna_kolicina WHERE naziv = new.naziv;
+        DELETE FROM oprema WHERE id = new.id;
     END IF;
-
-    DELETE FROM oprema WHERE id = new.id;
 END//
 DELIMITER ;
-*/
 
 
 
--- Prati se da zbroj izdane količine željene opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a
+																																	/*
+Prati se da zbroj količine željene izdane opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a.
+Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno. 																			*/
 
-DROP TRIGGER IF EXISTS kop;
+DROP TRIGGER IF EXISTS i_kol_op;
 
 DELIMITER //
-CREATE TRIGGER kop
+CREATE TRIGGER i_kol_op
     BEFORE INSERT ON izdana_oprema
     FOR EACH ROW
 BEGIN
+	DECLARE id_zadane_misije INTEGER;
     DECLARE br INTEGER;
     DECLARE uk INTEGER;
-
+    
+    SELECT id_misija INTO id_zadane_misije
+    FROM osoblje_na_misiji
+    WHERE osoblje_na_misiji.id = new.id_osoblje_na_misiji;
+    
     SELECT SUM(izdana_kolicina) INTO br
     FROM izdana_oprema
-    WHERE id_oprema = new.id_oprema;
-
+    INNER JOIN osoblje_na_misiji
+    ON izdana_oprema.id_osoblje_na_misiji = osoblje_na_misiji.id
+    WHERE id_oprema = new.id_oprema AND id_misija = id_zadane_misije;
+    
     SELECT ukupna_kolicina INTO uk
     FROM oprema
     WHERE id = new.id_oprema;
@@ -401,24 +406,30 @@ DELIMITER ;
 
 
 
+																																	/*
+Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a
+Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno.																*/
 
-
--- Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a
-
-DROP TRIGGER IF EXISTS ukop;
+DROP TRIGGER IF EXISTS u_kol_op;
 
 DELIMITER //
-CREATE TRIGGER ukop
+CREATE TRIGGER u_kol_op
     BEFORE UPDATE ON izdana_oprema
     FOR EACH ROW
 BEGIN
+	DECLARE id_zadane_misije INTEGER;
     DECLARE br INTEGER;
     DECLARE uk INTEGER;
 
+    SELECT id_misija INTO id_zadane_misije
+    FROM osoblje_na_misiji
+    WHERE osoblje_na_misiji.id = new.id_osoblje_na_misiji;
+    
     SELECT SUM(izdana_kolicina) INTO br
     FROM izdana_oprema
-    WHERE id_oprema = new.id_oprema;
-
+    INNER JOIN osoblje_na_misiji
+    ON izdana_oprema.id_osoblje_na_misiji = osoblje_na_misiji.id
+    WHERE id_oprema = new.id_oprema AND id_misija = id_zadane_misije;
 
     SELECT ukupna_kolicina INTO uk
     FROM oprema
@@ -430,7 +441,6 @@ BEGIN
     END IF;
 END//
 DELIMITER ;
-
 
 
 
