@@ -119,3 +119,26 @@ body
     margin-top: 250px;
     margin-bottom: 150px;
 }
+
+.graph_back
+{   background-color: aliceblue;
+    width: fit-content;
+    height: 1000px;
+}
+.graph
+{
+    width: 1000px;
+    
+}
+
+.graphgrid
+{   background-color: antiquewhite;
+    display: grid;
+    border: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size: 0.8vw;
+    gap: 20px;
+    column-gap: 10px;
+    grid-template-columns: auto auto;
+}

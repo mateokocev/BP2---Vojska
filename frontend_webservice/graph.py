@@ -2,21 +2,21 @@ import matplotlib.pyplot as plt
 import numpy as np
 import mysql.connector
 #getting data from Database
+from threading import Thread
 
 
 
-def pie(title,mySql,fileName="test",color="winter",fileType="png",font=15):
-        #sql stuff
-    
-    vojska= mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
+def pie(title, mySql, fileName="test", color="winter", fileType="png", font=15):
+    #sql stuff
+    vojska = mysql.connector.connect(host='localhost',database='vojska',user='root',password='root')
     MainKursor = vojska.cursor()
     MainKursor.execute(mySql)
     data = MainKursor.fetchall()
+
     MainKursor.close()
-    
     nummberItems = len(data)
-    labels= []
-    stuff =[]
+    labels = []
+    stuff = []
     for x in range(nummberItems):
         stuff.append(data[x][0])
         labels.append(data[x][1])
@@ -24,19 +24,19 @@ def pie(title,mySql,fileName="test",color="winter",fileType="png",font=15):
     plt.rc('font', size=2)  
     plt.style.use('_mpl-gallery-nogrid')
     colors = plt.get_cmap(color)(np.linspace(0.2, 0.7, len(stuff)))
-    fig, ax = plt.subplots()
-    
-    ax.pie(stuff, colors=colors,autopct="%1.1f%%",labels=labels,wedgeprops={"linewidth": 1, "edgecolor": "white"})
 
-    fig = plt.figure(1)
-    #plt.figure(figsize=(1,1))
-    saveTo = 'static/img/'
-    plt.savefig(saveTo+(title+"."+fileType),dpi=500)
+    # Create a new figure
+    fig, ax = plt.subplots()
+
+    ax.pie(stuff, colors=colors, autopct="%1.1f%%", labels=labels, wedgeprops={"linewidth": 1, "edgecolor": "white"})
+    ax.legend(loc='lower right')
+    # Save the figure
+    saveTo = 'static/img/statistics/'
+    plt.savefig(saveTo + (title + "." + fileType), dpi=500)
+    print("Info:" + str(data))
     
     
-Stroskovi ="troskovi"
-data = "UNTAET"
-pie(Stroskovi,"select sum(trosak_misije-(select trosak_misije from misija where naziv ='"+data+"')),'Sve Misije' from misija union  select trosak_misije,naziv from misija where naziv ='"+data+"';",fileType="svg")
+
 
     # prosjek imena
 #pie("imena","select count(*),ime from osoblje where ime = 'Ela' union  select count(*),ime from osoblje where ime = 'Ivan';",fileType="svg")

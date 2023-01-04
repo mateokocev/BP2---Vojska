@@ -11,28 +11,7 @@
 <body>
    <div class="cover"><h1 style="font-size: 80px; color: white;">{{data}}</h1></div>
    <div class="shadow"></div>
-    <div class="naslov">Misije</div>
     
-
-    <div style=" margin-left: 5%; margin-right: 5%;" class="grids">
-        {%for i in range(0, len)%}
-       
-        <div class="cards">
-            <img src="/static/img/kopnena_back.png" >
-            <h1>{{misije[i][0]}}</h1>
-            <div class="opis">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore blanditiis exercitationem rem, delectus ipsam ab dicta praesentium hic harum ullam culpa, necessitatibus deserunt repellendus ad, fugit veniam nesciunt. Nobis, voluptate!</div>
-            <div class="bottomText">
-                <p>{{misije[i][2]}}</p>
-                <p>{{misije[i][3]}}</p>
-                <p>{{misije[i][4]}}</p>
-            </div>
-        </div>
-        {%endfor%}
-    </div>
-     
-
-       
-
 <div class="naslov">Vozila na misiji</div>
     
 <div style=" margin-right: 5%;margin-left:  5%;" class="grids">
@@ -42,7 +21,9 @@
     <div class="cards">
         <img src="/static/img/kopnena_back.png" >
         <h1>{{vozila[i][0]}}</h1>
-       
+        <h3>Vrsta: {{vozila[i][1]}}</h3>
+        <h3>Ukupna kolicina: {{vozila[i][2]}}</h3>
+        <h3>Kapacitet: {{vozila[i][3]}}</h3>
         
         <div class="bottomText">
             <p>{{vozila[i][2]}}</p>
@@ -75,9 +56,32 @@
             </div>
         </div>
         {%endfor%}
-
-
+ 
 
 </div>
+
+
+<div class="naslov">Statistika</div>
+
+<div class="graphgrid">
+  
+
+        <img  class="graph" src="/static/img/statistics/{{Stroskovi}}" alt="">
+        <div><h1>Trošak misije</h1> <p>Prikaz Troška misije nasprema ostalih misija</p></div>
+
+
+        <img  class="graph" src="/static/img/statistics/{{Sosoblje}}" alt="">
+        <div><h1>Osoblje</h1> <p>Usporedba osoblja na misiji sa svim osobljem u vojsci</p></div>
+
+
+        <img  class="graph" src="/static/img/statistics/{{Svozila}}" alt="">
+        <div><h1>Vozila</h1> <p>Usporedba osoblja na misiji sa svim osobljem u vojsci</p></div>
+        
+        
+
+    
+</div>
+
+<h1>test: {{Sosoblje}}</h1>
 </body>
 </html>

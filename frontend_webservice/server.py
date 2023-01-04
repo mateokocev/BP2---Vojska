@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
 from random import randrange
+from graph import pie
 import sqlite3 as sql
 import mysql.connector
 #sve=mycursor.fetchmany(size=4) kolicina podataka
@@ -112,13 +113,23 @@ def database():
 
 @app.route('/informacije/<data>')  #Exception
 def informacije (data):
-    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and  misija.naziv = '"+data+"' ;")
-    misije = BP_DataAll("select misija.naziv,misija.ishod,DATE(misija.vrijeme_pocetka),misija.trosak_misije,DATE(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura;")
-    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa,misija.naziv from osoblje ,osoblje_na_misiji,misija where osoblje.id = osoblje_na_misiji.id_osoblje and misija.id = osoblje_na_misiji.id_misija;")
-    return render_template('informacije.html',data=data,misije=misije,len=len(misije),osoblje=osoblje, len2=len(osoblje))
+    
+    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = 1 and  misija.naziv = '"+data+"' ;")
+    vozila = BP_DataAll("select vozila.naziv,vozila.vrsta,vozila.ukupna_kolicina,vozila.kapacitet from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = '"+data+"';")
+    
+    
+            #troskovi misija
+    pie("troskovi","select ( select sum(trosak_misije)from misija), 'Trošak svih misija'from misija where naziv = '"+data+"' union select trosak_misije, naziv from misija where naziv = '"+data+"' ;",fileType="svg")
 
+            #kolicina osoblja na misiji
+    pie("osoblje","select count(*), 'Osoblja na misiji' from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = 1 and  misija.naziv = '"+data+"' union select count(id),'Svo osoblje' from osoblje ;select count(id),'Svo osoblje' from osoblje ;",fileType="svg")
+            
+            
+            #kolicina vozila na misiji
+    pie("vozila","select sum(ukupna_kolicina), 'vozilo na misiji' from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = '"+data+"' union select sum(ukupna_kolicina),'ukupna kolicina svih vozila' from vozila ;",fileType="svg")
 
-    return render_template('informacije.html',data=data,misije=misije,vozila=vozila,len=len(misije),osoblje=osoblje, len2=len(osoblje), lenVozila= len (vozila)  )
+    return render_template('informacije.html',data=str(data),Svozila="vozila.svg",Sosoblje="osoblje.svg",Stroskovi="troskovi.svg",osoblje=osoblje,vozila=vozila, len2=len(osoblje),lenVozila = len(vozila),)
+
 
 
 @app.route('/kopnena/<misija>') 
