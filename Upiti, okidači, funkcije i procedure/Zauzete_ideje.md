@@ -45,12 +45,15 @@
   Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.
   U slučaju je datum kraja liječenja NULL to znači da je liječenje još uvijek u tijeku.                                               
 
-- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
-  korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi -> doradit!!!
+- Napraviti okidač koji će u slučaju da korisnik unese opremu koja je već unešena zbrojit količinu opreme.
+  Npr u skladištu već postoji (1330, "RBG-6", "Bacač granata", 124) te korisnik unosi (1370, "RBG-6", "Bacač granata", 6).
+  To je "nepotrebno" te stoga okidač pridodaje dodatnu količinu onoj već postojećoj tj (1330, "RBG-6", "Bacač granata", 130).
 
-- Prati se da zbroj izdane količine željene opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a
+- Prati se da zbroj izdane količine željene opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a. 
+  Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno.
 
-- Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a
+- Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a.
+  Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno.
 
 - ...
 
