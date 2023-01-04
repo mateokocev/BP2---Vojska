@@ -37,7 +37,7 @@
 
 *David*
 - Doradit upite uzimajuci u obzir da budu jos slozeniji te optimizaciju uzet u obzir  :x:
-- Napravit još okidača   :x:
+- Napravit još okidača   :white_check_mark:
 - Napravit još funkcija   :x:
 - Napravit još procedura  :x:
 
