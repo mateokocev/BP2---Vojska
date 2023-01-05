@@ -28,7 +28,7 @@
         <h1>
 
         {% if cin %}
-            <button style="margin-left: 20px;" class="button-24" role="button">Uredi</button>
+            <a href="/izmjena"><button style="margin-left: 20px;" class="button-24" role="button">Uredi</button></a>
         {% endif %}
 
         </h1>
@@ -67,8 +67,8 @@
         
         <div class="alignText">
             <h3>Saznaj Više!</h3>
-            <a href=""></a>
-            <form action="/kopnena/1.%20Afganistanska%20tura">
+        
+            <form action="/Kopnena Vojska/SAD%20tura">
                 <button class="button-24" role="button">Saznaj Više!!</button>
             </form>
             
@@ -84,7 +84,7 @@
    <podstranica1>
     <imageCoverZrakoplovna>
         
-        <h1>HRVATSKA ZRAKOPLOVNA VOJSKA</h1>
+        <h1>HRVATSKA RATNO ZRAKOPLOVSTVO</h1>
         <div>
             <div class="textHolder" >
                 <h2 style="font-size: 20px; ;">{{VojskaText[1][0]}}</h2>
@@ -93,7 +93,9 @@
         <div class="alignText">
 
             <h3>Saznaj Više!</h3>
-            <button class="button-24" role="button">Saznaj Više!!</button>
+            <form action="/Ratno Zrakoplovstvo/SAD%20tura">
+                <button class="button-24" role="button">Saznaj Više!!</button>
+            </form>
             
         </div>
      </imageCoverZrakoplovna>
@@ -108,13 +110,15 @@
 
    <podstranica2>
     <imageCoverPomorksa>
-        <h1 style="color:rgb(47, 47, 47);">HRVATSKA POMORSKA VOJSKA</h1>
+        <h1 style="color:rgb(47, 47, 47);">RATNA MORNARICA</h1>
         <div class="textHolder">
             <h2 style="font-size: 20px;">{{VojskaText[2][0]}}</h2>
         </div>
        
             <h3 style="margin-left: 85%; color: rgb(43, 42, 42);">Saznaj Više!</h3>
-            <button class="button-24" role="button" style="margin-left: 85%;">Saznaj Više!!</button>
+            <form action="/Ratna Mornarica/SAD%20tura">
+                <button class="button-24" role="button">Saznaj Više!!</button>
+            </form>
             
         </div>
         
@@ -127,14 +131,16 @@
 
 <podstranica3>
  <imageCoverPolicija>
-     <h1>HRVATSKA VOJNA POLICIJA</h1>
+     <h1>VOJNA POLICIJA</h1>
      <div class="textHolder">
 
       <h2 style="font-size: 20px;">{{VojskaText[3][0]}}</h2>
      
      </div>
      <h3 style="font-size: 30px; margin-left: 85%;">Saznaj vise</h3>
-     <button class="button-24" role="button" style="margin-left: 85%;">Saznaj Više!!</button>
+     <form action="/Vojna Policija/SAD%20tura">
+        <button class="button-24" role="button">Saznaj Više!!</button>
+    </form>
      
   </imageCoverPolicija>
  </div>

@@ -14,7 +14,7 @@
             <a style="color: rgb(255, 255, 255); border: 20px;" href="/">Početna</a>
         </div>
         
-        <h1>Kopnena Vojska</h1>
+        <h1>{{sektor}}</h1>
     
     {%for i in range(0, len)%}
 
@@ -29,7 +29,7 @@
     </div>
     <div class="main">
         <div class="cover">
-            <h1><b>Kopnena Vojska</b> </h1>
+            <h1 style="text-align: center;"><b>{{sektor}}</b> </h1>
             <h3 style="text-align: center; font-size: 40px;">{{misija}}</h3>
             
         </div>
@@ -38,7 +38,7 @@
       
             <div class="grid3" style=" margin-bottom: 400px; margin-top: 250px;">
                 {%for i in range(0, len2)%}
-                <a href="/informacije/{{MisijenaTuri[i][6]}}">
+                <a href="/informacije/{{sektor}}/{{MisijenaTuri[i][6]}}">
                     <div class="newcube">
                         <div class="newcubeNaslov">{{MisijenaTuri[i][6]}}</div>
                         

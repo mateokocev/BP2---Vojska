@@ -1543,7 +1543,7 @@ INSERT INTO misija VALUES
  ( 3010 , "MONUC UN" , STR_TO_DATE("22.6.2029.", "%d.%m.%Y.") , STR_TO_DATE("18.1.1997.", "%d.%m.%Y.") , 41 , 2 ,"MONUC svojom rezolucijom od 30. studenoga 1999., u početku planirati promatranje primirja i razdruživanje snaga i održavati vezu sa svim stranama Sporazuma o prekidu vatre. Kasnije u nizu rezolucija, Vijeće je proširilo mandat MONUC-a na nadzor provedbe Sporazuma o prekidu vatre i dodijelilo više povezanih dodatnih zadaća." , 8709357 ),
  ( 3011 , "UNYOM" , STR_TO_DATE("5.3.2010.", "%d.%m.%Y.") , STR_TO_DATE("22.1.2023.", "%d.%m.%Y.") , 20 , 11 ,"Promatračka misija UN-a u Jemenu osnovana je 1963. godine. Sjeverni Jemen je 1962. ušao u stanje građanskog rata. Jemen se pridružio Egiptu 1958., a zatim se 1962. ponovno razdvojio, što je izazvalo sukob." , 9916296 ),
  -- new
- ( 3012 , "MINURCA" , STR_TO_DATE("24.5.2025.", "%d.%m.%Y.") , STR_TO_DATE("9.8.2022.", "%d.%m.%Y.") , 31 , 14 , null, 5019551 ),
+ ( 3012 , "1" , STR_TO_DATE("24.5.2025.", "%d.%m.%Y.") , STR_TO_DATE("9.8.2022.", "%d.%m.%Y.") , 31 , 14 , null, 5019551 ),
  
  ( 3013 , "UNOMIG" , STR_TO_DATE("17.3.2013.", "%d.%m.%Y.") , STR_TO_DATE("14.11.2004.", "%d.%m.%Y.") , 32 , 4 ,"Promatračka misija Ujedinjenih naroda u Gruziji (UNOMIG) osnovana je Rezolucijom 858 Vijeća sigurnosti Ujedinjenih naroda u kolovozu 1993. Kako bi provjerila usklađenost sa sporazumom o prekidu vatre od 27. srpnja 1993. između Republike Gruzije i snaga u Abhaziji, s posebnompozornošću na situacija u gradu Sukhumi, Gruzija. Također je trebalo istražiti izvješća o kršenjima primirja, pokušati riješiti takve incidente sa uključenim stranama i izvijestiti glavnog tajnika Ujedinjenih naroda o provedbi svog mandata. 88 vojnih savjetnika bilo je ovlašteno za raspoređivanje u regiji. Završila je 15. lipnja 2009., kada je Rusija stavila veto na produljenje misije. Posljednji promatrači napustili su regiju 15. srpnja 2009." , 2062168 ),
  ( 3014 , "UNMIL" , STR_TO_DATE("9.2.2002.", "%d.%m.%Y.") , STR_TO_DATE("7.1.2029.", "%d.%m.%Y.") , 21 , 13 ,"Misija Ujedinjenih naroda u Liberiji bila je mirovna operacija uspostavljena u rujnu 2003. za praćenje sporazuma o prekidu vatre u Liberiji nakon ostavke predsjednika Charlesa Taylora i završetka Drugog liberijskog građanskog rata." , 8728552 ),
@@ -1570,7 +1570,7 @@ INSERT INTO misija VALUES
  ( 3028 , "MONUA" , STR_TO_DATE("14.3.2003.", "%d.%m.%Y.") , STR_TO_DATE("8.6.2023.", "%d.%m.%Y.") , 18 , 6 , null, 8566407 ),
  ( 3029 , "UNAMSIL" , STR_TO_DATE("25.2.1996.", "%d.%m.%Y.") , STR_TO_DATE("11.1.2001.", "%d.%m.%Y.") , 21 , 12 , null, 8550255 ),
  ( 3030 , "UNAMSIL" , STR_TO_DATE("14.11.1992.", "%d.%m.%Y.") , STR_TO_DATE("27.1.2028.", "%d.%m.%Y.") , 19 , 5 , null, 9865296 ),
- ( 3031 , "UNMIH" , STR_TO_DATE("21.7.1997.", "%d.%m.%Y.") , STR_TO_DATE("11.8.2014.", "%d.%m.%Y.") , 29 , 2 , null, 7109438 ),
+ ( 3031 , "123123" , STR_TO_DATE("21.7.1997.", "%d.%m.%Y.") , STR_TO_DATE("11.8.2014.", "%d.%m.%Y.") , 29 , 2 , null, 7109438 ),
  
  ( 3032 , "ONUC" , STR_TO_DATE("12.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2004.", "%d.%m.%Y.") , 27 , 5 ,"Operacija Ujedinjenih naroda u Kongu bile su mirovne snage Ujedinjenih naroda raspoređene u Republici Kongo 1960. kao odgovor na krizu u Kongu. ONUC je bila prva mirovna misija UN-a sa značajnim vojnim sposobnostima i ostaje jedna od najvećih UN-ovih operacija i po opsegu i po operativnom opsegu." , 1903659 ),
  ( 3033 , "UNOCI" , STR_TO_DATE("2.11.2030.", "%d.%m.%Y.") , STR_TO_DATE("24.2.1995.", "%d.%m.%Y.") , 17 , 13 ,"Operacija Ujedinjenih naroda u Obali Bjelokosti (UNOCI) (francuski: Opération des Nations Unies en Côte d'Ivoire (UNOCI)) bila je mirovna misija UN-a i NATO-a u Obali Bjelokosti (Côte d'Ivoire) čiji je cilj bio 'olakšati provedbu mirovnog sporazuma koji su potpisale u siječnju 2003. od strane stranaka u Bjelokosti' (koji je imao za cilj okončanje građanskog rata u Bjelokosti). Dvije glavne stranke Bjelokosti bile su vladine snage Bjelokosti koje su kontrolirale jug zemlje i Nove snage (bivši pobunjenici) koje su kontrolirale sjever. Misija UNOCI-ja imala je za cilj kontrolirati 'zonu povjerenja' u središtu zemlje koja je razdvajala dvije strane. Šef misije i posebni predstavnik glavnog tajnika bio je Aïchatou Mindaoudou Souleymane iz Nigera. Ona je 2013. naslijedila Berta Koendersa iz Nizozemske, koji je 2011. naslijedio Choi Young-jina iz Južne Koreje. Misija je službeno završila 30. lipnja 2017." , 611531 ),
@@ -1585,7 +1585,7 @@ INSERT INTO misija VALUES
  ( 3039 , "UNGOMAP" , STR_TO_DATE("19.9.2009.", "%d.%m.%Y.") , STR_TO_DATE("13.1.2026.", "%d.%m.%Y.") , 28 , 11 ,"Misija dobrih ureda Ujedinjenih naroda u Afganistanu i Pakistanu osnovana je u svibnju 1988., tijekom sovjetsko-afganistanskog rata, kako bi pomogla u osiguravanju provedbe sporazuma o rješavanju situacije u vezi s Afganistanom te istražila i prijavila moguća kršenja bilo kojeg od odredbe sporazuma." , 9966801 ),
  ( 3040 , "UNAMIC" , STR_TO_DATE("16.11.2017.", "%d.%m.%Y.") , STR_TO_DATE("28.10.2018.", "%d.%m.%Y.") , 36 , 8 ,"UNAMIC je osnovan kako bi pomogao kambodžanskim stranama u održavanju primirja tijekom razdoblja prije uspostave Prijelazne vlasti Ujedinjenih naroda u Kambodži (UNTAC) i za pokretanje obuke civilnog stanovništva o upozoravanju na mine. Kasnije je mandat proširen kako bi uključio obuku u čišćenju mina i pokretanje programa čišćenja mina. UNTAC je u ožujku 1992. preuzeo misiju i njezine funkcije." , 172465 ),
  -- new
- (3041 , "UNOCI" , STR_TO_DATE("23.11.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.12.1998.", "%d.%m.%Y.") , 22 , 5 , null, 7220839 ),
+ (3041 , "123" , STR_TO_DATE("23.11.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.12.1998.", "%d.%m.%Y.") , 22 , 5 , null, 7220839 ),
  
  ( 3042 , "UNOMSIL" , STR_TO_DATE("11.12.2005.", "%d.%m.%Y.") , STR_TO_DATE("28.6.2011.", "%d.%m.%Y.") , 33 , 8 ,"Promatračka misija Ujedinjenih naroda u Sierra Leoneu bila je mirovna operacija Ujedinjenih naroda u Sierra Leoneu od 1998. do 1999. godine koja je uspostavljena donošenjem Rezolucije Vijeća sigurnosti Ujedinjenih naroda 1181. Njezina je misija bila praćenje vojne i sigurnosne situacije u Sierra Leoneu." , 3998984 ),
  ( 3043 , "UNIPOM" , STR_TO_DATE("19.1.1995.", "%d.%m.%Y.") , STR_TO_DATE("4.1.2001.", "%d.%m.%Y.") , 40 , 6 ,"UNIPOM je osnovan u rujnu 1965. kako bi nadzirao prekid vatre duž indijsko-pakistanske granice osim u državi Jammu i Kašmir i povlačenje cjelokupnog naoružanog osoblja na položaje koje je držalo prije 5. kolovoza 1965. Nakon povlačenja indijskih trupa i Pakistan je bio dovršen, UNIPOM je ukinut." , 6122253 ),
@@ -2568,5 +2568,28 @@ on s.id=o.id_sektor
 where o.krvna_grupa="0+" and s.naziv="Hrvatska kopnena vojska";
 select * from misija;
 
-select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and  misija.naziv = 'UNTAET' ;
-select vozila.naziv,vozila.vrsta,vozila.ukupna_kolicina,vozila.kapacitet from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = 'UNTAET';
+
+select sum(trosak_misije) from misija;
+select trosak_misije from misija where naziv ="UNTAET";
+select sum(trosak_misije-(select trosak_misije from misija where naziv ="UNTAET")),"Sve Misije" from misija union  select sum(trosak_misije),naziv from misija where naziv ="UNMIH";
+select sum(trosak_misije) from misija where naziv ='UNMIH';
+
+
+select ( select sum(trosak_misije)from misija), 'Trošak svih misija'from misija where naziv = 'UNTAET'union select trosak_misije, naziv from misija where naziv = 'UNTAET' ;
+select * from misija;
+
+
+-- UNOMUR krivo
+
+
+select * from sektor,osoblje, misija,osoblje_na_misiji where misija.id = osoblje_na_misiji.id_misija and misija.naziv = 'UNOMUR' and sektor.id = 1 and osoblje.id = osoblje_na_misiji.id_osoblje;
+select count(osoblje_na_misiji.id_misija),'Osoblje na misiji' from sektor, misija,osoblje_na_misiji where  osoblje_na_misiji.id_misija = misija.id and misija.naziv = 'UNOMUR' and sektor.id = 1 union select count(id),'Svo osoblje' from osoblje ;
+
+-- fixano
+select count(*), 'Osoblja na misiji' from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = 1 and  misija.naziv = 'UNOMSIL' union select count(id),'Svo osoblje' from osoblje ;select count(id),'Svo osoblje' from osoblje ;
+
+select sum(ukupna_kolicina), 'vozilo na misiji' from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = 'UNOMUR' union select sum(ukupna_kolicina),'ukupna kolicina svih vozila' from vozila ;
+select * from misije;
+
+
+select * from izdana_oprema, osoblje_na_misiji,osoblje where ;

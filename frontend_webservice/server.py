@@ -3,9 +3,8 @@ from random import randrange
 from graph import pie
 import sqlite3 as sql
 import mysql.connector
-#sve=mycursor.fetchmany(size=4) kolicina podataka
-#sve=mycursor.fetchone() jedan red 
-#sve=mycursor.fetchall() #samo sve uzme... 
+
+
 app = Flask(__name__)
                                         # <--------MAIN-------->
 
@@ -46,12 +45,14 @@ def login():
 
         global name
         global UpisLozinka
+
+
         name = request.form['username']
         UpisLozinka = request.form['password']
 
         krusor.execute("select * from login where md5(concat('"+name+"','"+UpisLozinka+"')) = lozinka;")
                         
-       
+        error=""
         if krusor.fetchone() == None:
             error = 'Kriva lozinka pokusaj ponovno!'
 
@@ -69,7 +70,7 @@ def login():
             print(randimg)
             return render_template('index.html', randimg = randimg , ime = name, VojskaText = VojskaText, cin = dozvola)
     
-    return render_template('Login.html')
+    return render_template('Login.html',error = error)
 
 
 
@@ -96,11 +97,15 @@ def profile():
 
 @app.route('/kopnena', methods=['GET', 'POST'])
 def kopnenaVojska():
+    
     data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
     
     return render_template('testnewdesign.html',data=data,len=len(data))
 
-@app.route('/database', methods = ['GET', 'POST'])
+
+
+
+@app.route('/izmjena', methods = ['GET', 'POST'])
 def database():
     if request.method == 'GET':
         status = "postano"
@@ -108,37 +113,64 @@ def database():
         status = "nije postano"
   
    
-    return render_template('database.html', status = status)
+    return render_template('izmjena.html', status = status)
 
 
-@app.route('/informacije/<data>')  #Exception
-def informacije (data):
+
+
+
+@app.route('/informacije/<sektor>/<data>')  #Exception
+def informacije (data,sektor):
+
+    if sektor == "Kopnena Vojska":
+        SektorId = "1"
+    elif sektor == "Ratna Mornarica":
+        SektorId = "2"
+    elif sektor == "Ratno Zrakoplovstvo":
+        SektorId = "3"
+    elif sektor == "Vojna Policija":
+        SektorId = "4"
     
-    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = 1 and  misija.naziv = '"+data+"' ;")
+    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = "+SektorId+" and  misija.naziv = '"+data+"' ;")
     vozila = BP_DataAll("select vozila.naziv,vozila.vrsta,vozila.ukupna_kolicina,vozila.kapacitet from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = '"+data+"';")
     
     
             #troskovi misija
     pie("troskovi","select ( select sum(trosak_misije)from misija), 'Trošak svih misija'from misija where naziv = '"+data+"' union select trosak_misije, naziv from misija where naziv = '"+data+"' ;",fileType="svg")
 
+    Troskovi = BP_DataAll("select ( select sum(trosak_misije)from misija), 'Trošak svih misija'from misija where naziv = '"+data+"' union select trosak_misije, naziv from misija where naziv = '"+data+"' ;")
+    
+    
             #kolicina osoblja na misiji
-    pie("osoblje","select count(*), 'Osoblja na misiji' from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = 1 and  misija.naziv = '"+data+"' union select count(id),'Svo osoblje' from osoblje ;select count(id),'Svo osoblje' from osoblje ;",fileType="svg")
+    pie("osoblje","select count(*), 'Osoblja na misiji' from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = "+SektorId+" and  misija.naziv = '"+data+"' union select count(id),'Svo osoblje' from osoblje ;select count(id),'Svo osoblje' from osoblje ;",fileType="svg")
             
-            
+    Osoblje = BP_DataAll("select count(*), 'Osoblja na misiji' from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = "+SektorId+" and  misija.naziv = '"+data+"' union select count(id),'Svo osoblje' from osoblje ;select count(id),'Svo osoblje' from osoblje ;")
+
             #kolicina vozila na misiji
     pie("vozila","select sum(ukupna_kolicina), 'vozilo na misiji' from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = '"+data+"' union select sum(ukupna_kolicina),'ukupna kolicina svih vozila' from vozila ;",fileType="svg")
 
-    return render_template('informacije.html',data=str(data),Svozila="vozila.svg",Sosoblje="osoblje.svg",Stroskovi="troskovi.svg",osoblje=osoblje,vozila=vozila, len2=len(osoblje),lenVozila = len(vozila),)
+    Vozila = BP_DataAll("select sum(ukupna_kolicina), 'vozilo na misiji' from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = '"+data+"' union select sum(ukupna_kolicina),'ukupna kolicina svih vozila' from vozila ;")
+
+    return render_template('informacije.html',Vozila = Vozila ,Troskovi = Troskovi, Osoblje = Osoblje, sektor=sektor,data=str(data),Svozila="vozila.svg",Sosoblje="osoblje.svg",Stroskovi="troskovi.svg",osoblje=osoblje,vozila=vozila, len2=len(osoblje),lenVozila = len(vozila),)
 
 
 
-@app.route('/kopnena/<misija>') 
-def KopnenaNew (misija):
-    data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
+@app.route('/<sektor>/<misija>') 
+def PrikazTura (misija,sektor):
     
+    if sektor == "Kopnena Vojska":
+        SektorId = "linear-gr11e8e4 100%)"
+    elif sektor == "Ratna Mornarica":
+        SektorId = "2"
+    elif sektor == "Ratno Zrakoplovstvo":
+        SektorId = "linear-g9,89,89,1) 11%, #be9764 100%)"
+    elif sektor == "Vojna Policija":
+        SektorId = "4"
+
+    data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
     MisijenaTuri= BP_DataAll("select * from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     MisijenaTuriDatumi= BP_DataAll("select date(misija.vrijeme_pocetka), date(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
-    return render_template('testnewdesign.html',MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
+    return render_template('testnewdesign.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
 
 
 
