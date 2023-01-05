@@ -63,6 +63,8 @@
 - Funkcija vraca ukupni trosak(zbroj troskova iz svih tablica)
 
 - Funkcija racuna koliko je novca ostalo "viska" iz proracuna(u ovoj funkciji se koristila prethodna funkcija)
+- 
+- Funkcija koja vraća broj osoblja koje je imalo uvijek perofrmans na treningu viši od 6 te da nikad nisu bili na liječenju.
 
 - ...
 
