@@ -10,18 +10,24 @@
 </head>
 <body>
 <div class="center">
-    <div style="text-align: center; margin-top: 3000px;" class="cube">
+    <div style="text-align: center; margin-top: 10%;" class="cube">
         {%block content%} 
         <a href="/"><img  src=""><button class="button-24"  role="button">Home</button></a> 
         <h2 style="font-size: 40px; color: wheat;">{{ime}}</h2>
 
 
         <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">{{err}}</h1>
-
-
+    
+   <div class="sort">
+        <a href="/ocjenjivanje/asc"><button style="margin-right: 100%; margin-bottom: 10px;" class="button-24" role="button">Asc</button></a>  
+        <a href="/ocjenjivanje/desc"><button style="margin-right: 100%; margin-bottom: 10px;" class="button-24" role="button">Desc</button></a>
+   </div>
+    
+    
         {% for i in range(0, lenosoblje) %}
         <div class="ocjena">
                 <h3>{{i+1}}</h3>
+               
                 <h3>{{osoblje[i][0]}}</h3>
                 <h3>{{osoblje[i][1]}}</h3>
                 <h3>{{osoblje[i][2]}}</h3>
@@ -30,7 +36,7 @@
             
 
         </div>
-
+        <hr>
         {%endfor%}
 
 

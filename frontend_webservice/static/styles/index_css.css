@@ -19,7 +19,7 @@ topbar img{margin-left: 30px;}
 
 topMainbar{
     display: grid;
-    grid-template-columns: auto auto 60px 50px;
+    grid-template-columns: auto auto 60px 100px;
     background-color: #2196F3;
     padding: 10px;
     position: static;

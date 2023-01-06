@@ -29,6 +29,8 @@ def RandomImageGenerator():
     x = str(randrange(5))
     return "/static/img/profPictures/"+x+".png"
 
+def SortTwoDimensionalTuple(lst,reverseType):
+    return sorted(lst, key=lambda x: x[-1],reverse= reverseType)
 
 
 
@@ -172,18 +174,17 @@ def PrikazTura (misija,sektor):
     return render_template('testnewdesign.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
 
 
-@app.route("/ocjenjivanje")  #Exception
-def ocjenjivanje():  
+@app.route("/ocjenjivanje/<Stype>")  #Exception
+def ocjenjivanje(Stype):  
 
     osoblje = BP_DataAll("select ime, prezime,cin,ocjena from osoblje;")
-   
-   # for x in range(len(osoblje)):
-   #     osoblje[x][3] = str(osoblje[x][3] * '⭐')
+    if Stype == 'asc':
+        osoblje= SortTwoDimensionalTuple(osoblje,False)
+    if Stype == 'desc':
+        osoblje= SortTwoDimensionalTuple(osoblje,True)
 
 
-
-
-    return render_template('ocjenjivanje.html',err = "Ocijenjivanje", note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+    return render_template('ocjenjivanje.html',err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
 
 
 
@@ -197,7 +198,7 @@ def page_not_found(error):
 
 
 
-@app.errorhandler(404)  #Exception
+@app.errorhandler(505)  #Exception
 def page_not_found(error):  
     return render_template('404.html', err = "PlEaSe ReFrEsH eVeRyThInG", note = error, desc = "brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",ime=name,)    
 

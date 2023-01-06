@@ -33,7 +33,7 @@ body
 
 }
 .informacije{
-    position: absolute;
+    
     text-align: right;
     right: 0%;
     padding: 20px;
@@ -70,7 +70,7 @@ body
 {   
     height: 772px;
     margin-left: 167px;
-    margin-top: 399px;
+    
     background-color: rgba(63, 178, 213, 0.13);
     transform: translate(-50%,-50%);
     border-radius: 5px;
@@ -171,3 +171,16 @@ body
     text-align: center;
     grid-template-columns: 10% auto auto auto 20%;
   }
+
+
+.sort
+{
+   
+    display: grid;
+    border: 10px;
+    font-size: 0.8vw;
+    gap: 20px;
+    column-gap: 10px;
+    text-align: center;
+    grid-template-columns: 10% auto auto auto 20%;
+}
