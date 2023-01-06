@@ -23,6 +23,121 @@ END //
 DELIMITER ;
 
 
+-- Ovaj trigger provjerava ako vojnik nije na aktivnoj turi, te ako nije, postavlja njegov status na "Neaktivan"
+DELIMITER //
+CREATE TRIGGER updtstatus_post_tura AFTER UPDATE ON tura
+FOR EACH ROW
+BEGIN
+	IF new.datum_kraja != NULL THEN
+		UPDATE osoblje
+			SET status_osoblja = "Neaktivan" WHERE id IN (SELECT id_osoblje FROM osoblje_na_turi WHERE id_tura = NEW.id AND datum_kraja IS NULL);
+	END IF;
+END//
+DELIMITER ;
+
+
+-- Ovaj trigger postavlja datum_kraja osoblja na turi na isti datum kraja ko i tura koja je završila samo ako to osoblje na turi ima datum_kraja NULL tj. nije se povuklo prije kraja ture i ostalo je tijekom cijele ture
+DELIMITER //
+CREATE TRIGGER updtkraj_post_tura AFTER UPDATE ON tura
+FOR EACH ROW
+BEGIN
+	IF NEW.datum_kraja != NULL THEN
+		UPDATE osoblje_na_turi 
+			SET datum_kraja = NEW.datum_kraja 
+				WHERE id_tura = NEW.id AND datum_kraja IS NULL;
+	END IF;
+END//
+DELIMITER ;
+
+
+-- kada vojnik ide na misiju poslužuje se tom osoblju na misiji osnovnu opremu, imamo funkciju koja provjerava dostupne id-eve te ih vraca u trigger kako bi mogli izvesti uspjesan insert. Također ima 
+DELIMITER //
+CREATE FUNCTION dostupni_id_izdana_oprema() RETURNS INTEGER
+BEGIN
+    DECLARE id_dostupnost INTEGER DEFAULT 5000;
+    DECLARE dostupan_id INTEGER;
+    
+    WHILE dostupan_id != NULL DO
+        SET id_dostupnost = id_dostupnost + 1;
+        
+        SELECT id INTO dostupan_id
+            FROM izdana_oprema
+            WHERE id = id_dostupnost;
+    END WHILE;
+    
+    RETURN id_dostupnost;
+END//
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER minoprema_pre_misija AFTER INSERT ON osoblje_na_misiji
+FOR EACH ROW
+BEGIN
+    DECLARE rand_samokres INTEGER;
+	SELECT FLOOR(1001 + RAND() * (1003-1001)) INTO rand_samokres;
+    
+    -- garantira jedan od dva dostupna samokresa
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), rand_samokres, NEW.id, 1);
+    -- garantira kacigu
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), 1358, NEW.id, 1);
+    -- garantira pancirku
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), 1359, NEW.id, 1);
+    -- garantira uniformu
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), 1360, NEW.id, 1);
+    -- garantira čizme
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), 1363, NEW.id, 1);
+END//
+DELIMITER ;
+
+
+-- promjena odgovornog za vozilo u slučaju ranog povlačenja iz ture. Uzme rezultat za novog odgovornog i spremi ga u @zamjena te ako nije null updatea id_odgovorni.
+DELIMITER //
+CREATE TRIGGER promjena_odgovornog AFTER UPDATE ON osoblje_na_turi
+FOR EACH ROW
+BEGIN
+	IF NEW.datum_kraja != NULL AND OLD.datum_kraja = NULL THEN
+		SELECT id INTO @zamjena
+			FROM osoblje_na_turi
+				WHERE datum_kraja IS NULL AND id_tura = OLD.id_tura
+                LIMIT 1;
+
+		IF @zamjena != NULL THEN
+			UPDATE vozilo_na_turi
+				SET id_odgovorni = @zamjena
+					WHERE id_odgovorni = OLD.id;
+		ELSE
+		  SIGNAL SQLSTATE '40000' 
+			SET MESSAGE_TEXT = 'Nije pronađena zamjena, moguće da je došlo do greške ili je tura gotova';
+		END IF;
+	END IF;
+END//
+DELIMITER ;
+
+
+-- Provjerava je li osoblje koje se salje na misiju uopce dostupno s time da broji koliko ima aktivnih misija tj. koliko misija kojima je datum kraja na NULL
+DELIMITER //
+CREATE TRIGGER dostupnost_osoblja BEFORE INSERT ON osoblje_na_misiji
+FOR EACH ROW
+BEGIN
+	
+	SELECT COUNT(id) INTO @dostupan
+        FROM osoblje_na_misiji AS onm
+        INNER JOIN osoblje AS o ON onm.id_osoblje = o.id
+        INNER JOIN osoblje_na_turi AS ont ON o.id = ont.id_osoblje
+			WHERE onm.id_osoblje = NEW.id_osoblje AND ont.id_osoblje = NEW.id_osoblje AND onm.datum_kraja = NULL;
+	IF @dostupan > 0 THEN
+		SIGNAL SQLSTATE '40000'
+			SET MESSAGE_TEXT = 'Osoblje nije dostupno za novu misiju';
+	END IF;
+END//
+DELIMITER ;
+
+
 
 
 
