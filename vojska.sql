@@ -37,6 +37,7 @@ CREATE TABLE osoblje(
     datum_uclanjenja DATE NOT NULL,
     status_osoblja VARCHAR(50) NOT NULL,
     krvna_grupa CHAR(3) NOT NULL,
+    ocjena INTEGER NOT NULL,
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 -- DROP TABLE osoblje;
@@ -2591,5 +2592,5 @@ select count(*), 'Osoblja na misiji' from osoblje,osoblje_na_misiji,misija where
 select sum(ukupna_kolicina), 'vozilo na misiji' from misija,vozilo_na_misiji,vozila where misija.id = vozilo_na_misiji.id_misija and vozilo_na_misiji.id_vozilo = vozila.id and misija.naziv = 'UNOMUR' union select sum(ukupna_kolicina),'ukupna kolicina svih vozila' from vozila ;
 select * from misije;
 
-
+select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id and osoblje.id_sektor = 1 and  misija.naziv = 'UNMIH' ;
 select * from izdana_oprema, osoblje_na_misiji,osoblje where ;

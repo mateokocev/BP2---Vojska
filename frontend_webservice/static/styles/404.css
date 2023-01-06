@@ -64,3 +64,10 @@ body
     background-position: 0 0;
     color: #FF4742;} 
   .button-24:active { opacity: .5;}
+
+
+
+  .shadow
+  {
+    background-color: #FFFFFF;
+  }

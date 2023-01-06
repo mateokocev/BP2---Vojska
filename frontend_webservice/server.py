@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, request
 from random import randrange
 from graph import pie
 import sqlite3 as sql
@@ -25,7 +25,6 @@ def BP_DataAll(sql):
     MainKursor.execute(sql)
     return MainKursor.fetchall()
     
-
 def RandomImageGenerator():
     x = str(randrange(5))
     return "/static/img/profPictures/"+x+".png"
@@ -159,11 +158,11 @@ def informacije (data,sektor):
 def PrikazTura (misija,sektor):
     
     if sektor == "Kopnena Vojska":
-        SektorId = "linear-gr11e8e4 100%)"
+        SektorId = "1)"
     elif sektor == "Ratna Mornarica":
         SektorId = "2"
     elif sektor == "Ratno Zrakoplovstvo":
-        SektorId = "linear-g9,89,89,1) 11%, #be9764 100%)"
+        SektorId = "3"
     elif sektor == "Vojna Policija":
         SektorId = "4"
 
@@ -171,6 +170,15 @@ def PrikazTura (misija,sektor):
     MisijenaTuri= BP_DataAll("select * from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     MisijenaTuriDatumi= BP_DataAll("select date(misija.vrijeme_pocetka), date(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     return render_template('testnewdesign.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
+
+
+@app.route("/ocjenjivanje")  #Exception
+def ocjenjivanje():  
+
+    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id ;")
+    return render_template('ocjenjivanje.html',err = "Ocijenjivanje", note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+
+
 
 
 
@@ -182,7 +190,7 @@ def page_not_found(error):
 
 
 
-@app.errorhandler(505)  #Exception
+@app.errorhandler(404)  #Exception
 def page_not_found(error):  
     return render_template('404.html', err = "PlEaSe ReFrEsH eVeRyThInG", note = error, desc = "brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",ime=name,)    
 
