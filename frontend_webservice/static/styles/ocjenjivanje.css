@@ -14,12 +14,12 @@ body
 
 .cube
 {   
-   margin-top: 100px;
+    
     background-color: rgba(255,255,255,0.13);
-    transform: translate(-50%,-50%);
+    
     border-radius: 5px;
     width: 1000px;
-    height:min-content;
+    height: fit-content;
     backdrop-filter: blur(50px);
     border: 2px solid rgba(255,255,255,0.1);
     box-shadow: 0 0 40px rgba(8,7,16,0.6);
@@ -28,8 +28,8 @@ body
 }
 .center
 {
-    margin-left: 50%;
-    margin-top: 25%;
+    margin-left: 25%;
+    
 
 }
 .informacije{

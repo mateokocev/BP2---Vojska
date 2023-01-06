@@ -175,7 +175,14 @@ def PrikazTura (misija,sektor):
 @app.route("/ocjenjivanje")  #Exception
 def ocjenjivanje():  
 
-    osoblje = BP_DataAll("select osoblje.ime,osoblje.prezime,osoblje.cin,osoblje.krvna_grupa from osoblje,osoblje_na_misiji,misija where osoblje.id =osoblje_na_misiji.id_osoblje and  osoblje_na_misiji.id_misija = misija.id ;")
+    osoblje = BP_DataAll("select ime, prezime,cin,ocjena from osoblje;")
+   
+   # for x in range(len(osoblje)):
+   #     osoblje[x][3] = str(osoblje[x][3] * '⭐')
+
+
+
+
     return render_template('ocjenjivanje.html',err = "Ocijenjivanje", note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
 
 

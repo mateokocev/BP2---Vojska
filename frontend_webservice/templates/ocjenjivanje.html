@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/profile.css">
+    <link rel="stylesheet" href="../static/styles/ocjenjivanje.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <title>Ocjenjivanje</title>
 </head>
@@ -21,11 +21,11 @@
 
         {% for i in range(0, lenosoblje) %}
         <div class="ocjena">
-           
+                <h3>{{i+1}}</h3>
                 <h3>{{osoblje[i][0]}}</h3>
                 <h3>{{osoblje[i][1]}}</h3>
                 <h3>{{osoblje[i][2]}}</h3>
-                <h3>⭐⭐⭐⭐⭐</h3>
+                <h3>{{osoblje[i][3] * '⭐'}}</h3>
             
             
 

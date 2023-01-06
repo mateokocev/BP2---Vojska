@@ -1498,7 +1498,7 @@ INSERT INTO osoblje VALUES
  ( 10996 , 3 , "Marina" , "Marjanović" , "Skupnik" , STR_TO_DATE("27.3.1952.", "%d.%m.%Y.") , STR_TO_DATE("19.6.2003.", "%d.%m.%Y.") , "Neaktivan" , "AB+" , 5 ),
  ( 10997 , 1 , "Felicija" , "Herceg" , "Pozornik" , STR_TO_DATE("10.1.1958.", "%d.%m.%Y.") , STR_TO_DATE("29.4.2007.", "%d.%m.%Y.") , "Umirovljen" , "B+" , 4 ),
  ( 10998 , 3 , "Božana" , "Galić" , "Narednik" , STR_TO_DATE("1.6.1968.", "%d.%m.%Y.") , STR_TO_DATE("19.10.1995.", "%d.%m.%Y.") , "Mrtav" , "AB-" , 1 ),
- ( 10999 , 3 , "admin" , "admin" , "Razvodnik" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Pokojan u duši" , "A+" , 2 );
+ ( 10999 , 3 , "admin" , "admin" , "Razvodnik" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Pokojan u duši" , "A+" , 30 );
 
 
 
