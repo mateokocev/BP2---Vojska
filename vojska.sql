@@ -165,7 +165,8 @@ CREATE TABLE izdana_oprema(
     id_osoblje_na_misiji INTEGER NOT NULL,
     izdana_kolicina INTEGER DEFAULT 1,
     FOREIGN KEY (id_oprema) REFERENCES oprema(id),
-    FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
+    FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id),
+    CONSTRAINT idrangechk CHECK (id > 5000 AND id < 6000)
 );
 -- DROP TABLE izdana_oprema;
 
