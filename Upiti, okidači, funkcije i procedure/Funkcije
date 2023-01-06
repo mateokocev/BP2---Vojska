@@ -39,3 +39,117 @@ END//
 DELIMITER ;
 
 SELECT visak() AS visak FROM DUAL;
+
+
+
+-- Funkcija koja vraća broj osoblja koje je imalo uvijek perofrmans na treningu viši od 6 te da nikad nisu bili na liječenju.
+
+DROP FUNCTION IF EXISTS br_os_tr_i_li;
+
+DELIMITER //
+CREATE FUNCTION br_os_tr_i_li() RETURNS INTEGER
+DETERMINISTIC
+BEGIN
+    DECLARE br_os_tr_li INTEGER;
+
+	CREATE TEMPORARY TABLE br_perf_veci_od_sest
+    SELECT id_osoblje, COUNT(*) AS br_perf_vece_sest
+    FROM osoblje_na_treningu
+    WHERE performans > 6
+    GROUP BY id_osoblje;
+    
+    CREATE TEMPORARY TABLE br_perf_po_osobi
+	SELECT id_osoblje AS id_os, COUNT(*) AS br_perf
+    FROM osoblje_na_treningu
+    GROUP BY id_osoblje;
+
+	SELECT COUNT(*) INTO br_os_tr_li
+    FROM
+	(SELECT id_osoblje
+    FROM br_perf_veci_od_sest
+    INNER JOIN br_perf_po_osobi
+    ON br_perf_veci_od_sest.id_osoblje = br_perf_po_osobi.id_os
+    WHERE br_perf_vece_sest = br_perf) AS l
+    WHERE id_osoblje 
+	NOT IN (SELECT id_osoblje FROM lijecenje);
+
+	DROP TEMPORARY TABLE br_perf_veci_od_sest;
+    DROP TEMPORARY TABLE br_perf_po_osobi;
+
+    RETURN br_os_tr_li;
+END//
+DELIMITER ;
+
+SELECT  br_os_tr_i_li() AS br_osoblja_dobar_performans_nikad_na_lijecenju FROM DUAL;
+
+
+
+/*
+Za određeni id osoblja treba se dati tekstualni odgovor u čemu je sve osoba sujelovala. 
+Npr. "Arabela Herceg je sudjelovala u najmanje jednoj/m: treningu i lijecenju."
+Moguće je više kombinacija, a najduža je npr "Arabela Herceg je sudjelovao/la u najmanje 
+jednoj: turi, misiji,treningu i lijecenju." U slučaju da osoba nije sudjelovala još uvijek u ničemu bit će ispisano npr 
+"Arabela Herceg nije sudjelovao/la ni u jednoj: turi, misiji,treningu ili lijecenju."
+*/
+
+DROP FUNCTION IF EXISTS os_sudjelovanje;
+
+DELIMITER //
+CREATE FUNCTION os_sudjelovanje(id_os INTEGER) RETURNS VARCHAR(100)
+DETERMINISTIC
+BEGIN
+    DECLARE odg VARCHAR(100);
+	DECLARE brojac INTEGER;
+    DECLARE tura VARCHAR(20);
+    DECLARE misija VARCHAR(20);
+    DECLARE trening VARCHAR(20);
+    DECLARE lijecenje VARCHAR(20);
+    
+	SELECT CONCAT(ime, " ",prezime) INTO odg
+    FROM osoblje 
+    WHERE id = id_os;
+
+	IF id_os IN (SELECT id_osoblje FROM osoblje_na_turi) THEN
+		SET tura = " turi,";
+        SET brojac = brojac + 1;
+	ELSE  
+		SET tura = "";
+	END IF;
+
+
+    IF id_os IN (SELECT id_osoblje FROM osoblje_na_misiji) THEN
+		SET misija = " misiji,";
+        SET brojac = brojac + 1;
+	ELSE  
+		SET misija = "";
+	END IF;
+    
+    IF id_os IN (SELECT id_osoblje FROM osoblje_na_treningu) THEN
+		SET trening = " treningu,";
+        SET brojac = brojac + 1;
+	ELSE  
+		SET trening = "";
+	END IF;
+    
+    IF id_os IN (SELECT id_osoblje FROM lijecenje) THEN
+		SET lijecenje = " lijecenju,";
+        SET brojac = brojac + 1;
+	ELSE  
+		SET lijecenje = "";
+	END IF;
+    
+    
+    IF brojac = 0 THEN 
+		SET odg = CONCAT(odg," nije sudjelovao/la ni u jednoj: turi, misiji,treningu ili lijecenju.");
+    ELSE 
+		SET odg = CONCAT(odg," je sudjelovao/la u najmanje jednoj:", tura, misija, trening, lijecenje);
+	END IF;	
+    
+    SET odg = CONCAT(LEFT(odg, LENGTH(odg)-3),".");
+    
+    RETURN odg;
+END//
+DELIMITER ;
+
+SELECT os_sudjelovanje(10009) AS os_sudjelovanje FROM DUAL;
+
