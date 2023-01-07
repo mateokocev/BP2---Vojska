@@ -1,0 +1,64 @@
+id,naziv,vrsta,ukupna_kolicina
+1301,"HS Produkt HS",Samokres,40000
+1302,"HS Produkt SF",Samokres,20000
+1303,"Heckler & Koch USP",Samokres,10000
+1304,"Heckler & Koch MP7",Strojnica,80
+1305,"Heckler & Koch UMP",Strojnica,100
+1306,"Heckler & Koch MP5",Strojnica,100
+1307,ERO,Strojnica,500
+1308,"HS Produkt VHS-2","Jurišna strojnica",20000
+1309,"HS Produkt VHS","Jurišna strojnica",7800
+1310,"Heckler & Koch G-36","Jurišna strojnica",750
+1311,"Heckler & Koch HK416","Jurišna strojnica",250
+1312,"FN F2000","Jurišna strojnica",100
+1313,"Zastava M70","Jurišna strojnica",88640
+1314,"PM md. 63/65","Jurišna strojnica",3420
+1315,"FN Minimi",Puškostrojnica,100
+1316,"FN MAG",Puškostrojnica,400
+1317,"Ultimax 100",Puškostrojnica,100
+1318,"Heckler & Koch HK21",Puškostrojnica,300
+1319,"Zastava M84",Puškostrojnica,1400
+1320,"Browning M2",Puškostrojnica,700
+1321,"Heckler & Koch HK417","Snajperska puška",250
+1322,"Remington M40","Snajperska puška",70
+1323,"SAKO TRG-42","Snajperska puška",240
+1324,"MACS M3","Snajperska puška",20
+1325,"Barrett M82","Snajperska puška",24
+1326,RT-20,"Snajperska puška",4
+1327,"Franchi SPAS-12",Sačmarica,100
+1328,"Benelli M4 Super 90",Sačmarica,250
+1329,"Heckler & Koch AG36","Bacač granata",300
+1330,RBG-6,"Bacač granata",124
+1331,"Mk 19 bacač granata","Bacač granata",92
+1332,"Spike LR2","Protuoklopno naoružanje || ATGM",16
+1333,"FGM-148 Javelin","Protuoklopno naoružanje || ATGM",5
+1334,"BGM-71 TOW-2","Protuoklopno naoružanje || ATGM",134
+1335,"9K115-2 Metis-M","Protuoklopno naoružanje || ATGM",54
+1336,"9M113 Konkurs","Protuoklopno naoružanje || ATGM",42
+1337,"9M111 Fagot","Protuoklopno naoružanje || ATGM",119
+1338,"9M14 Maljutka","Protuoklopno naoružanje || ATGM",216
+1339,RPG-22,"Protuoklopno naoružanje || RPG",300
+1340,AT4,"Protuoklopno naoružanje || RPG",55
+1341,M57,Minobacač,69
+1342,M96,Minobacač,69
+1343,M75,Minobacač,43
+1344,"Thales SSARF",Daljinometar,20
+1345,"Safran Jim Compact",Daljinometar,30
+1346,"SAGEM Sigma 30","Oprema za navigaciju",20
+1347,"Kongsberg EriTac","Oprema za komunikaciju",10
+1348,"Saab Giraffe M85","Oprema za komunikaciju",2
+1349,"Aeronautics Orbiter","UAV || Letjelica",6
+1350,"Elbit Skylark","UAV || Letjelica",20
+1351,"DJI Matrice 600","UAV || Dron",15
+1352,"DJI Mavic 2","UAV || Dron",10
+1353,"Med-Eng EOD 9 Odjelo","Protueksplozivna oprema",5
+1354,"DOK-ING MV-4 Robot/Čistač mina","Protueksplozivna oprema",4
+1355,"Telerob tEODor Robot","Protueksplozivna oprema",2
+1356,"Alaska vojni šatori","Prijenosna struktura",50
+1357,"Role 2B / Vojna terenska bolnica","Prijenosna struktura",1
+1358,"ACH balistična kaciga","Osobna zaštitna oprema",5000
+1359,"Kroko vojna pancirka","Osobna zaštitna oprema",5000
+1360,"Standardna vojna uniforma","Osobna zaštitna oprema",2000
+1361,"Veliki vojni ruksak",Ruksak,1100
+1362,"Mali vojni ruksak",Ruksak,1920
+1363,"Vojne čizme Jelen","Osobna zaštitna oprema",2500
