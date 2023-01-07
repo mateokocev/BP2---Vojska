@@ -74,3 +74,104 @@ DELIMITER ;
 CALL br_dostupnog_os_vo_op(STR_TO_DATE("1.10.1991.  12:37:13", "%d.%m.%Y. %H:%i:%s"), 
 STR_TO_DATE("1.10.2013.  12:37:13", "%d.%m.%Y. %H:%i:%s"), @a, @b, @c);
 SELECT  @a AS br_dostupnog_osoblja, @b AS br_dostupnih_vozila, @c AS br_dostupne_opreme FROM DUAL;
+
+
+-- MK
+
+-- --------------------------------------------------------------------------------------------
+-- PROCEDURE
+-- --------------------------------------------------------------------------------------------
+
+-- jednostavna procedura za promjenu statusa osoblja. Ima 2 IN parametra jedan za ID i jedan za status te koristi jednostavnu update komandu da promjeni status
+DELIMITER //
+CREATE PROCEDURE promjena_statusa_osoblja(IN p_id_osoblje INT, IN p_status_osoblja VARCHAR(50))
+BEGIN
+	UPDATE osoblje
+		SET status_osoblja = p_status_osoblja
+			WHERE id = p_id_osoblje;
+END//
+DELIMITER ;
+
+
+-- procedura za pogledati svo aktivno osoblje koje se trenutno nalazi na misiji preko jednostavnog upita koji spaja nekoliko tablica sa inner joinom
+DELIMITER //
+CREATE PROCEDURE svo_osoblje_na_misiji()
+BEGIN
+	SELECT o.*, m.naziv, l.naziv
+		FROM osoblje AS o
+        INNER JOIN osoblje_na_misiji AS onm ON o.id = onm.id_osoblje
+        INNER JOIN misija AS m ON onm.id_misija = m.id
+        INNER JOIN lokacija AS l ON m.id_lokacija = l.id
+			WHERE m.id.vrijeme_kraja IS NULL;
+END//
+DELIMITER ;
+
+
+-- primjer procedure koji ovisno o performansi na zadnjem treningu povecava ocjenu ili ju smanjuje i onda preporucuje da osoblje dobije promociju ili ne
+DELIMITER //
+CREATE PROCEDURE provjera_promocija_sniženje_cin(IN p_id_osoblje INT)
+BEGIN
+    DECLARE p_ocjena INT;
+    DECLARE p_performans INT;
+
+    SELECT ocjena INTO p_ocjena
+		FROM osoblje
+			WHERE id = p_id_osoblje;
+	
+	SELECT performans INTO p_performans
+        FROM osoblje_na_treningu
+			WHERE id_osoblje = p_id_osoblje AND datum_kraja IS NOT NULL
+			ORDER BY datum_pocetka DESC
+			LIMIT 1;
+
+    IF p_performans < 4 THEN
+        SET p_ocjena = ocjena - 5;
+    ELSEIF p_performans < 5 THEN
+        SET p_ocjena = ocjena - 3;
+    ELSEIF p_performans < 6 THEN
+        SET p_ocjena = ocjena - 1;
+    ELSEIF p_performans >= 9 THEN
+        SET p_ocjena = ocjena + 5;
+    ELSEIF p_performans >= 8 THEN
+        SET p_ocjena = ocjena + 3;
+    ELSEIF p_performans >= 7 THEN
+        SET p_ocjena = ocjena + 1;
+    END IF;
+
+	IF p_ocjena < 1 THEN
+		SET p_ocjena = 1;
+		SIGNAL SQLSTATE '40000'
+			SET MESSAGE_TEXT = 'Ocjena je prešla najniže prihvatljive razine te se preporućuje sniženje čina';
+	ELSEIF p_ocjena > 5 THEN
+		SET p_ocjena = 5;
+		SIGNAL SQLSTATE '40000'
+			SET MESSAGE_TEXT = 'Ocjena je prešla najvišu razinu te se preporućuje povečanje čina';
+	ELSE
+		UPDATE osoblje
+			SET ocjena = p_ocjena
+				WHERE id = p_id_osoblje;
+	END IF;
+END//
+DELIMITER ;
+
+
+-- promjeni status osoblja ako nije bio na treningu ili na turi u zadnjih godinu dana
+DELIMITER //
+CREATE PROCEDURE promjena_statusa_na_neaktivan()
+BEGIN
+    UPDATE osoblje
+    SET status_osoblja = 'neaktivan'
+    WHERE status_osoblja = 'aktivan' AND id NOT IN (SELECT id_osoblje FROM osoblje_na_turi WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR)) AND id NOT IN (SELECT id_osoblje FROM osoblje_na_treningu WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR));
+END //
+DELIMITER ;
+
+
+-- Svo osoblje u određenom sektoru koje nije mrtvo 
+DELIMITER //
+CREATE PROCEDURE ukupno_osoblje_u_sektoru(IN p_id_sektor INT)
+BEGIN
+    SELECT COUNT(*)
+    FROM osoblje
+    WHERE id_sektor = p_id_sektor;
+END//
+DELIMITER ;
