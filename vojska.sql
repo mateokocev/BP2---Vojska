@@ -627,11 +627,11 @@ INSERT INTO osoblje VALUES
  ( 10125 , 2 , "Martina" , "Babić" , "Brigadir" , STR_TO_DATE("2.1.1970.", "%d.%m.%Y.") , STR_TO_DATE("10.7.1998.", "%d.%m.%Y.") , "Neaktivan" , "A-" , 4 ),
  ( 10126 , 3 , "Jasmina" , "Novosel" , "Poručnik" , STR_TO_DATE("13.3.1956.", "%d.%m.%Y.") , STR_TO_DATE("17.6.2004.", "%d.%m.%Y.") , "Aktivan" , "A-" , 5 ),
  ( 10127 , 3 , "Mila" , "Perković" , "Bojnik" , STR_TO_DATE("1.4.1962.", "%d.%m.%Y.") , STR_TO_DATE("17.7.2012.", "%d.%m.%Y.") , "Umirovljen" , "0-" , 1 ),
- ( 10128 , 1 , "Ezra" , "Posavec" , "Razvodnik" , STR_TO_DATE("7.7.1960.", "%d.%m.%Y.") , STR_TO_DATE("24.12.2004.", "%d.%m.%Y.") , "Neaktivan" , "A-" , 4 ),
+ ( 10128 , 1 , "Romeo" , "Šajina" , "Razvodnik" , STR_TO_DATE("7.7.1960.", "%d.%m.%Y.") , STR_TO_DATE("24.12.2004.", "%d.%m.%Y.") , "Neaktivan" , "A-" , 4 ),
  ( 10129 , 2 , "Maksima" , "Crnković" , "Bojnik" , STR_TO_DATE("11.2.1970.", "%d.%m.%Y.") , STR_TO_DATE("23.12.2013.", "%d.%m.%Y.") , "Aktivan" , "B-" , 5 ),
  ( 10130 , 4 , "Zola" , "Šimunović" , "Razvodnik" , STR_TO_DATE("21.10.1968.", "%d.%m.%Y.") , STR_TO_DATE("20.9.2012.", "%d.%m.%Y.") , "Neaktivan" , "0+" , 2 ),
  ( 10131 , 4 , "Penelopa" , "Sever" , "Pukovnik" , STR_TO_DATE("30.11.1957.", "%d.%m.%Y.") , STR_TO_DATE("27.1.1997.", "%d.%m.%Y.") , "Umirovljen" , "B+" , 2 ),
- ( 10132 , 2 , "Leona" , "Ivanković" , "Pozornik" , STR_TO_DATE("22.10.1950.", "%d.%m.%Y.") , STR_TO_DATE("19.12.1993.", "%d.%m.%Y.") , "Aktivan" , "A-" , 5 ),
+ ( 10132 , 2 , "Goran" , "Oreški" , "General" , STR_TO_DATE("22.10.1950.", "%d.%m.%Y.") , STR_TO_DATE("19.12.1993.", "%d.%m.%Y.") , "Aktivan" , "A-" , 5 ),
  ( 10133 , 4 , "Kiana" , "Klarić" , "Razvodnik" , STR_TO_DATE("29.3.1967.", "%d.%m.%Y.") , STR_TO_DATE("27.1.1994.", "%d.%m.%Y.") , "Mrtav" , "0+" , 1 ),
  ( 10134 , 2 , "Kali" , "Dragičević" , "Pukovnik" , STR_TO_DATE("21.10.1953.", "%d.%m.%Y.") , STR_TO_DATE("26.1.2006.", "%d.%m.%Y.") , "Neaktivan" , "AB-" , 1 ),
  ( 10135 , 4 , "Tomislava" , "Jelić" , "Satnik" , STR_TO_DATE("12.11.1959.", "%d.%m.%Y.") , STR_TO_DATE("22.9.1991.", "%d.%m.%Y.") , "Neaktivan" , "AB+" , 4 ),
@@ -639,7 +639,7 @@ INSERT INTO osoblje VALUES
  ( 10137 , 3 , "Nia" , "Jurić" , "Pozornik" , STR_TO_DATE("28.11.1955.", "%d.%m.%Y.") , STR_TO_DATE("27.1.2004.", "%d.%m.%Y.") , "Aktivan" , "A-" , 3 ),
  ( 10138 , 3 , "Ksaver" , "Burić" , "Poručnik" , STR_TO_DATE("30.6.1963.", "%d.%m.%Y.") , STR_TO_DATE("26.5.2016.", "%d.%m.%Y.") , "Aktivan" , "A+" , 3 ),
  ( 10139 , 2 , "Jerko" , "Mitrović" , "Razvodnik" , STR_TO_DATE("4.3.1951.", "%d.%m.%Y.") , STR_TO_DATE("22.2.2012.", "%d.%m.%Y.") , "Umirovljen" , "0-" , 4 ),
- ( 10140 , 4 , "Tina" , "Petrović" , "Bojnik" , STR_TO_DATE("18.9.1962.", "%d.%m.%Y.") , STR_TO_DATE("23.5.2012.", "%d.%m.%Y.") , "Mrtav" , "A+" , 4 ),
+ ( 10140 , 4 , "Jan" , "Božac" , "Bojnik" , STR_TO_DATE("18.9.1962.", "%d.%m.%Y.") , STR_TO_DATE("23.5.2012.", "%d.%m.%Y.") , "Pokojan" , "A+" , 4 ),
  ( 10141 , 2 , "Severino" , "Božić" , "Bojnik" , STR_TO_DATE("25.1.1952.", "%d.%m.%Y.") , STR_TO_DATE("30.4.2020.", "%d.%m.%Y.") , "Aktivan" , "A-" , 4 ),
  ( 10142 , 3 , "Lika" , "Kralj" , "Brigadir" , STR_TO_DATE("6.6.1953.", "%d.%m.%Y.") , STR_TO_DATE("14.9.2004.", "%d.%m.%Y.") , "Aktivan" , "B+" , 5 ),
  ( 10143 , 1 , "Darko" , "Ivanković" , "Poručnik" , STR_TO_DATE("28.3.1957.", "%d.%m.%Y.") , STR_TO_DATE("28.5.2004.", "%d.%m.%Y.") , "Neaktivan" , "0-" , 3 ),
@@ -1494,11 +1494,11 @@ INSERT INTO osoblje VALUES
  ( 10992 , 2 , "Katarina" , "Radić" , "Pukovnik" , STR_TO_DATE("4.11.1956.", "%d.%m.%Y.") , STR_TO_DATE("27.12.1994.", "%d.%m.%Y.") , "Umirovljen" , "B-" , 4 ),
  ( 10993 , 4 , "Lana" , "Krznarić" , "Satnik" , STR_TO_DATE("15.8.1958.", "%d.%m.%Y.") , STR_TO_DATE("20.9.1993.", "%d.%m.%Y.") , "Neaktivan" , "0-" , 3 ),
  ( 10994 , 2 , "Oskar" , "Matković" , "Skupnik" , STR_TO_DATE("17.6.1970.", "%d.%m.%Y.") , STR_TO_DATE("15.4.2014.", "%d.%m.%Y.") , "Aktivan" , "0+" , 3 ),
- ( 10995 , 3 , "Bena" , "Marković" , "Pozornik" , STR_TO_DATE("26.11.1955.", "%d.%m.%Y.") , STR_TO_DATE("25.11.2003.", "%d.%m.%Y.") , "Neaktivan" , "AB+" , -2 ),
+ ( 10995 , 3 , "Bena" , "Marković" , "Pozornik" , STR_TO_DATE("26.11.1955.", "%d.%m.%Y.") , STR_TO_DATE("25.11.2003.", "%d.%m.%Y.") , "Neaktivan" , "AB+" , 3 ),
  ( 10996 , 3 , "Marina" , "Marjanović" , "Skupnik" , STR_TO_DATE("27.3.1952.", "%d.%m.%Y.") , STR_TO_DATE("19.6.2003.", "%d.%m.%Y.") , "Neaktivan" , "AB+" , 5 ),
  ( 10997 , 1 , "Felicija" , "Herceg" , "Pozornik" , STR_TO_DATE("10.1.1958.", "%d.%m.%Y.") , STR_TO_DATE("29.4.2007.", "%d.%m.%Y.") , "Umirovljen" , "B+" , 4 ),
  ( 10998 , 3 , "Božana" , "Galić" , "Narednik" , STR_TO_DATE("1.6.1968.", "%d.%m.%Y.") , STR_TO_DATE("19.10.1995.", "%d.%m.%Y.") , "Mrtav" , "AB-" , 1 ),
- ( 10999 , 3 , "admin" , "admin" , "Razvodnik" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Pokojan u duši" , "A+" , 30 );
+ ( 10999 , 3 , "admin" , "admin" , "General" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Pokojan u duši" , "A+" , 30 );
 
 
 
@@ -2565,24 +2565,3 @@ on l.id_osoblje= o.id
 inner join sektor as s
 on s.id=o.id_sektor
 where o.krvna_grupa="0+" and s.naziv="Hrvatska kopnena vojska";
-select * from misija;
-
-
-select sum(trosak_misije) from misija;
-select trosak_misije from misija where naziv ="UNTAET";
-select sum(trosak_misije-(select trosak_misije from misija where naziv ="UNTAET")),"Sve Misije" from misija union  select sum(trosak_misije),naziv from misija where naziv ="UNMIH";
-select sum(trosak_misije) from misija where naziv ='UNMIH';
-
-
-select ( select sum(trosak_misije)from misija), 'Trošak svih misija'from misija where naziv = 'UNTAET'union select trosak_misije, naziv from misija where naziv = 'UNTAET' ;
-select * from misija;
-
-
--- UNOMUR krivo
-
-
-select * from sektor,osoblje, misija,osoblje_na_misiji where misija.id = osoblje_na_misiji.id_misija and misija.naziv = 'UNOMUR' and sektor.id = 1 and osoblje.id = osoblje_na_misiji.id_osoblje;
-select count(osoblje_na_misiji.id_misija),'Osoblje na misiji' from sektor, misija,osoblje_na_misiji where  osoblje_na_misiji.id_misija = misija.id and misija.naziv = 'UNOMUR' and sektor.id = 1 union select count(id),'Svo osoblje' from osoblje ;
-
--- fixano
-select * from osoblje; 

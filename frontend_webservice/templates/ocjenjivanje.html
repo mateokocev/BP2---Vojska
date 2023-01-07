@@ -13,7 +13,8 @@
     <div style="text-align: center; margin-top: 10%;" class="cube">
         {%block content%} 
         <a href="/"><img  src=""><button class="button-24"  role="button">Home</button></a> 
-        <h2 style="font-size: 40px; color: wheat;">{{ime}}</h2>
+        <h2 style="font-size: 40px; color: wheat;">{{name}}</h2>
+        <h3>{{accountRating[0] * '⭐'}}</h3>
 
 
         <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">{{err}}</h1>
@@ -21,17 +22,38 @@
    <div class="sort">
         <a href="/ocjenjivanje/asc"><button style="margin-right: 100%; margin-bottom: 10px;" class="button-24" role="button">Asc</button></a>  
         <a href="/ocjenjivanje/desc"><button style="margin-right: 100%; margin-bottom: 10px;" class="button-24" role="button">Desc</button></a>
+
+        <form  action ="" method="post" style="display: inline; margin-left: auto;">
+        
+            <input  placeholder="Pretraži Ime,Prezime,Čin..." id="search" name="search" value="{{request.form.search}}">
+            
+        </form>
+        
    </div>
     
     
         {% for i in range(0, lenosoblje) %}
         <div class="ocjena">
-                <h3>{{i+1}}</h3>
+                <h3>#{{i+1}}</h3>
                
-                <h3>{{osoblje[i][0]}}</h3>
-                <h3>{{osoblje[i][1]}}</h3>
-                <h3>{{osoblje[i][2]}}</h3>
+                <h3>ime: {{osoblje[i][0]}}</h3>
+                <h3>Prezime: {{osoblje[i][1]}}</h3>
+                <h3>Čin: {{osoblje[i][2]}}</h3>
+
+                {% if osoblje [i][4] == "Hrvatska ratna mornarica" %}
+                <h3> <img src="/static/img/cin/{{osoblje[i][2]}}_p.png"></h3>
+                
+                {% elif osoblje [i][4] == "Hrvatsko ratno zrakoplovstvo" %}
+                <h3> <img src="/static/img/cin/{{osoblje[i][2]}}_z.png"></h3>
+
+                {% else %}
+                <h3> <img src="/static/img/cin/{{osoblje[i][2]}}.png"></h3>
+
+                {% endif %}
+                
                 <h3>{{osoblje[i][3] * '⭐'}}</h3>
+                <h3>Ocijena: {{osoblje[i][3]}}</h3>
+                <h3>{{osoblje[i][4]}}</h3>
             
             
 

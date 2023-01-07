@@ -4,7 +4,7 @@ from graph import pie
 import sqlite3 as sql
 import mysql.connector
 
-
+cinovi = ["bojnik","brigadir", "general","narednik","poručnik","pozornik","pukovnik","razvodnik","satnik","skupnik"]
 app = Flask(__name__)
                                         # <--------MAIN-------->
 
@@ -30,10 +30,17 @@ def RandomImageGenerator():
     return "/static/img/profPictures/"+x+".png"
 
 def SortTwoDimensionalTuple(lst,reverseType):
-    return sorted(lst, key=lambda x: x[-1],reverse= reverseType)
+    return sorted(lst, key=lambda x: x[-2],reverse= reverseType)
 
+def GetCin(cin,sektor):
 
+    if sektor == "Hrvatska ratna mornarica":
+        cin = str(cin) +"_p"
 
+    elif sektor == "Hrvatsko ratno zrakoplovstvo":
+        cin = str(cin) +"_z"
+
+    return cin
 
 # Route for handling the login page logic
 @app.route('/', methods = ['GET', 'POST'])
@@ -59,10 +66,14 @@ def login():
 
         else:
             osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
+            
             if osoblje[2] != "Razvodnik":
                 dozvola = None
+            
             else :
                 dozvola = osoblje[2]
+            
+            
             VojskaText = BP_DataAll("select opis from sektor;")
             print(VojskaText)
             global randimg
@@ -81,16 +92,9 @@ def profile():
     osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
     sektor = BP_DataRow("select sektor.naziv from login,osoblje,sektor where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"' and osoblje.prezime='"+UpisLozinka+"' and id_sektor = sektor.id;")
 
-  
 
-    if sektor[0] == "Hrvatska ratna mornarica":
-        cin = str(osoblje[2]) +"_p"
 
-    elif sektor[0] == "Hrvatsko ratno zrakoplovstvo":
-        cin = str(osoblje[2]) +"_z"
-
-    else:
-        cin = str(osoblje[2])
+    cin= GetCin(osoblje[2],sektor[0])
 
     return render_template('profile.html', randimg = randimg, osoblje = osoblje, sektor = sektor, cin = cin)
         
@@ -174,17 +178,45 @@ def PrikazTura (misija,sektor):
     return render_template('testnewdesign.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
 
 
-@app.route("/ocjenjivanje/<Stype>")  #Exception
+@app.route("/ocjenjivanje/<Stype>", methods = ['GET', 'POST'])  #Exception
 def ocjenjivanje(Stype):  
 
-    osoblje = BP_DataAll("select ime, prezime,cin,ocjena from osoblje;")
-    if Stype == 'asc':
+    osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id;")
+    accountRating = BP_DataRow("select ocjena from osoblje where ime = '"+name+"' and prezime = '"+ UpisLozinka+"';")
+    if request.method == 'POST':
+        Search = request.form['search']
+        
+        
+        if Search.lower() in cinovi:
+            
+            osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje,sektor where cin = '"+Search+"';")
+            return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+        
+
+        else:
+            osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje,sektor where ime = '"+Search+"';")
+            
+          
+            if osoblje != []:
+                return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+            
+            
+            else:
+                osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje where prezime = '"+Search+"';")
+                return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+
+
+    if Stype == 'asc': 
         osoblje= SortTwoDimensionalTuple(osoblje,False)
+        
+
     if Stype == 'desc':
         osoblje= SortTwoDimensionalTuple(osoblje,True)
+        
+    
 
 
-    return render_template('ocjenjivanje.html',err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+    return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
 
 
 
