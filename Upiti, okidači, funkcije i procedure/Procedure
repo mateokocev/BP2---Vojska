@@ -1,1 +1,76 @@
+-- PROCEDURE:	
+    
+ -- DK 
+          /*
+Ispisati koliki je broj osoblja, vozila, opreme trenutačno dostupno(3 vrijednosti) u danom intervalu (dva datuma
+koje korisnik izabere kao ulazne argumente          																				*/
 
+DROP PROCEDURE IF EXISTS br_dostupnog_os_vo_op;
+
+DELIMITER //
+CREATE PROCEDURE br_dostupnog_os_vo_op(IN datum_p DATETIME, IN datum_k DATETIME, OUT dost_os INT, OUT dost_vo INT, OUT dost_op INT)
+DETERMINISTIC
+BEGIN
+   DECLARE oduzet_br_voz INTEGER;
+   DECLARE oduzet_br_op INTEGER;
+   
+   SELECT COUNT(*) INTO dost_os
+   FROM osoblje 
+   WHERE id NOT IN
+    (SELECT DISTINCT id_osoblje
+    FROM osoblje_na_treningu
+    INNER JOIN trening
+    ON trening.id = osoblje_na_treningu.id_trening
+    WHERE (datum_p > vrijeme_pocetka AND datum_p < vrijeme_kraja) OR (datum_k > vrijeme_pocetka AND datum_k < vrijeme_kraja)
+    UNION
+	SELECT DISTINCT id_osoblje
+    FROM lijecenje
+    WHERE (datum_p > pocetak_lijecenja AND datum_p < kraj_lijecenja) OR (datum_k > pocetak_lijecenja AND datum_k < kraj_lijecenja)
+    UNION
+    SELECT DISTINCT id_osoblje
+    FROM osoblje_na_turi
+    WHERE (datum_p > datum_pocetka AND datum_p < datum_kraja) OR (datum_k > datum_pocetka AND datum_k < datum_kraja));
+    
+    
+    
+   SELECT SUM(ukupna_kolicina) INTO dost_vo
+   FROM vozila;
+    
+   SELECT SUM(br_voz_zauzet) INTO oduzet_br_voz
+   FROM
+   (SELECT COUNT(*) AS br_voz_zauzet
+   FROM popravak 
+   INNER JOIN vozilo_na_misiji
+   ON popravak.id_vozilo_na_misiji = vozilo_na_misiji.id
+   WHERE (datum_p > pocetak_popravka AND datum_p < kraj_popravka) OR (datum_k > pocetak_popravka AND datum_k < kraj_popravka)
+   UNION ALL
+   SELECT SUM(kolicina) AS br_voz_zauzet
+   FROM misija
+   INNER JOIN vozilo_na_misiji
+   ON misija.id = vozilo_na_misiji.id
+   WHERE (datum_p > vrijeme_pocetka AND datum_p < vrijeme_kraja) OR (datum_k > vrijeme_pocetka AND datum_k < vrijeme_kraja)) AS l;
+   
+   SET dost_vo = dost_vo - oduzet_br_voz;
+    
+    
+    
+    SELECT SUM(ukupna_kolicina) INTO dost_op
+    FROM oprema;
+    
+    SELECT SUM(izdana_kolicina) INTO oduzet_br_op
+    FROM izdana_oprema
+    INNER JOIN osoblje_na_misiji
+    ON osoblje_na_misiji.id = izdana_oprema.id_osoblje_na_misiji
+    INNER JOIN 
+    (SELECT id
+    FROM misija
+    WHERE (datum_p > vrijeme_pocetka AND datum_p < vrijeme_kraja) OR (datum_k > vrijeme_pocetka AND datum_k < vrijeme_kraja)) AS l
+    ON l.id = osoblje_na_misiji.id_misija;
+    
+    SET dost_op = dost_op - oduzet_br_op;
+END//
+DELIMITER ;
+
+CALL br_dostupnog_os_vo_op(STR_TO_DATE("1.10.1991.  12:37:13", "%d.%m.%Y. %H:%i:%s"), 
+STR_TO_DATE("1.10.2013.  12:37:13", "%d.%m.%Y. %H:%i:%s"), @a, @b, @c);
+SELECT  @a AS br_dostupnog_osoblja, @b AS br_dostupnih_vozila, @c AS br_dostupne_opreme FROM DUAL;
