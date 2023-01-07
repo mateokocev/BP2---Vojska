@@ -67,10 +67,18 @@
 - Funkcija koja vraća broj osoblja koje je imalo uvijek perofrmans na treningu viši od 6 te da nikad nisu bili na liječenju.
 
 - Za određeni id osoblja treba se dati tekstualni odgovor u čemu je sve osoba sujelovala. 
-Npr. "Arabela Herceg je sudjelovala u najmanje jednoj/m: treningu i lijecenju."
-Moguće je više kombinacija, a najduža je npr "Arabela Herceg je sudjelovao/la u najmanje 
-jednoj: turi, misiji,treningu i lijecenju." U slučaju da osoba nije sudjelovala još uvijek u ničemu bit će ispisano npr 
-"Arabela Herceg nije sudjelovao/la ni u jednoj: turi, misiji,treningu ili lijecenju."
+  Npr. "Arabela Herceg je sudjelovala u najmanje jednoj/m: treningu i lijecenju."
+  Moguće je više kombinacija, a najduža je npr "Arabela Herceg je sudjelovao/la u najmanje 
+  jednoj: turi, misiji,treningu i lijecenju." U slučaju da osoba nije sudjelovala još uvijek u ničemu bit će ispisano npr 
+  "Arabela Herceg nije sudjelovao/la ni u jednoj: turi, misiji,treningu ili lijecenju."
+
+- Performans na treningu može bit od 1 do 10 ([1,10]). Želi se pratiti koliki je bio broj osoblja po određenom činu s pojedinom
+  ocijenom performansa. Ne treba prikazat čin čije osoblje uopće nije dio tog performansa.
+  Format treba izgledat kao:
+  performans   cinovi_i_br_pojavljivanja
+	10            skupnik: 3 , brigadir: 3 , bojnik: 1 , pukovnik: 1 , poručnik: 2 , narednik: 2 
+	9             pozornik: 1 , narednik: 2 , bojnik: 3 , satnik: 1 , brigadir: 2 , poručnik: 2 , skupnik: 1 , razvodnik: 1 
+	...           ...
 
 - ...
 
