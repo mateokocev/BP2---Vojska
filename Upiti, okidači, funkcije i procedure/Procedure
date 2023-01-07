@@ -160,6 +160,78 @@ STR_TO_DATE("1.10.2013.  12:37:13", "%d.%m.%Y. %H:%i:%s"), @a, @b, @c);
 SELECT  @a AS br_dostupnog_osoblja, @b AS br_dostupnih_vozila, @c AS br_dostupne_opreme FROM DUAL;
 
 
+
+
+
+/*
+Treba odrediti koje misije su održane na području sjeverne polutke, a koje na području južne polutke. Prilikom 
+navoda se koristi naziv misije. Format mora bit sličan: 
+  Misije održane na sjevernoj polutci: naziv1, naziv2, ...
+  Misije održane na južnoj polutci: naziv1, naziv2, ...
+  Misije održane na ekvatoru: naziv1, naziv2, ...
+*/
+
+DROP PROCEDURE IF EXISTS polutke_misije;
+
+DELIMITER //
+CREATE PROCEDURE polutke_misije(OUT sj_misije VARCHAR(1000), OUT ju_misije VARCHAR(1000), OUT ekv_misije VARCHAR(1000))
+BEGIN
+	DECLARE ime_misije VARCHAR(50) ;
+    DECLARE sirina DECIMAL(10, 7);
+	DECLARE finished INTEGER DEFAULT 0;
+
+    DECLARE cur CURSOR FOR
+	SELECT misija.naziv, zemljopisna_sirina
+	FROM misija
+	INNER JOIN lokacija
+	ON misija.id_lokacija = lokacija.id;
+
+	DECLARE CONTINUE HANDLER
+	FOR SQLSTATE '02000' SET finished = 1;
+
+	SET sj_misije = "Misije održane na sjevernoj polutci: ";
+    SET ju_misije = "Misije održane na južnoj polutci: ";
+    SET ekv_misije = "Misije održane na ekvatoru: ";
+
+	OPEN cur;
+		iteriraj_kordinate: LOOP
+
+			FETCH cur INTO ime_misije, sirina;
+
+			IF finished = 1 THEN
+			   LEAVE iteriraj_kordinate;
+			END IF;
+            
+            IF sirina > 0 THEN
+				SET sj_misije = CONCAT(sj_misije, ime_misije, ", ");
+			ELSEIF sirina < 0 THEN
+				SET ju_misije = CONCAT(ju_misije, ime_misije, ", ");
+			ELSE
+				SET ekv_misije = CONCAT(ekv_misije, ime_misije, ", ");
+			END IF;
+            
+	  END LOOP iteriraj_kordinate;
+  CLOSE cur;
+	 
+  SET sj_misije = TRIM(TRAILING ", " FROM sj_misije);
+  SET ju_misije = TRIM(TRAILING ", " FROM ju_misije);
+  SET ekv_misije = TRIM(TRAILING ", " FROM ekv_misije);
+END //
+DELIMITER ;
+
+CALL polutke_misije(@sj_naziv, @ju_naziv, @ekv_naziv);
+
+SELECT @sj_naziv AS nazivi_misija FROM DUAL
+UNION
+SELECT @ju_naziv FROM DUAL
+UNION 
+SELECT @ekv_naziv FROM DUAL;
+
+
+
+
+
+
 -- MK
 
 -- --------------------------------------------------------------------------------------------
