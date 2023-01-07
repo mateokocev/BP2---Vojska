@@ -1,0 +1,24 @@
+*{font-family: 'Poppins',sans-serif;color: black;}
+
+body
+{
+    background-color: rgb(74, 70, 70);
+    background-image: url(../img/edit_bg.jpg);
+}
+
+form select {
+    display: inline-block;
+    text-align: center;
+    align-items: auto;
+    align-self: auto;
+    margin: 0 15px;
+}
+
+select {
+    height: 40px;
+    width: 150px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    align-self: auto;
+}
+  
