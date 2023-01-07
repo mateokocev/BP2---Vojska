@@ -153,3 +153,61 @@ DELIMITER ;
 
 SELECT os_sudjelovanje(10009) AS os_sudjelovanje FROM DUAL;
 
+
+
+
+
+/*
+Performans na treningu može bit od 1 do 10 ([1,10]). Želi se pratiti koliki je bio broj osoblja po određenom činu s pojedinom
+ocijenom performansa. Ne treba prikazat čin čije osoblje uopće nije dio tog performansa.
+Format treba izgledat kao:
+performans   cinovi_i_br_pojavljivanja
+10            skupnik: 3 , brigadir: 3 , bojnik: 1 , pukovnik: 1 , poručnik: 2 , narednik: 2 
+9             pozornik: 1 , narednik: 2 , bojnik: 3 , satnik: 1 , brigadir: 2 , poručnik: 2 , skupnik: 1 , razvodnik: 1 
+...           ...
+*/
+
+DROP FUNCTION IF EXISTS performans_cinovi;
+
+DELIMITER //
+CREATE FUNCTION performans_cinovi(perf INTEGER) RETURNS VARCHAR(500)
+DETERMINISTIC
+BEGIN
+    DECLARE red VARCHAR(100);
+    DECLARE cin_i_br_pojavljivanja VARCHAR(800)  DEFAULT "";
+    DECLARE finished INTEGER DEFAULT 0;
+
+	DECLARE cur CURSOR FOR
+	SELECT CONCAT(LOWER(cin), ": ",COUNT(*)) AS perf_des
+	FROM osoblje_na_treningu
+	INNER JOIN osoblje ON osoblje.id = osoblje_na_treningu.id_osoblje
+	WHERE performans = perf
+	GROUP BY cin;
+ 
+	DECLARE CONTINUE HANDLER 
+	FOR SQLSTATE '02000' SET finished = 1;
+
+	OPEN cur;
+		 iteriraj_cinove: LOOP
+			 FETCH cur INTO red;
+             
+			 IF finished = 1 THEN
+				LEAVE iteriraj_cinove;
+			 END IF;
+             
+			 SET cin_i_br_pojavljivanja = CONCAT(cin_i_br_pojavljivanja, ", ", red, " ");
+             
+		 END LOOP iteriraj_cinove;
+	CLOSE cur;
+    
+    SET cin_i_br_pojavljivanja = TRIM(LEADING "," FROM cin_i_br_pojavljivanja);
+    
+    RETURN cin_i_br_pojavljivanja;
+END //
+DELIMITER ;
+
+SELECT DISTINCT performans, performans_cinovi(performans) AS cinovi_i_br_pojavljivanja
+FROM osoblje_na_treningu
+ORDER BY performans DESC;
+
+
