@@ -48,11 +48,10 @@ CREATE TABLE tura(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(50) NOT NULL,
     vrsta_ture VARCHAR(69) NOT NULL,
-    vrijeme_pocetka DATETIME NOT NULL,
-    vrijeme_kraja DATETIME
+    vrijeme_pocetka DATE NOT NULL,
+    vrijeme_kraja DATE
 );
 -- DROP TABLE tura;
-
 
 
 CREATE TABLE misija(
@@ -86,8 +85,8 @@ CREATE TABLE osoblje_na_turi(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER NOT NULL,
     id_tura INTEGER NOT NULL,
-    datum_pocetka DATETIME NOT NULL,
-    datum_kraja DATETIME,
+    datum_pocetka DATE NOT NULL,
+    datum_kraja DATE,
     FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id)
 );
@@ -139,8 +138,8 @@ CREATE TABLE popravak(
     id INTEGER PRIMARY KEY,
     id_vozilo_na_misiji INTEGER NOT NULL,
     opis_stete TEXT NOT NULL,
-    pocetak_popravka DATETIME NOT NULL,
-    kraj_popravka DATETIME,
+    pocetak_popravka DATE NOT NULL,
+    kraj_popravka DATE,
     trosak_popravka NUMERIC(15,2) NOT NULL,
     CHECK(trosak_popravka >= 0),
     FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id)
@@ -198,8 +197,8 @@ CREATE TABLE lijecenje(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER,
     status_lijecenja TEXT NOT NULL,  
-    pocetak_lijecenja DATETIME NOT NULL,
-    kraj_lijecenja DATETIME,
+    pocetak_lijecenja DATE NOT NULL,
+    kraj_lijecenja DATE,
     opis_ozljede TEXT NOT NULL,
     trosak_lijecenja NUMERIC(15,2),
     CHECK(trosak_lijecenja >= 0),
@@ -461,21 +460,25 @@ DELIMITER ;
 
 
 
-/*LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/sektor.csv' INTO TABLE sektor
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/sektor.csv' INTO TABLE sektor
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (id, naziv, datum_osnivanja, opis, ukupni_proracun)
-SET datum_osnivanja = STR_TO_DATE(datum_osnivanja, '%d.%m.%Y'); */
-INSERT INTO sektor VALUES
+SET datum_osnivanja = STR_TO_DATE(datum_osnivanja, '%Y-%m-%d');
+
+/*INSERT INTO sektor VALUES
 (1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.%Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
 (2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.%Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
 (3, "Hrvatsko ratno zrakoplovstvo", STR_TO_DATE("12.12.1991.", "%d.%m.%Y."), "Osnovna zadaća HRZ-a je osiguranje suverenosti zračnog prostora Republike Hrvatske te pružanje zrakoplovne potpore drugim granama u provedbi njihovih zadaća u združenim operacijama. Nositelj je i organizator integriranog sustava protuzračne obrane Republike Hrvatske.", 3622000000.00),
 (4, "Hrvatska vojna policija", STR_TO_DATE("24.08.1991.", "%d.%m.%Y."), "Vojna policija Oružanih snaga Republike Hrvatske (VP OSRH) pruža potporu Ministarstvu obrane i Oružanim snagama Republike Hrvatske obavljanjem namjenskih vojnopolicijskih poslova u miru i ratu te borbenih zadaća u ratu.", 1822000000.00);
--- drop table sektor;
+*/
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/lokacija.csv' INTO TABLE lokacija
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
 
-
-INSERT INTO lokacija VALUES
+/* INSERT INTO lokacija VALUES
 (16,3,"Jaipur",26.922070,75.778885),
 (17,1,"Islamabad",33.738045,73.084488),
 (18,2,"Kabul",34.543896,69.160652),
@@ -502,9 +505,23 @@ INSERT INTO lokacija VALUES
 (39,1,"Chur",46.8499,9.5329),
 (40,3,"Ohio",40.367474,-82.996216),
 (41,2,"Columbus",39.983334,-82.983330);
+drop table lokacija;
+drop table misija;
+drop table osoblje_na_misiji;
+drop table izdana_oprema;
+drop table vozilo_na_misiji;
+drop table popravak;
+drop table trening;
+drop table osoblje_na_treningu;*/
 
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/osoblje.csv' INTO TABLE osoblje
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_sektor,ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa,ocjena)
+SET datum_rodenja = STR_TO_DATE(datum_rodenja, '%Y-%m-%d'), datum_uclanjenja = STR_TO_DATE(datum_uclanjenja, '%Y-%m-%d');
 
-INSERT INTO osoblje VALUES
+/* INSERT INTO osoblje VALUES
  ( 10001 , 3 , "Jagoda" , "Lučić" , "Pozornik" , STR_TO_DATE("5.3.1968.", "%d.%m.%Y.") , STR_TO_DATE("21.3.2002.", "%d.%m.%Y.") , "Mrtav" , "AB-" , 4 ),
  ( 10002 , 3 , "Arabela" , "Herceg" , "Skupnik" , STR_TO_DATE("1.10.1967.", "%d.%m.%Y.") , STR_TO_DATE("20.10.2013.", "%d.%m.%Y.") , "Mrtav" , "A-" , 3 ),
  ( 10003 , 1 , "Vilim" , "Grgurić" , "Skupnik" , STR_TO_DATE("30.10.1956.", "%d.%m.%Y.") , STR_TO_DATE("3.2.2016.", "%d.%m.%Y.") , "Mrtav" , "A+" , 2 ),
@@ -1503,12 +1520,18 @@ INSERT INTO osoblje VALUES
  ( 10996 , 3 , "Marina" , "Marjanović" , "Skupnik" , STR_TO_DATE("27.3.1952.", "%d.%m.%Y.") , STR_TO_DATE("19.6.2003.", "%d.%m.%Y.") , "Neaktivan" , "AB+" , 5 ),
  ( 10997 , 1 , "Felicija" , "Herceg" , "Pozornik" , STR_TO_DATE("10.1.1958.", "%d.%m.%Y.") , STR_TO_DATE("29.4.2007.", "%d.%m.%Y.") , "Umirovljen" , "B+" , 4 ),
  ( 10998 , 3 , "Božana" , "Galić" , "Narednik" , STR_TO_DATE("1.6.1968.", "%d.%m.%Y.") , STR_TO_DATE("19.10.1995.", "%d.%m.%Y.") , "Mrtav" , "AB-" , 1 ),
- ( 10999 , 3 , "admin" , "admin" , "General" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Pokojan u duši" , "A+" , 30 );
+ ( 10999 , 3 , "admin" , "admin" , "General" , STR_TO_DATE("4.9.1955.", "%d.%m.%Y.") , STR_TO_DATE("24.11.1995.", "%d.%m.%Y.") , "Pokojan u duši" , "A+" , 30 );*/
+--  delete from tura;
+-- drop table login;
 
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/tura.csv' INTO TABLE tura
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,naziv,vrsta_ture,vrijeme_pocetka,vrijeme_kraja)
+SET vrijeme_pocetka = STR_TO_DATE(vrijeme_pocetka, '%Y-%m-%d'), vrijeme_kraja = STR_TO_DATE(vrijeme_kraja, '%Y-%m-%d');
 
-
-
-INSERT INTO tura VALUES
+/*INSERT INTO tura VALUES
 (1, "Indijska i Pakistanska tura", "Mirovna tura", STR_TO_DATE("01.08.2008","%d.%m.%Y."), STR_TO_DATE("04.11.2021","%d.%m.%Y.")),
 (2, "1. Afganistanska tura", "Vojna tura", STR_TO_DATE("01.10.2008","%d.%m.%Y."), STR_TO_DATE("15.04.2009","%d.%m.%Y.")),
 (3, "Grčka tura", "Vojna tura", STR_TO_DATE("01.12.2010","%d.%m.%Y."), STR_TO_DATE("16.11.2014","%d.%m.%Y.")),
@@ -1522,8 +1545,7 @@ INSERT INTO tura VALUES
 (11, "Venezuelanksa tura", "Vojna tura", STR_TO_DATE("26.09.2015","%d.%m.%Y."), STR_TO_DATE("16.08.2017","%d.%m.%Y.")),
 (12, "Norveška tura", "Mirovna tura", STR_TO_DATE("01.04.2016","%d.%m.%Y."), STR_TO_DATE("23.04.2018","%d.%m.%Y.")),
 (13, "Švicarska tura ", "Mirovna tura", STR_TO_DATE("07.05.2006","%d.%m.%Y."), STR_TO_DATE("20.11.2009","%d.%m.%Y.")),
-(14, "SAD tura", "Mirovna tura", STR_TO_DATE("01.12.2012","%d.%m.%Y."), STR_TO_DATE("28.09.2013","%d.%m.%Y."));
-
+(14, "SAD tura", "Mirovna tura", STR_TO_DATE("01.12.2012","%d.%m.%Y."), STR_TO_DATE("28.09.2013","%d.%m.%Y."));*/
 
    --  id INTEGER PRIMARY KEY,
     -- naziv VARCHAR(50) NOT NULL,
@@ -1533,7 +1555,7 @@ INSERT INTO tura VALUES
     -- id_tura INTEGER NOT NULL,
     -- ishod TEXT,   -- vratit NOT NULL
     -- trosak_misije NUMERIC(15, 2) NOT NULL
-  
+
 INSERT INTO misija VALUES
  ( 3001 , "UNAVEM III" , STR_TO_DATE("7.12.1996.", "%d.%m.%Y.") , STR_TO_DATE("24.6.2003.", "%d.%m.%Y.") , 29 , 10 ,"Verifikacijska misija Ujedinjenih naroda Angola III bila je mirovna misija koja je počela djelovati u Angoli u veljači 1995. tijekom građanskog rata. Ustanovilo ga je Vijeće sigurnosti Ujedinjenih naroda Rezolucijom 976, a svoju misiju je završilo u lipnju 1997. ", 5507101 ),
  ( 3002 , "UNAVEM II" , STR_TO_DATE("18.11.1995.", "%d.%m.%Y.") , STR_TO_DATE("20.2.2022.", "%d.%m.%Y.") , 20 , 10 ," Verifikacijska misija Ujedinjenih naroda u Angoli II, uspostavljena u svibnju 1991. i trajala do veljače 1995., bila je druga mirovna misija Ujedinjenih naroda, od ukupno četiri, raspoređene u Angoli tijekom Angolskog građanskog rata, najdužeg rata u modernoj afričkoj povijesti. ", 6541048 ),
@@ -1709,7 +1731,14 @@ INSERT INTO osoblje_na_misiji VALUES
  ( 4098 , 10070 , 3006 ),
  ( 4099 , 10757 , 3043 );
 
-INSERT INTO osoblje_na_turi VALUES
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/osoblje_na_turi.csv' INTO TABLE osoblje_na_turi
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_osoblje,id_tura,datum_pocetka,datum_kraja)
+SET datum_pocetka = STR_TO_DATE(datum_pocetka, '%Y-%m-%d'), datum_kraja = STR_TO_DATE(datum_kraja, '%Y-%m-%d');
+
+/* INSERT INTO osoblje_na_turi VALUES
  ( 8001 , 10916 , 5 , STR_TO_DATE("24.6.2024.", "%d.%m.%Y.") , STR_TO_DATE("8.11.2011.", "%d.%m.%Y.") ),
  ( 8002 , 10439 , 8 , STR_TO_DATE("6.11.2009.", "%d.%m.%Y.") , STR_TO_DATE("14.11.2030.", "%d.%m.%Y.") ),
  ( 8003 , 10772 , 7 , STR_TO_DATE("7.1.1999.", "%d.%m.%Y.") , STR_TO_DATE("16.3.2012.", "%d.%m.%Y.") ),
@@ -1809,12 +1838,15 @@ INSERT INTO osoblje_na_turi VALUES
  ( 8097 , 10166 , 4 , STR_TO_DATE("13.10.2005.", "%d.%m.%Y.") , STR_TO_DATE("28.7.2020.", "%d.%m.%Y.") ),
  ( 8098 , 10378 , 11 , STR_TO_DATE("9.1.2000.", "%d.%m.%Y.") , STR_TO_DATE("25.11.2014.", "%d.%m.%Y.") ),
  ( 8099 , 10509 , 5 , STR_TO_DATE("12.1.1996.", "%d.%m.%Y.") , STR_TO_DATE("1.12.2013.", "%d.%m.%Y.") ),
- ( 8100 , 10673 , 9 , STR_TO_DATE("20.3.2007.", "%d.%m.%Y.") , STR_TO_DATE("21.10.1993.", "%d.%m.%Y.") );
+ ( 8100 , 10673 , 9 , STR_TO_DATE("20.3.2007.", "%d.%m.%Y.") , STR_TO_DATE("21.10.1993.", "%d.%m.%Y.") );*/
 
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/vozila.csv' INTO TABLE vozila
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,naziv,vrsta,ukupna_kolicina,kapacitet);
 
-
-
-INSERT INTO vozila VALUES
+/*INSERT INTO vozila VALUES
 (2000,"Patria AMV","Kotačna oklopna vozila",158,3),
 (2001,"International MaxxPro","Kotačna oklopna vozila",40,5),
 (2002,"Oshkosh M-ATV","Kotačna oklopna vozila",172,5),
@@ -1839,9 +1871,15 @@ INSERT INTO vozila VALUES
 (2017,"Mil Mi-17","Helikopteri",11,2),
 (2018,"Mil Mi-8","Helikopteri",13,4),
 (2019,"Sikorsky UH-60 Black Hawk","Helikopteri",2,5),
-(2020,"Bell OH-58 Kiowa Warrior","Helikopteri",15,6);
+(2020,"Bell OH-58 Kiowa Warrior","Helikopteri",15,6);*/
 
-INSERT INTO vozilo_na_misiji VALUES
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/vozilo_na_misiji.csv' INTO TABLE vozilo_na_misiji
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_vozilo,kolicina,id_misija);
+
+/* INSERT INTO vozilo_na_misiji VALUES
  ( 9000 , 2020 , 6 , 3019 ),
  ( 9001 , 2016 , 6 , 3005 ),
  ( 9002 , 2006 , 5 , 3033 ),
@@ -1871,9 +1909,15 @@ INSERT INTO vozilo_na_misiji VALUES
  ( 9026 , 2005 , 5 , 3021 ),
  ( 9027 , 2006 , 6 , 3015 ),
  ( 9028 , 2002 , 7 , 3020 ),
- ( 9029 , 2019 , 4 , 3023 );
+ ( 9029 , 2019 , 4 , 3023 );*/
 
-INSERT INTO vozilo_na_turi VALUES
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/vozilo_na_turi.csv' INTO TABLE vozilo_na_turi
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_vozilo,id_tura,id_odgovorni,kolicina);
+
+/*INSERT INTO vozilo_na_turi VALUES
  ( 7001 , 2007 , 10 , 8052 , 1 ),
  ( 7002 , 2001 , 10 , 8044 , 9 ),
  ( 7003 , 2013 , 5 , 8002 , 7 ),
@@ -1903,9 +1947,16 @@ INSERT INTO vozilo_na_turi VALUES
  ( 7027 , 2004 , 14 , 8098 , 4 ),
  ( 7028 , 2005 , 11 , 8027 , 4 ),
  ( 7029 , 2008 , 8 , 8035 , 2 ),
- ( 7030 , 2009 , 4 , 8068 , 6 );
+ ( 7030 , 2009 , 4 , 8068 , 6 );*/
 
-INSERT INTO popravak VALUES
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/popravak.csv' INTO TABLE popravak
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_vozilo_na_misiji,opis_stete,pocetak_popravka,kraj_popravka,trosak_popravka)
+SET pocetak_popravka = STR_TO_DATE(pocetak_popravka, '%Y-%m-%d'), kraj_popravka = STR_TO_DATE(kraj_popravka, '%Y-%m-%d');
+
+/*INSERT INTO popravak VALUES
  ( 6001 , 9019 , "Vozilu je potrebna kompletna restauracija" , STR_TO_DATE("2.11.1992.", "%d.%m.%Y.") , STR_TO_DATE("9.3.2024.", "%d.%m.%Y.") , 235475 ),
  ( 6002 , 9018 , "Potrebni mali popravci" , STR_TO_DATE("14.11.2030.", "%d.%m.%Y.") , STR_TO_DATE("25.3.2026.", "%d.%m.%Y.") , 429969 ),
  ( 6003 , 9005 , "Popravci na rubu neisplativosti" , STR_TO_DATE("9.3.1993.", "%d.%m.%Y.") , STR_TO_DATE("12.12.2023.", "%d.%m.%Y.") , 374594 ),
@@ -1925,11 +1976,15 @@ INSERT INTO popravak VALUES
  ( 6017 , 9018 , "Vozilo nije u voznome stanju" , STR_TO_DATE("28.10.2030.", "%d.%m.%Y.") , STR_TO_DATE("21.2.2027.", "%d.%m.%Y.") , 220281 ),
  ( 6018 , 9006 , "Manja šteta na oklopu i manji popravci" , STR_TO_DATE("9.1.2003.", "%d.%m.%Y.") , STR_TO_DATE("12.12.1994.", "%d.%m.%Y.") , 213060 ),
  ( 6019 , 9004 , "Potrebni mali popravci" , STR_TO_DATE("14.3.2022.", "%d.%m.%Y.") , STR_TO_DATE("1.2.2007.", "%d.%m.%Y.") , 277448 ),
- ( 6020 , 9016 , "Popravci na rubu neisplativosti" , STR_TO_DATE("3.2.2029.", "%d.%m.%Y.") , STR_TO_DATE("5.12.2020.", "%d.%m.%Y.") , 441037 );
+ ( 6020 , 9016 , "Popravci na rubu neisplativosti" , STR_TO_DATE("3.2.2029.", "%d.%m.%Y.") , STR_TO_DATE("5.12.2020.", "%d.%m.%Y.") , 441037 );*/
 
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/oprema.csv' INTO TABLE oprema
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,naziv,vrsta,ukupna_kolicina);
 
-
-INSERT INTO oprema VALUES
+/* INSERT INTO oprema VALUES
 (1301, "HS Produkt HS", "Samokres", 40000),
 (1302, "HS Produkt SF", "Samokres", 20000),
 (1303, "Heckler & Koch USP", "Samokres", 10000),
@@ -1992,11 +2047,16 @@ INSERT INTO oprema VALUES
 (1360, "Standardna vojna uniforma", "Osobna zaštitna oprema", 2000),
 (1361, "Veliki vojni ruksak", "Ruksak", 1100),
 (1362, "Mali vojni ruksak", "Ruksak", 1920),
-(1363, "Vojne čizme Jelen", "Osobna zaštitna oprema", 2500);
+(1363, "Vojne čizme Jelen", "Osobna zaštitna oprema", 2500);*/
+
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/izdana_oprema.csv' INTO TABLE izdana_oprema
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_oprema,id_osoblje_na_misiji,izdana_kolicina);
 
 
-
-INSERT INTO izdana_oprema VALUES
+/* INSERT INTO izdana_oprema VALUES
  ( 5001 , 1311 , 4002 , 1 ),
  ( 5003 , 1303 , 4004 , 1 ),
  ( 5005 , 1318 , 4006 , 1 ),
@@ -2096,11 +2156,16 @@ INSERT INTO izdana_oprema VALUES
  ( 5193 , 1340 , 4094 , 1 ),
  ( 5195 , 1358 , 4096 , 1 ),
  ( 5197 , 1321 , 4098 , 1 ),
- ( 5199 , 1324 , 4000 , 1 );
+ ( 5199 , 1324 , 4000 , 1 ); */
 
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/trening.csv' INTO TABLE trening
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,vrijeme_pocetka,vrijeme_kraja,id_lokacija,opis)
+SET vrijeme_pocetka = STR_TO_DATE(vrijeme_pocetka, '%Y-%m-%d %H:%i:%s'), vrijeme_kraja = STR_TO_DATE(vrijeme_kraja, '%Y-%m-%d %H:%i:%s');
 
-
-INSERT INTO trening VALUES
+/* INSERT INTO trening VALUES
  ( 1100 , STR_TO_DATE("20.7.1991.  4:9:55", "%d.%m.%Y. %H:%i:%s") , STR_TO_DATE("14.7.1991.  2:14:36", "%d.%m.%Y. %H:%i:%s") , 35 , ""),
  ( 1101 , STR_TO_DATE("27.2.1995.  6:15:59", "%d.%m.%Y. %H:%i:%s") , STR_TO_DATE("5.8.1999.  23:16:47", "%d.%m.%Y. %H:%i:%s") , 18 , ""),
  ( 1102 , STR_TO_DATE("22.5.1997.  4:31:41", "%d.%m.%Y. %H:%i:%s") , STR_TO_DATE("5.11.2000.  3:48:37", "%d.%m.%Y. %H:%i:%s") , 27 , ""),
@@ -2200,10 +2265,15 @@ INSERT INTO trening VALUES
  ( 1196 , STR_TO_DATE("28.10.1994.  21:13:0", "%d.%m.%Y. %H:%i:%s") , STR_TO_DATE("13.10.1992.  13:21:47", "%d.%m.%Y. %H:%i:%s") , 22 ,"" ),
  ( 1197 , STR_TO_DATE("15.12.1999.  10:8:59", "%d.%m.%Y. %H:%i:%s") , STR_TO_DATE("5.4.1998.  1:46:44", "%d.%m.%Y. %H:%i:%s") , 40 ,"" ),
  ( 1198 , STR_TO_DATE("4.9.2000.  6:42:53", "%d.%m.%Y. %H:%i:%s") , STR_TO_DATE("20.6.1993.  7:38:53", "%d.%m.%Y. %H:%i:%s") , 16 ,"" ),
- ( 1199 , STR_TO_DATE("4.8.1997.  16:42:15", "%d.%m.%Y. %H:%i:%s") , STR_TO_DATE("3.9.1992.  9:4:47", "%d.%m.%Y. %H:%i:%s") , 23 ,"" );
+ ( 1199 , STR_TO_DATE("4.8.1997.  16:42:15", "%d.%m.%Y. %H:%i:%s") , STR_TO_DATE("3.9.1992.  9:4:47", "%d.%m.%Y. %H:%i:%s") , 23 ,"" ); */
+ 
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/osoblje_na_treningu.csv' INTO TABLE osoblje_na_treningu
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_osoblje,id_trening,performans);
 
-
-INSERT INTO osoblje_na_treningu VALUES
+/*INSERT INTO osoblje_na_treningu VALUES
  ( 1201 , 10893 , 1162 , 1 ),
  ( 1202 , 10453 , 1169 , 6 ),
  ( 1203 , 10887 , 1195 , 9 ),
@@ -2303,11 +2373,16 @@ INSERT INTO osoblje_na_treningu VALUES
  ( 1297 , 10347 , 1104 , 10 ),
  ( 1298 , 10881 , 1165 , 4 ),
  ( 1299 , 10249 , 1170 , 6 ),
- ( 1300 , 10569 , 1138 , 9 );
+ ( 1300 , 10569 , 1138 , 9 );*/
 
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/lijecenje.csv' INTO TABLE lijecenje
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_osoblje,status_lijecenja,pocetak_lijecenja,kraj_lijecenja,opis_ozljede,trosak_lijecenja)
+SET pocetak_lijecenja = STR_TO_DATE(pocetak_lijecenja, '%Y-%m-%d'), kraj_lijecenja = STR_TO_DATE(kraj_lijecenja, '%Y-%m-%d');
 
-
-INSERT INTO lijecenje VALUES
+/* INSERT INTO lijecenje VALUES
  ( 1000 , 10036 , "Izliječen" , STR_TO_DATE("28.12.2000.", "%d.%m.%Y.") , STR_TO_DATE("15.3.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 44187 ),
  ( 1001 , 10207 , "U tijeku" , STR_TO_DATE("7.4.1996.", "%d.%m.%Y.") , STR_TO_DATE("15.6.2021.", "%d.%m.%Y.") , "Slabo ozljieđen" , 76427 ),
  ( 1002 , 10251 , "U tijeku" , STR_TO_DATE("11.2.2013.", "%d.%m.%Y.") , STR_TO_DATE("21.11.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 44531 ),
@@ -2407,7 +2482,7 @@ INSERT INTO lijecenje VALUES
  ( 1096 , 10882 , "Izliječen" , STR_TO_DATE("10.9.1993.", "%d.%m.%Y.") , STR_TO_DATE("3.8.2022.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 27482 ),
  ( 1097 , 10920 , "Izliječen" , STR_TO_DATE("24.10.2010.", "%d.%m.%Y.") , STR_TO_DATE("17.6.2021.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 27244 ),
  ( 1098 , 10982 , "U tijeku" , STR_TO_DATE("11.3.2004.", "%d.%m.%Y.") , STR_TO_DATE("28.12.2022.", "%d.%m.%Y.") , "Ozbiljno ozlijeđen" , 50406 ),
- ( 1099 , 10677 , "U tijeku" , STR_TO_DATE("12.5.2009.", "%d.%m.%Y.") , STR_TO_DATE("19.5.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 11246 );
+ ( 1099 , 10677 , "U tijeku" , STR_TO_DATE("12.5.2009.", "%d.%m.%Y.") , STR_TO_DATE("19.5.2020.", "%d.%m.%Y.") , "Srednje ozlijeđen" , 11246 );*/
 
 
 
