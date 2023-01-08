@@ -2,6 +2,83 @@
     
  -- DK 
  
+ 
+ -- Za određeni id_osoblja treba vratit koliko je sati proveo/la na misiji, na treningu a koliko na liječenju.
+
+     
+DROP PROCEDURE IF EXISTS sati_provedeno_osoblje;
+
+DELIMITER //
+CREATE PROCEDURE sati_provedeno_osoblje(IN id_os INTEGER, OUT misija_h INTEGER, OUT trening_h INTEGER, OUT lijecenje_h INTEGER)
+DETERMINISTIC
+BEGIN
+
+	SELECT SUM(TIMESTAMPDIFF(DAY, vrijeme_pocetka, vrijeme_kraja)) INTO misija_h
+    FROM misija
+    INNER JOIN osoblje_na_misiji
+    ON misija.id = osoblje_na_misiji.id_misija
+    WHERE id_osoblje = id_os;
+    
+    SELECT IFNULL(misija_h, 0) INTO misija_h;
+    
+    SELECT SUM(TIMESTAMPDIFF(DAY, vrijeme_pocetka, vrijeme_kraja)) INTO trening_h
+    FROM trening
+    INNER JOIN osoblje_na_treningu
+    ON trening.id = osoblje_na_treningu.id_trening
+    WHERE id_osoblje = id_os;
+    
+    SELECT IFNULL(trening_h, 0) INTO trening_h;
+    
+    SELECT SUM(TIMESTAMPDIFF(DAY, pocetak_lijecenja, kraj_lijecenja)) INTO lijecenje_h
+    FROM lijecenje
+    WHERE id_osoblje = id_os;
+
+	SELECT IFNULL(lijecenje_h, 0) INTO lijecenje_h;
+
+END//
+DELIMITER ;
+
+CALL sati_provedeno_osoblje(10322, @h_m, @h_t, @h_l);
+SELECT @h_m AS sati_provedeni_na_misiji, @h_t AS sati_provedeni_na_treningu, @h_l AS sati_provedeni_na_lijecenju FROM DUAL;  
+     
+     
+     
+  /*
+  Za određeni iznos novca se gleda da li bi taj novac mogao pokriti troškove najmanje pola misija te vraća odgovor
+  'DA' ili 'NE'
+  */
+     
+DROP PROCEDURE IF EXISTS novac_misije;
+
+DELIMITER //
+CREATE PROCEDURE novac_misije(IN iznos DECIMAL(30, 2), OUT odg CHAR(2))
+DETERMINISTIC
+BEGIN
+	DECLARE br_pola_misija INTEGER;
+    DECLARE trosak_najmanje_polovice DECIMAL(30, 2);
+
+	SELECT (COUNT(*)/2) INTO br_pola_misija
+	FROM misija;
+		 
+	SELECT SUM(trosak_misije) INTO trosak_najmanje_polovice
+	FROM misija
+	ORDER BY trosak_misije ASC
+	LIMIT br_pola_misija;
+
+	IF iznos >= trosak_najmanje_polovice THEN
+		SET odg = 'DA';
+	ELSE 
+		SET odg = 'NE';
+	END IF;
+END//
+DELIMITER ;
+
+CALL novac_misije(30000000, @odg);
+SELECT @odg AS Da_li_iznos_pokriva_troskove_pola_misija FROM DUAL;
+ 
+ 
+ 
+ 
  /*
 Za dva vremenska intervala (pojedini će biti određen s dvije datumske vrijednosti) se mora odrediti  pojedinačni 
 ukupni trošak za misije, ukupni trošak za popravak, ukupni trošak za liječenje te usporedit. 
