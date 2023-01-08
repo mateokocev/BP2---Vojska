@@ -19,6 +19,79 @@ select {
     width: 150px;
     border-radius: 20px;
     border: 1px solid #ccc;
+    
     align-self: auto;
 }
+
+
+
+.data
+{   
+    padding: 50px;
+    background-color: rgba(255, 228, 196, 0.762);
+    display: inline-block;
+    text-align: center;
+    width: fit-content;
+    text-align: left;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    border-radius: 4px;
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    
+}
+
+
+
+.cube
+{   
+    
+    background-color: rgba(255,255,255,0.13);
+    border-radius: 5px;
+    width: auto;
+    height: fit-content;
+    margin-left: 25%;
+    margin-right: 25%;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 10px;
+
+}
   
+
+
+.button-24 {
+    margin: 10px;
+    
+    background: #FF4742;
+    border: 1px solid #FF4742;
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: inline-block;
+    font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 16px;
+    min-height: 40px;
+    outline: 0;
+    padding: 12px 14px;
+    text-align: center;
+    text-rendering: geometricprecision;
+    text-transform: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;}
+  .button-24:hover,
+  .button-24:active {
+    background-color: initial;
+    background-position: 0 0;
+    color: #FF4742;} 
+  .button-24:active { opacity: .5;}

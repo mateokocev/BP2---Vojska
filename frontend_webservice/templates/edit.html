@@ -8,36 +8,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-
-    <h1 style="text-align:center;">Uređivanje baze</h1>
+  <div class="cube">
+    <h1 style="text-align:center; font-size: 50px; ">Uređivanje baze</h1>
     <br/>
 
-    <form style="text-align: center" margin="10px 0px">
-        <label for="menu1">Odaberi radnju</label>
-        <select id="menu1" style="margin: 5px 5px">
-          <option value="option1">Stvori novo</option>
-          <option value="option2">Izmijeni podatke</option>
-          <option value="option3">Obriši</option>
-        </select>
-        <label for="menu2">Odaberi objekt</label>
-        <select id="menu2" style="margin: 5px 5px">
-          <option value="option1">Tura</option>
-          <option value="option2">Misija</option>
-          <option value="option3">Osoblje</option>
-          <option value="option4">Osoblje na misiji</option>
-          <option value="option5">Osoblje na turi</option>
-          <option value="option6">Lokacija</option>
-          <option value="option7">Vozilo</option>
-          <option value="option8">Vozilo na misiji</option>
-          <option value="option9">Vozilo na turi</option>
-          <option value="option10">Oprema</option>
-          <option value="option11">Izdana oprema</option>
-          <option value="option12">Trening</option>
-          <option value="option13">Osoblje na treningu</option>
-          <option value="option14">Lijecenje</option>
-          <option value="option15">Popravak</option>
-        </select>
-      </form>
+    <form method="POST" style="text-align: center" margin="10px 0px">
+      <label style="color: aliceblue;" for="menu1">Odaberi radnju</label>
+      <select id="menu1" name="menu1" style="margin: 5px 5px">
+          <option value="create">Stvori novo</option>
+          <option value="update">Izmijeni podatke</option>
+          <option value="delete">Obriši</option>
+      </select>
 
+      <label style="color: aliceblue;" for="menu2">Odaberi objekt</label>
+      <select id="menu2" name="menu2" style="margin: 5px 5px">
+          {% for i in range(0, tablesLen) %}
+          <option >{{tables[i][0]}}</option>
+          {%endfor%}
+      </select>
+      <button type="submit" class="button-24" role="button">Search</button>
+  </form>
+
+
+  {% if item != "" %}
+  <form method="POST" style="text-align: center" margin="10px 0px">
+    <div class="data"> 
+      {% for i in range(0, itemLen) %}
+      <label>{{item[i][0]}}</label>
+      <input  placeholder="{{item[i][1]}}">
+   
+      {%endfor%}
+      <br>
+      <button type="submit" class="button-24" role="button">{{selection1}}</button>
+    </div>
+   
+  
+  </form>
+  {% endif %}
+  </div>
 </body>
 </html>

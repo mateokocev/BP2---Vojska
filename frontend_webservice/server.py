@@ -112,13 +112,20 @@ def kopnenaVojska():
 
 @app.route('/izmjena', methods = ['GET', 'POST'])
 def database():
-    if request.method == 'GET':
-        status = "postano"
-    else:
-        status = "nije postano"
-  
+    item= ""
+    selection1=""
+    if request.method == 'POST':
+        selection1 = request.form['menu1']
+        selection2 = request.form['menu2']
+        item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
+       
+        
+    #SHOW COLUMNS  FROM osoblje;
+    tables = BP_DataAll('show TABLES;')
    
-    return render_template('izmjena.html', status = status)
+    
+    
+    return render_template('edit.html',selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
 
 
 
