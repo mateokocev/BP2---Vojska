@@ -1629,7 +1629,13 @@ INSERT INTO misija VALUES
 -- new
  ( 3055 , "UNAMSIL" , STR_TO_DATE("6.2.2017.", "%d.%m.%Y.") , STR_TO_DATE("22.7.2033.", "%d.%m.%Y.") , 31 , 5 , null, 7138853 );
 
-INSERT INTO osoblje_na_misiji VALUES
+LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/osoblje_na_misiji.csv' INTO TABLE osoblje_na_misiji
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(id,id_osoblje,id_misija);
+
+/*INSERT INTO osoblje_na_misiji VALUES
  ( 4000 , 10631 , 3029 ),
  ( 4001 , 10709 , 3005 ),
  ( 4002 , 10588 , 3011 ),
@@ -1729,7 +1735,7 @@ INSERT INTO osoblje_na_misiji VALUES
  ( 4096 , 10362 , 3001 ),
  ( 4097 , 10632 , 3049 ),
  ( 4098 , 10070 , 3006 ),
- ( 4099 , 10757 , 3043 );
+ ( 4099 , 10757 , 3043 );*/
 
 LOAD DATA INFILE 'D:/ZABAZE/BP2---Vojska/CSV/osoblje_na_turi.csv' INTO TABLE osoblje_na_turi
 FIELDS TERMINATED BY ','
