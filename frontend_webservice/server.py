@@ -9,7 +9,7 @@ app = Flask(__name__)
                                         # <--------MAIN-------->
 
 global name
-name= "Čovječe"
+name = "Čovječe"
 
 
 # Get data
@@ -113,17 +113,29 @@ def kopnenaVojska():
 def database():
     item= ""
     selection1=""
+    MaxId=""
     if request.method == 'POST':
         selection1 = request.form['menu1']
         selection2 = request.form['menu2']
         item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
+<<<<<<< Updated upstream
   
+=======
+        MaxId = BP_DataRow('Select max(id) from '+selection2+';')
+>>>>>>> Stashed changes
        
     
     #SHOW COLUMNS  FROM osoblje;
     tables = BP_DataAll('show TABLES;')
+<<<<<<< Updated upstream
    
     return render_template('edit.html',selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
+=======
+    
+    
+    
+    return render_template('edit.html',MaxId = MaxId,selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
+>>>>>>> Stashed changes
 
 
 

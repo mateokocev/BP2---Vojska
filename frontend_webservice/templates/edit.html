@@ -34,9 +34,13 @@
   <form method="POST" style="text-align: center" margin="10px 0px">
     <div class="data"> 
       {% for i in range(0, itemLen) %}
+      {% if item[i][0] == "id" %}
+      <label>{{item[i][0]}}</label>
+      <p>{{MaxId[0]+1}}</p>
+      {%else%}
       <label>{{item[i][0]}}</label>
       <input  placeholder="{{item[i][1]}}">
-   
+      {%endif%}
       {%endfor%}
       <br>
       <button type="submit" class="button-24" role="button">{{selection1}}</button>
