@@ -19,12 +19,18 @@ def BP_DataRow(sql):
     MainKursor.execute(sql)
     return MainKursor.fetchone()
 
+def BP_Update(sql):
+    vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
+    MainKursor = vojska.cursor()
+    MainKursor.execute(sql)
+    return "Done"
+
 def BP_DataAll(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
     return MainKursor.fetchall()
-    
+
 def RandomImageGenerator():
     x = str(randrange(5))
     return "/static/img/profPictures/"+x+".png"
@@ -67,20 +73,13 @@ def login():
         else:
             osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
             
-            if osoblje[2] != "Razvodnik":
-                dozvola = None
-            
-            else :
-                dozvola = osoblje[2]
-            
-            
             VojskaText = BP_DataAll("select opis from sektor;")
             print(VojskaText)
             global randimg
             randimg = RandomImageGenerator()
             
             print(randimg)
-            return render_template('index.html', randimg = randimg , ime = name, VojskaText = VojskaText, cin = dozvola)
+            return render_template('index.html', randimg = randimg , ime = name, VojskaText = VojskaText, cin = osoblje[2])
     
     return render_template('Login.html',error = error)
 
@@ -118,13 +117,12 @@ def database():
         selection1 = request.form['menu1']
         selection2 = request.form['menu2']
         item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
+  
        
-        
+    
     #SHOW COLUMNS  FROM osoblje;
     tables = BP_DataAll('show TABLES;')
    
-    
-    
     return render_template('edit.html',selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
 
 
