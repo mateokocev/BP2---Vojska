@@ -109,35 +109,74 @@ def kopnenaVojska():
 
 
 
-@app.route('/izmjena', methods = ['GET', 'POST'])
-def database():
+@app.route('/izmjena/<radnja>', methods = ['GET', 'POST'])
+def database(radnja):
     item= ""
     selection1=""
     MaxId=""
-    if request.method == 'POST':
-        selection1 = request.form['menu1']
-        selection2 = request.form['menu2']
-        item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
-<<<<<<< Updated upstream
-  
-=======
-        MaxId = BP_DataRow('Select max(id) from '+selection2+';')
->>>>>>> Stashed changes
+    tables = BP_DataAll('show TABLES;')
+    if radnja == "novo":
+        if request.method == 'POST':
+            selection1 = request.form['menu1']
+            selection2 = request.form['menu2']
+            
+            data = []
+            for x in range(len(item)):
+                print(request.form['podatak'+str(x)])
+                #data.append(request.form['podatak'+str(x)])
+            # BP_Update("Insert into")
+            print(data)
+
+            item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
+            MaxId = BP_DataRow('Select max(id) from '+selection2+';')
+        return render_template('edit.html',MaxId = MaxId,selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
+
        
     
     #SHOW COLUMNS  FROM osoblje;
-    tables = BP_DataAll('show TABLES;')
-<<<<<<< Updated upstream
-   
-    return render_template('edit.html',selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
-=======
     
-    
-    
-    return render_template('edit.html',MaxId = MaxId,selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
->>>>>>> Stashed changes
 
+    if radnja == "izbrisi":
+        if request.method == 'POST':
+            selection1 = request.form['menu1']
+            selection2 = request.form['menu2']
+            
+            data = []
+            for x in range(len(item)):
+                print(request.form['podatak'+str(x)])
+                #data.append(request.form['podatak'+str(x)])
+            # BP_Update("Insert into")
+            print(data)
 
+            item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
+            MaxId = BP_DataRow('Select max(id) from '+selection2+';')
+        return render_template('edit.html',MaxId = MaxId,selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
+
+       
+    
+    #SHOW COLUMNS  FROM osoblje;
+    
+
+    if radnja == "izmjeni":
+        if request.method == 'POST':
+            selection1 = request.form['menu1']
+            selection2 = request.form['menu2']
+            
+            data = []
+            for x in range(len(item)):
+                print(request.form['podatak'+str(x)])
+                #data.append(request.form['podatak'+str(x)])
+            # BP_Update("Insert into")
+            print(data)
+
+            item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
+            MaxId = BP_DataRow('Select max(id) from '+selection2+';')
+        return render_template('edit.html',MaxId = MaxId,selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
+
+       
+    return "error"
+    #SHOW COLUMNS  FROM osoblje;
+    
 
 
 
