@@ -19,12 +19,36 @@ def BP_DataRow(sql):
     MainKursor.execute(sql)
     return MainKursor.fetchone()
 
+
+def BP_Function(sql):
+    vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
+    MainKursor = vojska.cursor()
+    MainKursor.execute(sql)
+    
+    return MainKursor.fetchall()
+
 def BP_Update(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
     vojska.commit()
     return "Done"
+
+def BP_Insert (array, tablica,maxId): # does not work with date
+
+    sqlTxt="INSERT INTO "+ tablica+" VALUES("+ str(maxId)+","
+    for x in array:
+        
+        if x == int:
+            sqlTxt += x
+        elif x:
+            sqlTxt += "'"+x+"',"
+
+    sqlTxt =sqlTxt[:-1] 
+    sqlTxt += ");"
+
+    print(sqlTxt)
+    print(sqlTxt+";")
 
 def BP_DataAll(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
@@ -52,6 +76,8 @@ def GetCin(cin,sektor):
 # Route for handling the login page logic
 @app.route('/', methods = ['GET', 'POST'])
 def login():
+    kurac = BP_Function("SELECT trosak() AS ukupni_trosak FROM DUAL;")
+    print(kurac[0][0])
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     krusor = vojska.cursor()
     error = ""
@@ -112,24 +138,69 @@ def kopnenaVojska():
 
 @app.route('/izmjena/insert/<tablica>', methods = ['GET', 'POST'])
 def database(tablica):
-    
+    getData = BP_DataAll("Select * from "+ tablica+" ;")
+    getRowLen = len(getData[0])
+    error=""
+    lokacija = BP_DataAll("select id, naziv from lokacija;")
+    maxid = BP_DataRow("select max(id) from "+tablica+" limit 1")  
     if request.method == 'POST':
         
-        if tablica == "osoblje":
+        
             
-            maxid = BP_DataRow("select max(id) from osoblje limit 1")            #STR_TO_DATE("12.12.1991.", "%d.%m.%Y.")
-            
-            datum1 = request.form["datum1"]
-            datum2 = request.form["datum2"]
+            if tablica == "osoblje":
+
+                maxid = BP_DataRow("select max(id) from osoblje limit 1")            #STR_TO_DATE("12.12.1991.", "%d.%m.%Y.")
+
+                datum1 = request.form["datum1"]
+                datum2 = request.form["datum2"]
+
+                datum1 = datum1.split("-")
+                datum2 = datum2.split("-")  
 
 
-            datum1 = datum1.split("-")
-            datum2 = datum2.split("-")  
-            print(request.form["menu1"])
-            
-            BP_Update("INSERT INTO osoblje VALUES ("+str(maxid[0]+1)+","+request.form["menu1"]+",'"+request.form["ime"]+"','"+request.form["prezime"]+"','"+request.form["cin"]+"', STR_TO_DATE('"+datum1[2]+"."+datum1[1]+"."+datum1[0]+"', '%d.%m.%Y.'), STR_TO_DATE('"+datum2[2]+"."+datum2[1]+"."+datum2[0]+"', '%d.%m.%Y.'),'"+request.form["status"]+"','"+request.form["krv"]+"',"+request.form["ocjena"]+");")
+                BP_Update("INSERT INTO osoblje VALUES ("+str(maxid[0]+1)+","+request.form["menu1"]+",'"+request.form["ime"]+"','"+request.form["prezime"]+"','"+request.form["cin"]+"', STR_TO_DATE('"+datum1[2]+"."+datum1[1]+"."+datum1[0]+"', '%d.%m.%Y.'), STR_TO_DATE('"+datum2[2]+"."+datum2[1]+"."+datum2[0]+"', '%d.%m.%Y.'),'"+request.form["status"]+"','"+request.form["krv"]+"',"+request.form["ocjena"]+");")
 
-    return render_template('izmjena.html')
+            if tablica == "vozila":
+
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+            
+            if tablica == "tura":
+
+                        
+
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+
+            if tablica == "trening":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+            
+            
+            if error != "":                     #dodati kasnije
+                error= "Uspjesno Dodano!"
+            try:
+                print("a")  
+            except Exception as e:
+                  error=e
+
+    return render_template('izmjena.html',tablica= tablica,lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
     
 

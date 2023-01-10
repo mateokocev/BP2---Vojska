@@ -2882,7 +2882,7 @@ BEGIN
 END//
 DELIMITER ;
 
-SELECT dostupnost_za_misiju(10360, 30) AS dostupnost_za_misiju;
+SELECT dostupnost_za_misiju(10360, 100) AS dostupnost_za_misiju;
 
 
 
@@ -3221,6 +3221,7 @@ END//
 DELIMITER ;
 
 CALL svo_osoblje_na_misiji();
+
 
 -- primjer procedure koji ovisno o performansi na zadnjem treningu povecava ocjenu ili ju smanjuje i onda preporucuje da osoblje dobije promociju ili ne
 DELIMITER //

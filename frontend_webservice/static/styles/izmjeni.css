@@ -208,9 +208,16 @@ label
    
     column-gap: 10px;
     
-    grid-template-columns: auto  auto auto auto auto auto auto auto ;
+    grid-template-columns: auto  auto auto auto auto auto auto auto auto auto ;
 }
+.gridauto
+{
+    display: grid;
+    text-align: center;
+    gap: 20px;
+    column-gap: 10px;
 
+}
 
 input{
     display: block;

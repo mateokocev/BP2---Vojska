@@ -14,15 +14,17 @@
        
         <a href="/"><img  src=""><button class="button-24"  role="button">Home</button></a> 
         <h2 style="font-size: 100px; color: wheat;">Uredi Podatke</h2>
+        
        
 
 
         <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">{{err}}</h1>
         <a href="/izmjena/insert"><button style=" margin-bottom: 10px;" class="button-24" role="button">Insert</button></a>  
         <a href="/izmjena/update"><button style=" margin-bottom: 10px;" class="button-24" role="button">Update</button></a>
-   <div class="grid8">
-     
+        
+        <p style="font-size: 20px; color: rgb(154, 2, 2);">{{error}}</p>
    
+        <div class="grid8">
     <a href="/izmjena/insert/lijecenje"><button style=" margin-bottom: 10px;" class="newButton" role="button">lijecenje</button></a>
     <a href="/izmjena/insert/misija"><button style=" margin-bottom: 10px;" class="newButton" role="button">misija</button></a>
     <a href="/izmjena/insert/oprema"><button style=" margin-bottom: 10px;" class="newButton" role="button">oprema</button></a>
@@ -31,16 +33,17 @@
     <a href="/izmjena/insert/trening"><button style=" margin-bottom: 10px;" class="newButton" role="button">trening</button></a>
     <a href="/izmjena/insert/tura"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
     <a href="/izmjena/insert/vozila"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
-
+   
         
    </div>
-    
+   <hr>
+   <h3 style="font-size: 60px; color: wheat;">{{tablica}}</h3>
     
       
        
-                
+                   
             <form method="POST" style="text-align: center" margin="10px 0px">
-               
+                {% if tablica == "osoblje" %}
                 <label>Ime</label>
                 <input id="ime" name="ime" placeholder="test">
                 <label>Prezime</label>
@@ -52,41 +55,120 @@
                     <option value="2">Hrvatska ratna mornarica  </option>
                     <option value="3">Hrvatsko ratno zrakoplovstvo </option>
                     <option value="4">Hrvatska vojna policija </option>
-                    <option value="5">Hrvatska vojna policija </option>
-
-
-
-
-
                 </select>
 
                 <label>Cin</label>
                 <input id="" name="cin" placeholder="test">
+
                 <label>Datum Rođenja</label>
                 <input type="date" name="datum1" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+
                 <label>Datum Učlanjenja</label>
                 <input type="date" name="datum2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+
                 <label>Status Osoblja</label>
                 <input id="" name="status" placeholder="test">
+
                 <label>Krvna Grupa</label>
                 <input id="" name="krv" placeholder="test">
+
                 <label>Ocjena</label>
                 <input id="" name="ocjena" placeholder="test">
-                
 
+                
+                {% endif %}
+
+
+                {% if tablica == "vozila" %}
+                <label>Naziv</label>
+                <input id="" name="podatak1" placeholder="test">
+                <label>Vrsta</label>
+                <input id="" name="podatak2" placeholder="test">
+                <label>Ukupna Količina</label>
+                <input id="" name="podatak3" placeholder="test">
+                <label>Kapacitet</label>
+                <input id="" name="podatak4" placeholder="test">
+                {% endif %}
+
+
+                {% if tablica == "tura" %}
+                <h1>ID</h1>
+                <h1>{{maxid[0]+1}}</h1>
+                <label>Naziv</label>
+                <input id="" name="podatak1" placeholder="test">
+
+                <label>Vrsta Ture</label>
+                <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                    <option value="Mirovna tura">Mirovna tura</option>
+                    <option value="Vojna tura">Vojna tura</option>
+                </select>
+
+                <label>Vrijeme početka</label>
+                <input type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+
+                <label>Vrijeme Kraja</label>
+                <input type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                
+                {% endif %}
+
+
+                {% if tablica == "trening" %}
+                <h1>ID</h1>
+                <h1>{{maxid[0]+1}}</h1>
+
+                <label>Vrijeme Pocetka</label>
+                <input id="" name="podatak1" placeholder="test">
+
+                <label>Vrijeme kraja</label>
+                <input id="appt-time" type="time" name="podatak2" step="2" />
+               
+                <label>Lokacija</label>
+              
+                <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                    {% for x in range(0, lokacijaLen) %}
+
+                    <option value="{{lokacija[x][0]}}">{{lokacija[x][1]}}</option>
+
+                    {%endfor%}
+                </select>
+                <label>Opis</label>
+                <input  id="" type="text" name="podatak3" placeholder="test">
+
+                
+                {% endif %}
                   <br>
-                <button type="submit" style=" margin-bottom: 10px;" class="newButton" role="button">Insert</button> 
+                <button type="submit"  style=" margin-bottom: 10px;" class="newButton" role="button">Insert</button> 
               </form>
+
             
 
        
-        <hr>
+        <hr>    
+              <h1>Podatci</h1>
+              <hr>
+              <div style="grid-template-columns: {{ getRowLen * 'auto '}} ;" class="gridauto">
+                {% for i in range(0, getDatalen) %}
+
+                    {% for x in range(0, 10) %}
+
+                        {% if getData[i][x] or getData[i][x] == None or getData[i][x] == "" %}
+                        
+                        <p>{{getData[i][x]}}</p>
+                       
+                        {% endif %}
+                       
+                    {%endfor%}
+                    
+                {%endfor%}
+                
+              </div>
       
 
 
 
 
         <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button">Home</button></a> 
+        <a href="/izmjena/insert/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button">Refresh / Top</button></a> 
       
         
 
@@ -96,5 +178,6 @@
 </div>
 </body>
 </html>
+
 
 
