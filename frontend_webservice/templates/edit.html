@@ -11,8 +11,9 @@
   <div class="cube">
     <h1 style="text-align:center; font-size: 50px; ">Uređivanje baze</h1>
     <br/>
-
+    
     <form method="POST" style="text-align: center" margin="10px 0px">
+      
       <label style="color: aliceblue;" for="menu1">Odaberi radnju</label>
       <select id="menu1" name="menu1" style="margin: 5px 5px">
           <option value="create">Stvori novo</option>
@@ -26,7 +27,9 @@
           <option >{{tables[i][0]}}</option>
           {%endfor%}
       </select>
-      <button type="submit" class="button-24" role="button">Search</button>
+    
+      <input type="submit" name="btn" value="Search" class="button-24" role="button">
+      
   </form>
 
 
@@ -39,14 +42,14 @@
       <p>{{MaxId[0]+1}}</p>
       {%else%}
       <label>{{item[i][0]}}</label>
-      <input id="podatak{{i}}" name="" placeholder="{{item[i][1]}}">
+      <input id="podatak{{i}}" name="podatak{{i}}" placeholder="{{item[i][1]}}">
       {%endif%}
       {%endfor%}
       <br>
-      <button type="submit" class="button-24" role="button">{{selection1}}</button>
+      <input class="button-24" type="submit" name="btn" value="{{selection1}}">
+
     </div>
-   
-  
+
   </form>
   {% endif %}
   </div>

@@ -2,8 +2,11 @@
 
 body
 {
-    background-color: rgb(74, 70, 70);
-    background-image: url(../img/edit_bg.jpg);
+   
+    background-image: url(../img/login_back.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+     background-size:     cover; 
 }
 
 form select {

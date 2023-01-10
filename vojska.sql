@@ -1,7 +1,7 @@
 DROP DATABASE IF EXISTS vojska;
 CREATE DATABASE vojska;
 USE vojska;
-s
+
 
 CREATE TABLE sektor(
     id INTEGER PRIMARY KEY,
@@ -17,10 +17,11 @@ CREATE TABLE sektor(
 
 CREATE TABLE lokacija(
     id INTEGER PRIMARY KEY,
-    id_sektor INTEGER NOT NULL,
+    id_sektor INTEGER,
     naziv VARCHAR(60) NOT NULL,
     zemljopisna_duzina DECIMAL(10, 7) NOT NULL,
     zemljopisna_sirina DECIMAL(10, 7) NOT NULL,
+    UNIQUE(zemljopisna_duzina, zemljopisna_sirina),
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 -- DROP TABLE lokacija;
@@ -40,7 +41,7 @@ CREATE TABLE osoblje(
     ocjena INTEGER NOT NULL,
     FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
- -- DROP TABLE osoblje;
+-- DROP TABLE osoblje;
 
 
 
@@ -64,9 +65,9 @@ CREATE TABLE misija(
     id_tura INTEGER NOT NULL,
     ishod TEXT,   -- vratit NOT NULL
     trosak_misije NUMERIC(15, 2) NOT NULL,
-    CHECK(trosak_misije >= 1),
+    CHECK(trosak_misije >= 0),
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
-    FOREIGN KEY (id_tura) REFERENCES tura(id)
+    FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE
 );
 -- DROP TABLE misija;
 
@@ -75,8 +76,8 @@ CREATE TABLE osoblje_na_misiji(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER NOT NULL,
     id_misija INTEGER NOT NULL,
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-    FOREIGN KEY (id_misija) REFERENCES misija(id)
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_misija) REFERENCES misija(id) ON DELETE CASCADE
 );
 -- DROP TABLE osoblje_na_misiji;
 
@@ -88,8 +89,8 @@ CREATE TABLE osoblje_na_turi(
     id_tura INTEGER NOT NULL,
     datum_pocetka DATETIME NOT NULL,
     datum_kraja DATETIME,
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-    FOREIGN KEY (id_tura) REFERENCES tura(id)
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE
 );
 -- DROP TABLE osoblje_na_turi;
 
@@ -101,7 +102,7 @@ CREATE TABLE vozila(
     vrsta VARCHAR(50) NOT NULL,
     ukupna_kolicina INTEGER NOT NULL,
     kapacitet INTEGER NOT NULL,
-    CHECK(ukupna_kolicina >= 1 AND kapacitet >= 1)
+    CHECK(ukupna_kolicina > 0 AND kapacitet > 0)
 
 );
 -- DROP TABLE vozila;
@@ -113,9 +114,9 @@ CREATE TABLE vozilo_na_misiji(
     id_vozilo INTEGER NOT NULL,
     kolicina INTEGER NOT NULL,
     id_misija INTEGER NOT NULL,
-    CHECK(kolicina >= 1),
-    FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
-    FOREIGN KEY (id_misija) REFERENCES misija(id)
+    CHECK(kolicina > 0),
+    FOREIGN KEY (id_vozilo) REFERENCES vozila(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_misija) REFERENCES misija(id) ON DELETE CASCADE
 );
 -- DROP TABLE vozilo_na_misiji;
 
@@ -127,8 +128,9 @@ CREATE TABLE vozilo_na_turi(
     id_tura INTEGER,
     id_odgovorni INTEGER NOT NULL,
     kolicina INTEGER,
-    FOREIGN KEY (id_vozilo) REFERENCES vozila(id),
-    FOREIGN KEY (id_tura) REFERENCES tura(id),
+    CHECK(kolicina > 0),
+    FOREIGN KEY (id_vozilo) REFERENCES vozila(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE,
     FOREIGN KEY (id_odgovorni) REFERENCES osoblje_na_turi(id)
 );
 -- DROP TABLE vozilo_na_turi;
@@ -143,7 +145,7 @@ CREATE TABLE popravak(
     kraj_popravka DATETIME,
     trosak_popravka NUMERIC(15,2) NOT NULL,
     CHECK(trosak_popravka >= 0),
-    FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id)
+    FOREIGN KEY (id_vozilo_na_misiji) REFERENCES vozilo_na_misiji(id) ON DELETE CASCADE
 );
 -- DROP TABLE popravak;
 
@@ -154,7 +156,7 @@ CREATE TABLE oprema(
     naziv VARCHAR(50) NOT NULL,
     vrsta VARCHAR(50) NOT NULL,
     ukupna_kolicina INTEGER NOT NULL,
-    CHECK(ukupna_kolicina >= 1)
+    CHECK(ukupna_kolicina > 0)
 );
 -- DROP TABLE oprema;
 
@@ -164,8 +166,9 @@ CREATE TABLE izdana_oprema(
     id INTEGER PRIMARY KEY,
     id_oprema INTEGER NOT NULL,
     id_osoblje_na_misiji INTEGER NOT NULL,
-    izdana_kolicina INTEGER DEFAULT 1,
-    FOREIGN KEY (id_oprema) REFERENCES oprema(id),
+    izdana_kolicina INTEGER DEFAULT 1,          -- stavit konkretne vrijednost. ne default!!!
+    CHECK(izdana_kolicina > 0),
+    FOREIGN KEY (id_oprema) REFERENCES oprema(id) ON DELETE CASCADE,
     FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
 );
 -- DROP TABLE izdana_oprema;
@@ -188,8 +191,8 @@ CREATE TABLE osoblje_na_treningu(
 	id_trening INTEGER NOT NULL,
 	performans INTEGER NOT NULL,
 	CHECK(performans >= 0 AND performans < 11),
-        FOREIGN KEY (id_osoblje) REFERENCES osoblje(id),
-        FOREIGN KEY (id_trening) REFERENCES trening(id)
+	FOREIGN KEY (id_osoblje) REFERENCES osoblje(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_trening) REFERENCES trening(id) ON DELETE CASCADE
 );
 -- DROP TABLE osoblje_na_treningu;
 
@@ -203,43 +206,144 @@ CREATE TABLE lijecenje(
     opis_ozljede TEXT NOT NULL,
     trosak_lijecenja NUMERIC(15,2),
     CHECK(trosak_lijecenja >= 0),
-    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id)
+    FOREIGN KEY (id_osoblje) REFERENCES osoblje(id) ON DELETE CASCADE
 );
 -- DROP TABLE lijecenje;
 
 
 
+-- OKIDAČI:
+	
+ -- DK   
+    /*
+Datum početka ture ne može biti veći ili jednak od datuma kraja ture.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je tura još uvijek u tijeku. Riječ je o UPDATE-u.                                                              */
 
-
-
-
-
--- OKIDACI
-
--- tekst zadataka ce bit jos restrukturiran, ovo je okvirno
-
--- struktura je ova:
-/*
-DROP TRIGGER IF EXISTS ime_okidaca;
+DROP TRIGGER IF EXISTS u_tura_vrijeme;
 
 DELIMITER //
-CREATE TRIGGER ime_okidaca
-	BEFORE INSERT ON naziv_tablice
+CREATE TRIGGER u_tura_vrijeme
+    BEFORE UPDATE ON tura
     FOR EACH ROW
 BEGIN
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND new.vrijeme_kraja != NULL THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja misije';
+    END IF;
+END//
+DELIMITER ;
+
+		
+                                                                                                                                  /*
+Datum početka misije ne može biti veći ili jednak od datuma kraja misije.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je misija još uvijek u tijeku. Riječ je o UPDATE-u.                                                             */
+
+DROP TRIGGER IF EXISTS u_mis_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER u_mis_vrijeme
+    BEFORE UPDATE ON misija
+    FOR EACH ROW
+BEGIN
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND new.vrijeme_kraja != NULL THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja misije';
+    END IF;
+END//
+DELIMITER ;
 
 
 
+																																	  /*
+Datum početka sudjelovanja osoblja na turi ne može biti veći ili jednak od datuma kraja sudjelovanja.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da osoba još uvijek sudjeluje u turi. Riječ je o UPDATE-u.                                                              */
+
+DROP TRIGGER IF EXISTS u_ont_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER u_ont_vrijeme
+    BEFORE UPDATE ON osoblje_na_turi
+    FOR EACH ROW
+BEGIN
+	IF new.datum_pocetka >= new.datum_kraja AND new.datum_kraja != NULL THEN
+		SIGNAL SQLSTATE '40000'
+                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja sudjelovanja osoblja na turi!';
+        END IF;
+END//
+DELIMITER ;
+
+
+
+																																	/*
+Datum početka popravka ne može biti veći ili jednak od datuma kraja popravka.
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
+U slučaju da je kraj NULL to znači da je popravak još uvijek u tijeku. Riječ je o INSERT-u.                                                            */
+
+DROP TRIGGER IF EXISTS i_po_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER i_po_vrijeme
+    BEFORE INSERT ON popravak
+    FOR EACH ROW
+BEGIN
+	IF new.pocetak_popravka >= new.kraj_popravka AND new.kraj_popravka != NULL THEN
+		SIGNAL SQLSTATE '40000'
+                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
+        END IF;
+END//
+DELIMITER ;
+
+
+
+																																 /*
+Datum početka treninga ne može biti veći ili jednak od datuma kraja treninga te trening bi najmanje trebao trajat 20 min.
+Riječ o INSERT-u.                                                                                                                */
+/*
+DROP TRIGGER IF EXISTS i_tr_vrijeme;
+
+DELIMITER //
+CREATE TRIGGER i_tr_vrijeme
+    BEFORE INSERT ON trening
+    FOR EACH ROW
+BEGIN
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
+	SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
+    END IF;
 END//
 DELIMITER ;
 */
 
 
+                                                                                                                                    /*
+Datum početka lijecenja ne može biti veći ili jednak od datuma kraja liječenja kada je riječ o INSERT-u. 
+Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.
+U slučaju je datum kraja liječenja NULL to znači da je liječenje još uvijek u tijeku.                                                */
 
--- DK
--- imamo: id 3, 4 pistolja te kosirnik bespotrebno dodaje id 5 s 3 pistolja. Stvaramo okidac koji ce tih 3 zbrojit s 5 zato jer
--- korisnik nije ispravno postupio. Tezimo tome da baza bude optimalna te da optimalno radi
-/*
+DROP TRIGGER IF EXISTS i_li_vrijeme;                                                                                                      
+
+DELIMITER //
+CREATE TRIGGER li_vrijeme
+    BEFORE INSERT ON lijecenje
+    FOR EACH ROW
+BEGIN
+    IF new.pocetak_lijecenja >= new.kraj_lijecenja AND new.kraj_lijecenja != NULL THEN
+	 SIGNAL SQLSTATE '40000'
+         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
+    END IF;
+END//
+DELIMITER ;
+
+
+
+																																	/*
+Napraviti okidač koji će u slučaju da korisnik unese opremu koja je već unešena zbrojit količinu opreme.
+Npr u skladištu već postoji (1330, "RBG-6", "Bacač granata", 124) te korisnik unosi (1370, "RBG-6", "Bacač granata", 6).
+To je "nepotrebno" te stoga okidač pridodaje dodatnu količinu onoj već postojećoj tj (1330, "RBG-6", "Bacač granata", 130).         */
+
 DROP TRIGGER IF EXISTS postoji;
 
 DELIMITER //
@@ -253,35 +357,40 @@ BEGIN
     FROM oprema
     WHERE naziv = new.naziv;
 
-
     IF br > 1 THEN
         UPDATE oprema SET ukupna_kolicina = ukupna_kolicina + new.ukupna_kolicina WHERE naziv = new.naziv;
+        DELETE FROM oprema WHERE id = new.id;
     END IF;
-
-    DELETE FROM oprema WHERE id = new.id;
 END//
 DELIMITER ;
 
 
 
+																																	/*
+Prati se da zbroj količine željene izdane opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a.
+Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno. 																			*/
 
--- DK
--- Prati se da zbroj izdane kolicine zeljene opreme ne bude veci od sveukupne moguce kolicine opreme tijekom insert-a
-
-DROP TRIGGER IF EXISTS kop;
+DROP TRIGGER IF EXISTS i_kol_op;
 
 DELIMITER //
-CREATE TRIGGER kop
+CREATE TRIGGER i_kol_op
     BEFORE INSERT ON izdana_oprema
     FOR EACH ROW
 BEGIN
+	DECLARE id_zadane_misije INTEGER;
     DECLARE br INTEGER;
     DECLARE uk INTEGER;
-
+    
+    SELECT id_misija INTO id_zadane_misije
+    FROM osoblje_na_misiji
+    WHERE osoblje_na_misiji.id = new.id_osoblje_na_misiji;
+    
     SELECT SUM(izdana_kolicina) INTO br
     FROM izdana_oprema
-    WHERE id_oprema = new.id_oprema;
-
+    INNER JOIN osoblje_na_misiji
+    ON izdana_oprema.id_osoblje_na_misiji = osoblje_na_misiji.id
+    WHERE id_oprema = new.id_oprema AND id_misija = id_zadane_misije;
+    
     SELECT ukupna_kolicina INTO uk
     FROM oprema
     WHERE id = new.id_oprema;
@@ -295,26 +404,30 @@ DELIMITER ;
 
 
 
+																																	/*
+Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a
+Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno.																*/
 
-
-
--- DK
--- Prati se da zbroj izdane kolicine ne bude veci od sveukupne moguce kolicine opreme tijekom update-a
-
-DROP TRIGGER IF EXISTS ukop;
+DROP TRIGGER IF EXISTS u_kol_op;
 
 DELIMITER //
-CREATE TRIGGER ukop
+CREATE TRIGGER u_kol_op
     BEFORE UPDATE ON izdana_oprema
     FOR EACH ROW
 BEGIN
+	DECLARE id_zadane_misije INTEGER;
     DECLARE br INTEGER;
     DECLARE uk INTEGER;
 
+    SELECT id_misija INTO id_zadane_misije
+    FROM osoblje_na_misiji
+    WHERE osoblje_na_misiji.id = new.id_osoblje_na_misiji;
+    
     SELECT SUM(izdana_kolicina) INTO br
     FROM izdana_oprema
-    WHERE id_oprema = new.id_oprema;
-
+    INNER JOIN osoblje_na_misiji
+    ON izdana_oprema.id_osoblje_na_misiji = osoblje_na_misiji.id
+    WHERE id_oprema = new.id_oprema AND id_misija = id_zadane_misije;
 
     SELECT ukupna_kolicina INTO uk
     FROM oprema
@@ -328,117 +441,127 @@ END//
 DELIMITER ;
 
 
+-- MK
 
-
-
--- DK
--- Datetime pocetka popravka ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
--- Ak je kraj NULL to znaci da je popravak jos uvijek u tijeku
-
-DROP TRIGGER IF EXISTS vr_po;
-
+-- Ovaj trigger provjerava ako vojnik nije na aktivnoj turi, te ako nije, postavlja njegov status na "Neaktivan"
 DELIMITER //
-CREATE TRIGGER vr_po
-    BEFORE INSERT ON popravak
-    FOR EACH ROW
+CREATE TRIGGER updtstatus_post_tura AFTER UPDATE ON tura
+FOR EACH ROW
 BEGIN
-	IF DATE(new.pocetak_popravka) >= DATE(new.kraj_popravka) AND new.kraj_popravka != NULL THEN
-		SIGNAL SQLSTATE '40000'
-                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
-        END IF;
+	IF tura.datum_kraja != NULL THEN
+		UPDATE osoblje
+			SET status_osoblja = "Neaktivan" WHERE id IN (SELECT id_osoblje FROM osoblje_na_turi WHERE id_tura = tura.id AND datum_kraja IS NULL);
+	END IF;
 END//
 DELIMITER ;
 
 
-
-
-
-
--- DK
--- Vrijeme pocetka ne smije biti isto ili manje kao vrijeme kraja te trening bi najmanje trebao trajat 20 min(jos vidjet s Stevanom)
-DROP TRIGGER IF EXISTS vr_tr;
-
+-- Ovaj trigger postavlja datum_kraja osoblja na turi na isti datum kraja ko i tura koja je završila samo ako to osoblje na turi ima datum_kraja NULL tj. nije se povuklo prije kraja ture i ostalo je tijekom cijele ture
 DELIMITER //
-CREATE TRIGGER vr_tr
-    BEFORE INSERT ON trening
-    FOR EACH ROW
+CREATE TRIGGER updtkraj_post_tura AFTER UPDATE ON tura
+FOR EACH ROW
 BEGIN
-    IF DATE(new.vrijeme_pocetka) >= DATE(new.vrijeme_kraja) OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
-	SIGNAL SQLSTATE '40000'
-        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
-    END IF;
+	IF tura.datum_kraja != NULL THEN
+		UPDATE osoblje_na_turi 
+			SET datum_kraja = tura.datum_kraja 
+				WHERE id_tura = tura.id AND datum_kraja IS NULL;
+	END IF;
 END//
 DELIMITER ;
 
-
-
-
-
--- DK
--- Datetime pocetka lijecenja ne moze biti veci od datetime kraja. Idemo ih usporedivat samo uz uvjet da kraj nije NULL.
--- Ak je kraj NULL to znaci da je lijecenje jos uvijek u tijeku
-DROP TRIGGER IF EXISTS vrli;
-
+/*
+-- kada vojnik ide na misiju poslužuje se tom osoblju na misiji osnovnu opremu, imamo funkciju koja provjerava dostupne id-eve te ih vraca u trigger kako bi mogli izvesti uspjesan insert. Također ima 
 DELIMITER //
-CREATE TRIGGER vrli
-    BEFORE INSERT ON lijecenje
-    FOR EACH ROW
-BEGIN
-    IF DATE(new.pocetak_lijecenja) >= DATE(new.kraj_lijecenja) AND new.kraj_lijecenja != NULL THEN
-	 SIGNAL SQLSTATE '40000'
-         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
-    END IF;
-END//
-DELIMITER ;
-
-
--- Funkcija vraca ukupni trosak
-
-DELIMITER //
-CREATE FUNCTION trosak() RETURNS DECIMAL(12,2)
+CREATE FUNCTION dostupni_id_izdana_oprema() RETURNS INTEGER
 DETERMINISTIC
 BEGIN
-    DECLARE ukupno_misija, ukupni_popravak, ukupno_lijecenje DECIMAL(8,2);
-
-    SELECT SUM(trosak_misije) INTO ukupno_misija
-    FROM misija;
-
-    SELECT SUM(trosak_popravka) INTO ukupni_popravak
-    FROM popravak;
-
-    SELECT SUM(trosak_lijecenja) INTO ukupno_lijecenje
-    FROM lijecenje;
-
-    RETURN ukupno_misija + ukupni_popravak + ukupno_lijecenje;
+    DECLARE id_dostupnost INTEGER DEFAULT 5000;
+    DECLARE dostupan_id INTEGER;
+    
+    WHILE dostupan_id != NULL DO
+        SET id_dostupnost = id_dostupnost + 1;
+        
+        SELECT id INTO dostupan_id
+            FROM izdana_oprema
+            WHERE id = id_dostupnost;
+    END WHILE;
+    
+    RETURN id_dostupnost;
 END//
 DELIMITER ;
-
-SELECT trosak() AS ukupni_trosak FROM DUAL;
-
-
-
--- Funkcija racuna koliko je novca ostalo "viska" iz proracuna:
 
 DELIMITER //
-CREATE FUNCTION visak() RETURNS DECIMAL(12,2)
-DETERMINISTIC
+CREATE TRIGGER minoprema_pre_misija AFTER INSERT ON osoblje_na_misiji
+FOR EACH ROW
 BEGIN
-    DECLARE proracun_svih_sektora DECIMAL(12,2);
-
-    SELECT SUM(ukupni_proracun) INTO proracun_svih_sektora
-    FROM sektor;
-
-    RETURN proracun_svih_sektora - trosak();
+    DECLARE rand_samokres INTEGER;
+	SELECT FLOOR(1001 + RAND() * (1003-1001)) INTO rand_samokres;
+    
+    -- garantira jedan od dva dostupna samokresa
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), rand_samokres, NEW.id, 1);
+    -- garantira kacigu
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), 1358, NEW.id, 1);
+    -- garantira pancirku
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), 1359, NEW.id, 1);
+    -- garantira uniformu
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), 1360, NEW.id, 1);
+    -- garantira čizme
+	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
+    VALUES(dostupni_id_izdana_oprema(), 1363, NEW.id, 1);
 END//
 DELIMITER ;
-
-SELECT visak() AS visak FROM DUAL;
-
-
 */
+
+-- promjena odgovornog za vozilo u slučaju ranog povlačenja iz ture. Uzme rezultat za novog odgovornog i spremi ga u @zamjena te ako nije null updatea id_odgovorni.
+DELIMITER //
+CREATE TRIGGER promjena_odgovornog AFTER UPDATE ON osoblje_na_turi
+FOR EACH ROW
+BEGIN
+	IF NEW.datum_kraja != NULL AND OLD.datum_kraja = NULL THEN
+		SELECT id INTO @zamjena
+			FROM osoblje_na_turi
+				WHERE datum_kraja IS NULL AND id_tura = OLD.id_tura
+                LIMIT 1;
+
+		IF @zamjena != NULL THEN
+			UPDATE vozilo_na_turi
+				SET id_odgovorni = @zamjena
+					WHERE id_odgovorni = OLD.id;
+		ELSE
+		  SIGNAL SQLSTATE '40000' 
+			SET MESSAGE_TEXT = 'Nije pronađena zamjena, moguće da je došlo do greške ili je tura gotova';
+		END IF;
+	END IF;
+END//
+DELIMITER ;
+
+/*
+-- Provjerava je li osoblje koje se salje na misiju uopce dostupno s time da broji koliko ima aktivnih misija tj. koliko misija kojima je datum kraja na NULL
+DELIMITER //
+CREATE TRIGGER dostupnost_osoblja BEFORE INSERT ON osoblje_na_misiji
+FOR EACH ROW
+BEGIN
+	
+	SELECT COUNT(id) INTO @dostupan
+        FROM osoblje_na_misiji AS onm
+        INNER JOIN osoblje AS o ON onm.id_osoblje = o.id
+        INNER JOIN osoblje_na_turi AS ont ON o.id = ont.id_osoblje
+			WHERE onm.id_osoblje = NEW.id_osoblje AND ont.id_osoblje = NEW.id_osoblje AND onm.datum_kraja = NULL;
+	IF @dostupan > 0 THEN
+		SIGNAL SQLSTATE '40000'
+			SET MESSAGE_TEXT = 'Osoblje nije dostupno za novu misiju';
+	END IF;
+END//
+DELIMITER ;
+*/
+
+
+
 -- BACKEND:
-
-
 CREATE TABLE login(
     id INTEGER primary KEY,  -- autoincrement
 	ime varchar(100),
@@ -460,8 +583,6 @@ DELIMITER ;
 
 
 
-
-
 INSERT INTO sektor VALUES
 (1, "Hrvatska kopnena vojska", STR_TO_DATE("28.05.1991.", "%d.%m.%Y."), "Najbrojnija je grana Oružanih snaga Republike Hrvatske, čija je uloga i namjena promicanje i zaštita vitalnih nacionalnih interesa Republike Hrvatske, obrana suvereniteta i teritorijalne cjelovitosti države. Temeljna zadaća je spriječiti prodor agresora u dubinu teritorija, sačuvati vitalne strategijske objekte, osigurati mobilizaciju ratnog sastava i pobijediti agresora. Nositeljica je i organizatorica kopnene obrane Republike Hrvatske.", 4324000000.00),
 (2, "Hrvatska ratna mornarica", STR_TO_DATE("12.09.1991.", "%d.%m.%Y."), "Uloga i namjena HRM-e  je štititi integritet i suverenitet Republike Hrvatske na moru i s mora. Nositeljica je i organizatorica pomorske obrane Republike Hrvatske", 2876000000.00),
@@ -471,32 +592,33 @@ INSERT INTO sektor VALUES
 
 
 INSERT INTO lokacija VALUES
-(16,3,"Jaipur",26.922070,75.778885),
-(17,1,"Islamabad",33.738045,73.084488),
-(18,2,"Kabul",34.543896,69.160652),
-(19,1,"Herat",34.343044,62.199074),
-(20,1,"Kholm",51.14312320,23.47119860),
-(21,4,"Charikar",35.013058,69.168892),
-(22,3,"Solun",40.64361,22.93086),
-(23,1,"Patras",38.246639,21.734573),
-(24,2,"Kijev",50.450001,30.523333),
-(25,1,"Nikolajev",46.96591,31.9974),
-(26,3,"Pretorija",-25.731340,28.218370),
-(27,2,"Kaapstad",-33.918861,18.423300),
-(28,4,"Taipei",25.105497,121.597366),
-(29,4,"Kaohsiung",22.633333,120.266670),
-(30,1,"Ulsan",35.549999,129.316666),
-(31,2,"Busan",35.166668,129.066666),
-(32,2,"Sarajevo",43.856430,18.413029),
-(33,4,"Bihac",44.811962,15.868565),
-(34,3,"Caracas",10.500000,-66.916664),
-(35,2,"Maracaibo",10.653860,-71.645966),
-(36,1,"Stavanger",58.969975,5.733107),
-(37,4,"Narvik",68.438499,17.427261),
-(38,4,"Bern",46.947456,7.451123),
-(39,1,"Chur",46.8499,9.5329),
-(40,3,"Ohio",40.367474,-82.996216),
-(41,2,"Columbus",39.983334,-82.983330);
+(16,null,"Jaipur",26.922070,75.778885),
+(17,null,"Islamabad",33.738045,73.084488),
+(18,null,"Kabul",34.543896,69.160652),
+(19,null,"Herat",34.343044,62.199074),
+(20,null,"Kholm",51.14312320,23.47119860),
+(21,null,"Charikar",35.013058,69.168892),
+(22,null,"Solun",40.64361,22.93086),
+(23,null,"Patras",38.246639,21.734573),
+(24,null,"Kijev",50.450001,30.523333),
+(25,null,"Nikolajev",46.96591,31.9974),
+(26,null,"Pretorija",-25.731340,28.218370),
+(27,null,"Kaapstad",-33.918861,18.423300),
+(28,null,"Taipei",25.105497,121.597366),
+(29,null,"Kaohsiung",22.633333,120.266670),
+(30,null,"Ulsan",35.549999,129.316666),
+(31,null,"Busan",35.166668,129.066666),
+(32,null,"Sarajevo",43.856430,18.413029),
+(33,null,"Bihac",44.811962,15.868565),
+(34,null,"Caracas",10.500000,-66.916664),
+(35,null,"Maracaibo",10.653860,-71.645966),
+(36,null,"Stavanger",58.969975,5.733107),
+(37,null,"Narvik",68.438499,17.427261),
+(38,null,"Bern",46.947456,7.451123),
+(39,null,"Chur",46.8499,9.5329),
+(40,null,"Ohio",40.367474,-82.996216),
+(41,null,"Columbus",39.983334,-82.983330);
+
 
 
 INSERT INTO osoblje VALUES
@@ -1520,86 +1642,62 @@ INSERT INTO tura VALUES
 (14, "SAD tura", "Mirovna tura", STR_TO_DATE("01.12.2012","%d.%m.%Y."), STR_TO_DATE("28.09.2013","%d.%m.%Y."));
 
 
-   --  id INTEGER PRIMARY KEY,
-    -- naziv VARCHAR(50) NOT NULL,
-    -- vrijeme_pocetka DATETIME NOT NULL,
-    -- vrijeme_kraja DATETIME,
-    -- id_lokacija INTEGER NOT NULL,
-    -- id_tura INTEGER NOT NULL,
-    -- ishod TEXT,   -- vratit NOT NULL
-    -- trosak_misije NUMERIC(15, 2) NOT NULL
-  
+
 INSERT INTO misija VALUES
- ( 3001 , "UNAVEM III" , STR_TO_DATE("7.12.1996.", "%d.%m.%Y.") , STR_TO_DATE("24.6.2003.", "%d.%m.%Y.") , 29 , 10 ,"Verifikacijska misija Ujedinjenih naroda Angola III bila je mirovna misija koja je počela djelovati u Angoli u veljači 1995. tijekom građanskog rata. Ustanovilo ga je Vijeće sigurnosti Ujedinjenih naroda Rezolucijom 976, a svoju misiju je završilo u lipnju 1997. ", 5507101 ),
- ( 3002 , "UNAVEM II" , STR_TO_DATE("18.11.1995.", "%d.%m.%Y.") , STR_TO_DATE("20.2.2022.", "%d.%m.%Y.") , 20 , 10 ," Verifikacijska misija Ujedinjenih naroda u Angoli II, uspostavljena u svibnju 1991. i trajala do veljače 1995., bila je druga mirovna misija Ujedinjenih naroda, od ukupno četiri, raspoređene u Angoli tijekom Angolskog građanskog rata, najdužeg rata u modernoj afričkoj povijesti. ", 6541048 ),
- ( 3003 , "UNTAET" , STR_TO_DATE("17.3.1997.", "%d.%m.%Y.") , STR_TO_DATE("6.5.1992.", "%d.%m.%Y.") , 36 , 7 , "Prijelazna uprava Ujedinjenih naroda u Istočnom Timoru, bila je misija Ujedinjenih naroda u Istočnom Timoru koja je imala za cilj riješiti desetljećima dugu istočnotimorsku krizu na području koje je okupirala indonezijska vojska.", 3855871 ),
- ( 3004 , "UNMISET" , STR_TO_DATE("23.5.2016.", "%d.%m.%Y.") , STR_TO_DATE("3.9.1999.", "%d.%m.%Y.") , 19 , 12 ," Misija potpore Ujedinjenih naroda Istočnom Timoru trajala je od 20. svibnja 2002. do 20. svibnja 2005., kada ju je zamijenio Ured Ujedinjenih naroda u Istočnom Timoru. Osnovan je kada je Istočni Timor postao međunarodno priznata neovisna država i kada je Prijelazna uprava Ujedinjenih naroda u Istočnom Timoru završila.", 1680718 ),
- ( 3005 , "UNMIT" , STR_TO_DATE("14.7.2005.", "%d.%m.%Y.") , STR_TO_DATE("11.3.2001.", "%d.%m.%Y.") , 38 , 1 ,"Integrirana misija Ujedinjenih naroda u Istočnom Timoru osnovana je 25. kolovoza 2006. Rezolucijom Vijeća sigurnosti UN-a 1704. ", 6079519 ),
- ( 3006 , "UNCRO" , STR_TO_DATE("1.2.2001.", "%d.%m.%Y.") , STR_TO_DATE("17.3.1992.", "%d.%m.%Y.") , 27 , 13 ,"UNCRO ili Operacija Ujedinjenih naroda za obnovu povjerenja u Hrvatskoj naziv je za mirovnu operaciju Ujedinjenih naroda u Hrvatskoj. Mirovna operacija oformljena je Rezolucijom Vijeća sigurnosti UN-a broj 981 od 31. ožujka 1995., kao slijednica UNPROFOR-a. ", 3381107 ),
- ( 3007 , "UNFICYP" , STR_TO_DATE("13.9.2017.", "%d.%m.%Y.") , STR_TO_DATE("11.12.2018.", "%d.%m.%Y.") , 22 , 13 ,"Mirovne snage Ujedinjenih naroda na Cipru (UNFICYP) mirovne su snage Ujedinjenih naroda koje su osnovane Rezolucijom 186 Vijeća sigurnosti Ujedinjenih naroda 1964. kako bi spriječile ponovne borbe nakon nasilja među zajednicama između ciparskih Grka i ciparskih Turaka, kako bi pridonijele održavanju i ponovnu uspostavu zakona i reda i olakšati povratak u normalne uvjete." , 5970893 ),
- ( 3008 , "MONUA" , STR_TO_DATE("27.10.2004.", "%d.%m.%Y.") , STR_TO_DATE("24.8.2030.", "%d.%m.%Y.") , 28 , 7 ,"Promatračka misija Ujedinjenih naroda u Angoli osnovana je Rezolucijom Vijeća sigurnosti Ujedinjenih naroda 1118 od 30. lipnja 1997. Zbog kolapsa mirovnog procesa u Angoli, glavni tajnik UN-a preporučio je Vijeću sigurnosti UN-a da se mandat MONUA-e ne obnavlja." , 6807180 ),
- ( 3009 , "MINURCA" , STR_TO_DATE("15.7.2010.", "%d.%m.%Y.") , STR_TO_DATE("23.10.2032.", "%d.%m.%Y.") , 27 , 10 ,"Misija Ujedinjenih naroda u Srednjoafričkoj Republici, poznatija kao MINURCA, bile su mirovne snage Ujedinjenih naroda u Srednjoafričkoj Republici. Misija od 1350 vojnika uspostavljena je Rezolucijom Vijeća sigurnosti Ujedinjenih naroda 1159 u ožujku 1998." , 2975836 ),
- ( 3010 , "MONUC UN" , STR_TO_DATE("22.6.2029.", "%d.%m.%Y.") , STR_TO_DATE("18.1.1997.", "%d.%m.%Y.") , 41 , 2 ,"MONUC svojom rezolucijom od 30. studenoga 1999., u početku planirati promatranje primirja i razdruživanje snaga i održavati vezu sa svim stranama Sporazuma o prekidu vatre. Kasnije u nizu rezolucija, Vijeće je proširilo mandat MONUC-a na nadzor provedbe Sporazuma o prekidu vatre i dodijelilo više povezanih dodatnih zadaća." , 8709357 ),
- ( 3011 , "UNYOM" , STR_TO_DATE("5.3.2010.", "%d.%m.%Y.") , STR_TO_DATE("22.1.2023.", "%d.%m.%Y.") , 20 , 11 ,"Promatračka misija UN-a u Jemenu osnovana je 1963. godine. Sjeverni Jemen je 1962. ušao u stanje građanskog rata. Jemen se pridružio Egiptu 1958., a zatim se 1962. ponovno razdvojio, što je izazvalo sukob." , 9916296 ),
- -- new
- ( 3012 , "1" , STR_TO_DATE("24.5.2025.", "%d.%m.%Y.") , STR_TO_DATE("9.8.2022.", "%d.%m.%Y.") , 31 , 14 , null, 5019551 ),
- 
- ( 3013 , "UNOMIG" , STR_TO_DATE("17.3.2013.", "%d.%m.%Y.") , STR_TO_DATE("14.11.2004.", "%d.%m.%Y.") , 32 , 4 ,"Promatračka misija Ujedinjenih naroda u Gruziji (UNOMIG) osnovana je Rezolucijom 858 Vijeća sigurnosti Ujedinjenih naroda u kolovozu 1993. Kako bi provjerila usklađenost sa sporazumom o prekidu vatre od 27. srpnja 1993. između Republike Gruzije i snaga u Abhaziji, s posebnompozornošću na situacija u gradu Sukhumi, Gruzija. Također je trebalo istražiti izvješća o kršenjima primirja, pokušati riješiti takve incidente sa uključenim stranama i izvijestiti glavnog tajnika Ujedinjenih naroda o provedbi svog mandata. 88 vojnih savjetnika bilo je ovlašteno za raspoređivanje u regiji. Završila je 15. lipnja 2009., kada je Rusija stavila veto na produljenje misije. Posljednji promatrači napustili su regiju 15. srpnja 2009." , 2062168 ),
- ( 3014 , "UNMIL" , STR_TO_DATE("9.2.2002.", "%d.%m.%Y.") , STR_TO_DATE("7.1.2029.", "%d.%m.%Y.") , 21 , 13 ,"Misija Ujedinjenih naroda u Liberiji bila je mirovna operacija uspostavljena u rujnu 2003. za praćenje sporazuma o prekidu vatre u Liberiji nakon ostavke predsjednika Charlesa Taylora i završetka Drugog liberijskog građanskog rata." , 8728552 ),
- ( 3015 , "UNMOGIP" , STR_TO_DATE("8.8.2018.", "%d.%m.%Y.") , STR_TO_DATE("7.7.2006.", "%d.%m.%Y.") , 23 , 4 ,"Prva skupina vojnih promatrača Ujedinjenih naroda stigla je u područje misije 24. siječnja 1949. kako bi nadgledali prekid vatre između Indije i Pakistana u državi Jammu i Kashmir. Ovi promatrači, pod zapovjedništvom vojnog savjetnika kojeg je imenovao glavni tajnik UN-a, činili su jezgru Vojne promatračke skupine Ujedinjenih naroda u Indiji i Pakistanu (UNMOGIP).", 3318084 ),
- ( 3016 , "MINURCAT" , STR_TO_DATE("7.11.2021.", "%d.%m.%Y.") , STR_TO_DATE("21.4.2004.", "%d.%m.%Y.") , 34 , 8 ,"MINURCAT je završio svoj mandat 31. prosinca 2010., u skladu s rezolucijom Vijeća sigurnosti 1923 (2010) i na zahtjev čadske vlade, koja je preuzela punu odgovornost za zaštitu civila na svom teritoriju. Nakon povlačenja, tim UN-a u zemlji i Integrirani ured UN-a za izgradnju mira u Srednjoafričkoj Republici (BINUCA) ostali su u zemlji kako bi nastavili raditi za dobrobit naroda Čada." , 1692847 ),
- ( 3017 , "UNAMID" , STR_TO_DATE("17.12.1999.", "%d.%m.%Y.") , STR_TO_DATE("14.3.1994.", "%d.%m.%Y.") , 39 , 8 ,"Hibridna operacija Afričke unije i Ujedinjenih naroda u Darfuru (poznata po akronimu UNAMID) zajednička je mirovna misija Afričke unije (AU) i Ujedinjenih naroda (UN) službeno odobrena Rezolucijom 1769 Vijeća sigurnosti Ujedinjenih naroda 31. srpnja 2007. Donijeti stabilnost u ratom razorenu regiju Darfur u Sudanu dok traju mirovni pregovori o konačnom rješenju." , 8843818 ),
- ( 3018 , "UNAMSIL" , STR_TO_DATE("4.8.2026.", "%d.%m.%Y.") , STR_TO_DATE("20.2.1994.", "%d.%m.%Y.") , 27 , 4 ,"Misija Ujedinjenih naroda u Sierra Leoneu bila je mirovna operacija Ujedinjenih naroda u Sierra Leoneu od 1999. do 2006. Osnovalo ju je Vijeće sigurnosti Ujedinjenih naroda u listopadu 1999. kako bi pomoglo u provedbi Mirovnog sporazuma iz Loméa, sporazuma koji je trebao okončati Građanski rat u Sijera Leoneu." , 3493087 ),
- ( 3019 , "UNASOG" , STR_TO_DATE("23.3.2001.", "%d.%m.%Y.") , STR_TO_DATE("3.5.2012.", "%d.%m.%Y.") , 34 , 5 ,"Promatračka skupina Ujedinjenih naroda u pojasu Aouzou bila je promatračka misija Ujedinjenih naroda koja je bila raspoređena u pojasu Aouzou, u Republici Čad. ", 2149934 ),
- ( 3020 , "UNPROFOR" , STR_TO_DATE("1.6.1995.", "%d.%m.%Y.") , STR_TO_DATE("1.12.2022.", "%d.%m.%Y.") , 28 , 1 ,"UNPROFOR je akronim za 'United Nations PROtection FORces' osnovane 21. veljače 1992. Rezolucijom 743 Vijeća sigurnosti, a raspuštene 31. ožujka 1995. Ti su naoružani 'čuvari mira' UN-a bili pod kontrolom Vijeća sigurnosti, a od oko 39.000 UNPROFOR-ovih vojnika iz svih zemalja svijeta, u misiji ih je poginulo 320." , 5557034 ),
- ( 3021 , "MINUGUA" , STR_TO_DATE("6.3.2005.", "%d.%m.%Y.") , STR_TO_DATE("23.6.1995.", "%d.%m.%Y.") , 21 , 12 ,"MINUGUA je bila humanitarna misija Ujedinjenih naroda u Gvatemali koja je uključivala, u najkritičnijoj točki mirovnog procesa, tromjesečnu mirovnu misiju. Izvorni naziv ove operacije bio je Misija Ujedinjenih naroda za provjeru ljudskih prava i poštivanja Sveobuhvatnog sporazuma o ljudskim pravima u Gvatemali." , 4525460 ),
- ( 3022 , "UNOMIL" , STR_TO_DATE("2.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("14.10.2033.", "%d.%m.%Y.") , 41 , 7 ,"Promatračka misija Ujedinjenih naroda u Liberiji bila je mirovna misija Ujedinjenih naroda u Liberiji. Osnovan je Rezolucijom 866 sa sjedištem u glavnom gradu Monroviji.", 4644302 ),
- -- new
-  ( 3023 , "UNTMIH" , STR_TO_DATE("7.12.2019.", "%d.%m.%Y.") , STR_TO_DATE("15.3.2034.", "%d.%m.%Y.") , 27 , 11 , null, 6720729 ),
- 
- ( 3024 , "UNMIBH" , STR_TO_DATE("21.3.1999.", "%d.%m.%Y.") , STR_TO_DATE("19.9.2027.", "%d.%m.%Y.") , 26 , 12 ,"Misija Ujedinjenih naroda u Bosni i Hercegovini bila je međunarodna organizacija osnovana Rezolucijom 1035 Vijeća sigurnosti Ujedinjenih naroda 21. prosinca 1995. godine. Svoj mandat završila je 31. prosinca 2002. godine, kada ju je naslijedila Policijska misija Europske unije u Bosni i Hercegovini." , 2760791 ),
- ( 3025 , "ONUSAL" , STR_TO_DATE("9.3.2009.", "%d.%m.%Y.") , STR_TO_DATE("11.1.1999.", "%d.%m.%Y.") , 20 , 12 ,"ONUCA i ONUSAL bile su dvije mirovne misije Ujedinjenih naroda raspoređene u Srednjoj Americi tijekom kasnih 1980-ih i ranih 1990-ih.", 2505324 ),
- 
- -- new
+ ( 3001 , "UNAVEM III" , STR_TO_DATE("7.12.1996.", "%d.%m.%Y.") , STR_TO_DATE("24.6.2003.", "%d.%m.%Y.") , 29 , 10 , null, 5507101 ),
+ ( 3002 , "UNAVEM II" , STR_TO_DATE("18.11.1995.", "%d.%m.%Y.") , STR_TO_DATE("20.2.2022.", "%d.%m.%Y.") , 20 , 10 , null, 6541048 ),
+ ( 3003 , "UNTAET" , STR_TO_DATE("17.3.1997.", "%d.%m.%Y.") , STR_TO_DATE("6.5.1992.", "%d.%m.%Y.") , 36 , 7 , null, 3855871 ),
+ ( 3004 , "UNMISET" , STR_TO_DATE("23.5.2016.", "%d.%m.%Y.") , STR_TO_DATE("3.9.1999.", "%d.%m.%Y.") , 19 , 12 , null, 1680718 ),
+ ( 3005 , "UNMIT" , STR_TO_DATE("14.7.2005.", "%d.%m.%Y.") , STR_TO_DATE("11.3.2001.", "%d.%m.%Y.") , 38 , 1 , null, 6079519 ),
+ ( 3006 , "UNCRO" , STR_TO_DATE("1.2.2001.", "%d.%m.%Y.") , STR_TO_DATE("17.3.1992.", "%d.%m.%Y.") , 27 , 13 , null, 3381107 ),
+ ( 3007 , "UNFICYP" , STR_TO_DATE("13.9.2017.", "%d.%m.%Y.") , STR_TO_DATE("11.12.2018.", "%d.%m.%Y.") , 22 , 13 , null, 5970893 ),
+ ( 3008 , "MONUA" , STR_TO_DATE("27.10.2004.", "%d.%m.%Y.") , STR_TO_DATE("24.8.2030.", "%d.%m.%Y.") , 28 , 7 , null, 6807180 ),
+ ( 3009 , "MINURCA" , STR_TO_DATE("15.7.2010.", "%d.%m.%Y.") , STR_TO_DATE("23.10.2032.", "%d.%m.%Y.") , 27 , 10 , null, 2975836 ),
+ ( 3010 , "MONUC UN" , STR_TO_DATE("22.6.2029.", "%d.%m.%Y.") , STR_TO_DATE("18.1.1997.", "%d.%m.%Y.") , 41 , 2 , null, 8709357 ),
+ ( 3011 , "UNYOM" , STR_TO_DATE("5.3.2010.", "%d.%m.%Y.") , STR_TO_DATE("22.1.2023.", "%d.%m.%Y.") , 20 , 11 , null, 9916296 ),
+ ( 3012 , "MINURCA" , STR_TO_DATE("24.5.2025.", "%d.%m.%Y.") , STR_TO_DATE("9.8.2022.", "%d.%m.%Y.") , 31 , 14 , null, 5019551 ),
+ ( 3013 , "UNOMIG" , STR_TO_DATE("17.3.2013.", "%d.%m.%Y.") , STR_TO_DATE("14.11.2004.", "%d.%m.%Y.") , 32 , 4 , null, 2062168 ),
+ ( 3014 , "UNMIL" , STR_TO_DATE("9.2.2002.", "%d.%m.%Y.") , STR_TO_DATE("7.1.2029.", "%d.%m.%Y.") , 21 , 13 , null, 8728552 ),
+ ( 3015 , "UNMOGIP" , STR_TO_DATE("8.8.2018.", "%d.%m.%Y.") , STR_TO_DATE("7.7.2006.", "%d.%m.%Y.") , 23 , 4 , null, 3318084 ),
+ ( 3016 , "MINURCAT" , STR_TO_DATE("7.11.2021.", "%d.%m.%Y.") , STR_TO_DATE("21.4.2004.", "%d.%m.%Y.") , 34 , 8 , null, 1692847 ),
+ ( 3017 , "UNAMID" , STR_TO_DATE("17.12.1999.", "%d.%m.%Y.") , STR_TO_DATE("14.3.1994.", "%d.%m.%Y.") , 39 , 8 , null, 8843818 ),
+ ( 3018 , "UNAMSIL" , STR_TO_DATE("4.8.2026.", "%d.%m.%Y.") , STR_TO_DATE("20.2.1994.", "%d.%m.%Y.") , 27 , 4 , null, 3493087 ),
+ ( 3019 , "UNASOG" , STR_TO_DATE("23.3.2001.", "%d.%m.%Y.") , STR_TO_DATE("3.5.2012.", "%d.%m.%Y.") , 34 , 5 , null, 2149934 ),
+ ( 3020 , "UNPROFOR" , STR_TO_DATE("1.6.1995.", "%d.%m.%Y.") , STR_TO_DATE("1.12.2022.", "%d.%m.%Y.") , 28 , 1 , null, 5557034 ),
+ ( 3021 , "MINUGUA" , STR_TO_DATE("6.3.2005.", "%d.%m.%Y.") , STR_TO_DATE("23.6.1995.", "%d.%m.%Y.") , 21 , 12 , null, 4525460 ),
+ ( 3022 , "UNOMIL" , STR_TO_DATE("2.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("14.10.2033.", "%d.%m.%Y.") , 41 , 7 , null, 4644302 ),
+ ( 3023 , "UNTMIH" , STR_TO_DATE("7.12.2019.", "%d.%m.%Y.") , STR_TO_DATE("15.3.2034.", "%d.%m.%Y.") , 27 , 11 , null, 6720729 ),
+ ( 3024 , "UNMIBH" , STR_TO_DATE("21.3.1999.", "%d.%m.%Y.") , STR_TO_DATE("19.9.2027.", "%d.%m.%Y.") , 26 , 12 , null, 2760791 ),
+ ( 3025 , "ONUSAL" , STR_TO_DATE("9.3.2009.", "%d.%m.%Y.") , STR_TO_DATE("11.1.1999.", "%d.%m.%Y.") , 20 , 12 , null, 2505324 ),
  ( 3026 , "MINOPUH UN" , STR_TO_DATE("23.5.2026.", "%d.%m.%Y.") , STR_TO_DATE("20.1.1996.", "%d.%m.%Y.") , 34 , 13 , null, 8658669 ),
- 
- ( 3027 , "UNMIH" , STR_TO_DATE("1.12.1995.", "%d.%m.%Y.") , STR_TO_DATE("24.11.2003.", "%d.%m.%Y.") , 17 , 14 ,"Misija Ujedinjenih naroda na Haitiju bila je mirovna operacija koju su Ujedinjeni narodi provodili između rujna 1993. i lipnja 1996. Misija je ponovno uspostavljena u travnju 2004., nakon što je pobuna zauzela veći dio Haitija i predsjednik Bertrand Aristide dao ostavku." , 2674440 ),
- 
- -- new
+ ( 3027 , "UNMIH" , STR_TO_DATE("1.12.1995.", "%d.%m.%Y.") , STR_TO_DATE("24.11.2003.", "%d.%m.%Y.") , 17 , 14 , null, 2674440 ),
  ( 3028 , "MONUA" , STR_TO_DATE("14.3.2003.", "%d.%m.%Y.") , STR_TO_DATE("8.6.2023.", "%d.%m.%Y.") , 18 , 6 , null, 8566407 ),
  ( 3029 , "UNAMSIL" , STR_TO_DATE("25.2.1996.", "%d.%m.%Y.") , STR_TO_DATE("11.1.2001.", "%d.%m.%Y.") , 21 , 12 , null, 8550255 ),
  ( 3030 , "UNAMSIL" , STR_TO_DATE("14.11.1992.", "%d.%m.%Y.") , STR_TO_DATE("27.1.2028.", "%d.%m.%Y.") , 19 , 5 , null, 9865296 ),
- ( 3031 , "123123" , STR_TO_DATE("21.7.1997.", "%d.%m.%Y.") , STR_TO_DATE("11.8.2014.", "%d.%m.%Y.") , 29 , 2 , null, 7109438 ),
- 
- ( 3032 , "ONUC" , STR_TO_DATE("12.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2004.", "%d.%m.%Y.") , 27 , 5 ,"Operacija Ujedinjenih naroda u Kongu bile su mirovne snage Ujedinjenih naroda raspoređene u Republici Kongo 1960. kao odgovor na krizu u Kongu. ONUC je bila prva mirovna misija UN-a sa značajnim vojnim sposobnostima i ostaje jedna od najvećih UN-ovih operacija i po opsegu i po operativnom opsegu." , 1903659 ),
- ( 3033 , "UNOCI" , STR_TO_DATE("2.11.2030.", "%d.%m.%Y.") , STR_TO_DATE("24.2.1995.", "%d.%m.%Y.") , 17 , 13 ,"Operacija Ujedinjenih naroda u Obali Bjelokosti (UNOCI) (francuski: Opération des Nations Unies en Côte d'Ivoire (UNOCI)) bila je mirovna misija UN-a i NATO-a u Obali Bjelokosti (Côte d'Ivoire) čiji je cilj bio 'olakšati provedbu mirovnog sporazuma koji su potpisale u siječnju 2003. od strane stranaka u Bjelokosti' (koji je imao za cilj okončanje građanskog rata u Bjelokosti). Dvije glavne stranke Bjelokosti bile su vladine snage Bjelokosti koje su kontrolirale jug zemlje i Nove snage (bivši pobunjenici) koje su kontrolirale sjever. Misija UNOCI-ja imala je za cilj kontrolirati 'zonu povjerenja' u središtu zemlje koja je razdvajala dvije strane. Šef misije i posebni predstavnik glavnog tajnika bio je Aïchatou Mindaoudou Souleymane iz Nigera. Ona je 2013. naslijedila Berta Koendersa iz Nizozemske, koji je 2011. naslijedio Choi Young-jina iz Južne Koreje. Misija je službeno završila 30. lipnja 2017." , 611531 ),
- 
+ ( 3031 , "UNMIH" , STR_TO_DATE("21.7.1997.", "%d.%m.%Y.") , STR_TO_DATE("11.8.2014.", "%d.%m.%Y.") , 29 , 2 , null, 7109438 ),
+ ( 3032 , "ONUC" , STR_TO_DATE("12.3.2014.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2004.", "%d.%m.%Y.") , 27 , 5 , null, 1903659 ),
+ ( 3033 , "UNOCI" , STR_TO_DATE("2.11.2030.", "%d.%m.%Y.") , STR_TO_DATE("24.2.1995.", "%d.%m.%Y.") , 17 , 13 , null, 611531 ),
  ( 3034 , "UNSMIH" , STR_TO_DATE("25.5.2019.", "%d.%m.%Y.") , STR_TO_DATE("22.7.2009.", "%d.%m.%Y.") , 20 , 6 , null, 3860340 ),
- ( 3035 , "UNMOP" , STR_TO_DATE("19.7.2022.", "%d.%m.%Y.") , STR_TO_DATE("3.3.2023.", "%d.%m.%Y.") , 24 , 7 ,"Promatračka misija UN-a na Prevlaci uspostavljena je 15. siječnja 1996. godine Rezolucijom 1038 Vijeća sigurnosti kao mirovna misija za praćenje demilitarizacije spornog poluotoka Prevlaka obavljanjem svakodnevnih pješačkih i kolskih ophodnji s obje strane granice između Hrvatske i SR Jugoslavije." , 5264104 ),
- ( 3036 , "UNMIK" , STR_TO_DATE("24.10.2001.", "%d.%m.%Y.") , STR_TO_DATE("28.12.2004.", "%d.%m.%Y.") , 36 , 3 ,"Privremena administrativna misija Ujedinjenih naroda na Kosovu ili UNMIK je privremena civilna uprava na Kosovu pod vodstvom Ujedinjenih naroda. Misija je osnovana 10. lipnja 1999. rezolucijom 1244 Vijeća sigurnosti Ujedinjenih naroda." , 473290 ),
- -- new
+ ( 3035 , "UNMOP" , STR_TO_DATE("19.7.2022.", "%d.%m.%Y.") , STR_TO_DATE("3.3.2023.", "%d.%m.%Y.") , 24 , 7 , null, 5264104 ),
+ ( 3036 , "UNMIK" , STR_TO_DATE("24.10.2001.", "%d.%m.%Y.") , STR_TO_DATE("28.12.2004.", "%d.%m.%Y.") , 36 , 3 , null, 473290 ),
  ( 3037 , "UNMOGIP" , STR_TO_DATE("19.8.2026.", "%d.%m.%Y.") , STR_TO_DATE("26.4.2004.", "%d.%m.%Y.") , 30 , 10 , null, 7519572 ),
  ( 3038 , "UNMISET" , STR_TO_DATE("9.9.2002.", "%d.%m.%Y.") , STR_TO_DATE("11.9.2027.", "%d.%m.%Y.") , 24 , 1 , null, 9840396 ),
- 
- ( 3039 , "UNGOMAP" , STR_TO_DATE("19.9.2009.", "%d.%m.%Y.") , STR_TO_DATE("13.1.2026.", "%d.%m.%Y.") , 28 , 11 ,"Misija dobrih ureda Ujedinjenih naroda u Afganistanu i Pakistanu osnovana je u svibnju 1988., tijekom sovjetsko-afganistanskog rata, kako bi pomogla u osiguravanju provedbe sporazuma o rješavanju situacije u vezi s Afganistanom te istražila i prijavila moguća kršenja bilo kojeg od odredbe sporazuma." , 9966801 ),
- ( 3040 , "UNAMIC" , STR_TO_DATE("16.11.2017.", "%d.%m.%Y.") , STR_TO_DATE("28.10.2018.", "%d.%m.%Y.") , 36 , 8 ,"UNAMIC je osnovan kako bi pomogao kambodžanskim stranama u održavanju primirja tijekom razdoblja prije uspostave Prijelazne vlasti Ujedinjenih naroda u Kambodži (UNTAC) i za pokretanje obuke civilnog stanovništva o upozoravanju na mine. Kasnije je mandat proširen kako bi uključio obuku u čišćenju mina i pokretanje programa čišćenja mina. UNTAC je u ožujku 1992. preuzeo misiju i njezine funkcije." , 172465 ),
- -- new
- (3041 , "123" , STR_TO_DATE("23.11.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.12.1998.", "%d.%m.%Y.") , 22 , 5 , null, 7220839 ),
- 
- ( 3042 , "UNOMSIL" , STR_TO_DATE("11.12.2005.", "%d.%m.%Y.") , STR_TO_DATE("28.6.2011.", "%d.%m.%Y.") , 33 , 8 ,"Promatračka misija Ujedinjenih naroda u Sierra Leoneu bila je mirovna operacija Ujedinjenih naroda u Sierra Leoneu od 1998. do 1999. godine koja je uspostavljena donošenjem Rezolucije Vijeća sigurnosti Ujedinjenih naroda 1181. Njezina je misija bila praćenje vojne i sigurnosne situacije u Sierra Leoneu." , 3998984 ),
- ( 3043 , "UNIPOM" , STR_TO_DATE("19.1.1995.", "%d.%m.%Y.") , STR_TO_DATE("4.1.2001.", "%d.%m.%Y.") , 40 , 6 ,"UNIPOM je osnovan u rujnu 1965. kako bi nadzirao prekid vatre duž indijsko-pakistanske granice osim u državi Jammu i Kašmir i povlačenje cjelokupnog naoružanog osoblja na položaje koje je držalo prije 5. kolovoza 1965. Nakon povlačenja indijskih trupa i Pakistan je bio dovršen, UNIPOM je ukinut." , 6122253 ),
- ( 3044 , "UNTAC" , STR_TO_DATE("12.9.2012.", "%d.%m.%Y.") , STR_TO_DATE("20.3.2007.", "%d.%m.%Y.") , 31 , 10 ,"Prijelazna uprava Ujedinjenih naroda u Kambodži bila je mirovna operacija Ujedinjenih naroda u Kambodži 1992–93., formirana nakon Pariškog mirovnog sporazuma 1991." , 3957457 ),
- ( 3045 , "DOMREP" , STR_TO_DATE("21.7.2001.", "%d.%m.%Y.") , STR_TO_DATE("15.7.2032.", "%d.%m.%Y.") , 16 , 13 ,"DOMREP je osnovan u svibnju 1965. kako bi promatrao situaciju i izvještavao o kršenjima primirja između dviju de facto vlasti u Dominikanskoj Republici. Nakon dogovora o novoj Vladi, DOMREP je povučen" , 1087331 ),
- ( 3046 , "UNSF" , STR_TO_DATE("8.4.2001.", "%d.%m.%Y.") , STR_TO_DATE("28.5.1994.", "%d.%m.%Y.") , 36 , 11 ,"Privremeno izvršno tijelo Ujedinjenih naroda i Sigurnosne snage Ujedinjenih naroda u zapadnoj Novoj Gvineji osnovane su tijekom listopada 1962. u skladu s Rezolucijom 1752 Opće skupštine kako se zahtijeva u članku 2 Njujorškog sporazuma za upravljanje bivšom Nizozemskom Novom Gvinejom." , 853626 ),
+ ( 3039 , "UNGOMAP" , STR_TO_DATE("19.9.2009.", "%d.%m.%Y.") , STR_TO_DATE("13.1.2026.", "%d.%m.%Y.") , 28 , 11 , null, 9966801 ),
+ ( 3040 , "UNAMIC" , STR_TO_DATE("16.11.2017.", "%d.%m.%Y.") , STR_TO_DATE("28.10.2018.", "%d.%m.%Y.") , 36 , 8 , null, 172465 ),
+ ( 3041 , "UNOCI" , STR_TO_DATE("23.11.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.12.1998.", "%d.%m.%Y.") , 22 , 5 , null, 7220839 ),
+ ( 3042 , "UNOMSIL" , STR_TO_DATE("11.12.2005.", "%d.%m.%Y.") , STR_TO_DATE("28.6.2011.", "%d.%m.%Y.") , 33 , 8 , null, 3998984 ),
+ ( 3043 , "UNIPOM" , STR_TO_DATE("19.1.1995.", "%d.%m.%Y.") , STR_TO_DATE("4.1.2001.", "%d.%m.%Y.") , 40 , 6 , null, 6122253 ),
+ ( 3044 , "UNTAC" , STR_TO_DATE("12.9.2012.", "%d.%m.%Y.") , STR_TO_DATE("20.3.2007.", "%d.%m.%Y.") , 31 , 10 , null, 3957457 ),
+ ( 3045 , "DOMREP" , STR_TO_DATE("21.7.2001.", "%d.%m.%Y.") , STR_TO_DATE("15.7.2032.", "%d.%m.%Y.") , 16 , 13 , null, 1087331 ),
+ ( 3046 , "UNSF" , STR_TO_DATE("8.4.2001.", "%d.%m.%Y.") , STR_TO_DATE("28.5.1994.", "%d.%m.%Y.") , 36 , 11 , null, 853626 ),
  ( 3047 , "MONUA" , STR_TO_DATE("24.7.2017.", "%d.%m.%Y.") , STR_TO_DATE("1.10.2013.", "%d.%m.%Y.") , 25 , 9 , null, 6286138 ),
  ( 3048 , "UNOGIL" , STR_TO_DATE("17.8.2030.", "%d.%m.%Y.") , STR_TO_DATE("3.5.2029.", "%d.%m.%Y.") , 40 , 10 , null, 8778437 ),
  ( 3049 , "UNPREDEP" , STR_TO_DATE("22.9.2009.", "%d.%m.%Y.") , STR_TO_DATE("7.11.1994.", "%d.%m.%Y.") , 21 , 1 , null, 6568915 ),
- ( 3050 , "UNPREDEP" , STR_TO_DATE("11.5.2018.", "%d.%m.%Y.") , STR_TO_DATE("14.5.2033.", "%d.%m.%Y.") , 24 , 14 ,"Snage Ujedinjenih naroda za preventivno raspoređivanje osnovane su 31. ožujka 1995. Rezolucijom 983 Vijeća sigurnosti kako bi zamijenile Zaštitne snage Ujedinjenih naroda u Republici Sjevernoj Makedoniji." , 8606804 ),
- ( 3051 , "UNOMUR" , STR_TO_DATE("26.10.2004.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2032.", "%d.%m.%Y.") , 22 ,  8    ,"Promatračka misija Ujedinjenih naroda Uganda-Ruanda bila je mirovna misija koju je uspostavilo Vijeće sigurnosti Ujedinjenih naroda Rezolucijom 846 i trajala je od lipnja 1993. do rujna 1994. Njezina je misija bila 'nadzirati granicu između Ugande i Ruande i provjeriti da nije bilo vojne pomoći pruža se preko njega'", 2569626 ),
- ( 3052 , "UNAMIR" , STR_TO_DATE("3.9.2024.", "%d.%m.%Y.") , STR_TO_DATE("17.8.2022.", "%d.%m.%Y.") , 32 , 5 ,"Misija Ujedinjenih naroda za pomoć Ruandi uspostavljena je Rezolucijom 872 Vijeća sigurnosti Ujedinjenih naroda od 5. listopada 1993. Namjera joj je bila pomoći u provedbi sporazuma iz Arushe, potpisanog 4. kolovoza 1993., koji je trebao okončati građanski rat u Ruandi." , 1502835 ),
- ( 3053 , "UNOSOM I" , STR_TO_DATE("17.7.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.5.2028.", "%d.%m.%Y.") , 22 , 11 ,"Operacija Ujedinjenih naroda u Somaliji I bila je prvi dio napora pod pokroviteljstvom Ujedinjenih naroda za pružanje, olakšanje i osiguranje humanitarne pomoći u Somaliji, kao i za praćenje prvog prekida vatre u sukobu u građanskom ratu u Somaliji početkom 1990-ih, uz posredovanje UN-a." , 1358647 ),
- ( 3054 , "UNOGIL" , STR_TO_DATE("25.6.2017.", "%d.%m.%Y.") , STR_TO_DATE("10.2.2007.", "%d.%m.%Y.") , 40 , 11 ,"Promatračku skupinu Ujedinjenih naroda u Libanonu osnovali su Ujedinjeni narodi Rezolucijom 128 Vijeća sigurnosti 11. lipnja 1958. kao odgovor na libanonsku krizu 1958. godine. ", 8713394 ),
--- new
+ ( 3050 , "UNPREDEP" , STR_TO_DATE("11.5.2018.", "%d.%m.%Y.") , STR_TO_DATE("14.5.2033.", "%d.%m.%Y.") , 24 , 14 , null, 8606804 ),
+ ( 3051 , "UNOMUR" , STR_TO_DATE("26.10.2004.", "%d.%m.%Y.") , STR_TO_DATE("2.8.2032.", "%d.%m.%Y.") , 22 , 8 , null, 2569626 ),
+ ( 3052 , "UNAMIR" , STR_TO_DATE("3.9.2024.", "%d.%m.%Y.") , STR_TO_DATE("17.8.2022.", "%d.%m.%Y.") , 32 , 5 , null, 1502835 ),
+ ( 3053 , "UNOSOM I" , STR_TO_DATE("17.7.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.5.2028.", "%d.%m.%Y.") , 22 , 11 , null, 1358647 ),
+ ( 3054 , "UNOGIL" , STR_TO_DATE("25.6.2017.", "%d.%m.%Y.") , STR_TO_DATE("10.2.2007.", "%d.%m.%Y.") , 40 , 11 , null, 8713394 ),
  ( 3055 , "UNAMSIL" , STR_TO_DATE("6.2.2017.", "%d.%m.%Y.") , STR_TO_DATE("22.7.2033.", "%d.%m.%Y.") , 31 , 5 , null, 7138853 );
 
 INSERT INTO osoblje_na_misiji VALUES
@@ -2410,164 +2508,787 @@ INSERT INTO lijecenje VALUES
 
 
 
--- UPITI:
 
--- Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje na listi
--- je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu.
+-- FUNKCIJE:
 
+-- DK
+-- Funkcija vraca ukupni trosak
 
-SELECT os.id, ime, prezime
-FROM osoblje_na_treningu AS o
-INNER JOIN trening AS t
-	ON o.id_trening = t.id
-INNER JOIN osoblje AS os
-	ON os.id = o.id_osoblje
-INNER JOIN osoblje_na_misiji AS om
-	ON om.id_osoblje = os.id
-INNER JOIN misija AS m
-	ON om.id_misija = m.id
-WHERE 12 - MONTH(m.vrijeme_pocetka) <= TIMESTAMPDIFF(MONTH, m.vrijeme_pocetka, m.vrijeme_kraja)
-ORDER BY performans DESC
-LIMIT 10;
+DROP FUNCTION IF EXISTS trosak;
 
+DELIMITER //
+CREATE FUNCTION trosak() RETURNS DECIMAL(22,2)
+DETERMINISTIC
+BEGIN
+    DECLARE ukupno_misija, ukupni_popravak, ukupno_lijecenje DECIMAL(30,2);
 
+    SELECT SUM(trosak_misije) INTO ukupno_misija
+    FROM misija;
 
+    SELECT SUM(trosak_popravka) INTO ukupni_popravak
+    FROM popravak;
 
--- Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Helikopteri"
--- koje je bilo na najviše popravaka.
+    SELECT SUM(trosak_lijecenja) INTO ukupno_lijecenje
+    FROM lijecenje;
 
+    RETURN ukupno_misija + ukupni_popravak + ukupno_lijecenje;
+END//
+DELIMITER ;
 
-SELECT ime, prezime, cin
-FROM
-	(SELECT ime, prezime, cin, COUNT(*) AS broj_popravka
-	FROM popravak AS p
-	INNER JOIN vozilo_na_misiji AS vm
-		ON p.id_vozilo_na_misiji = vm.id
-	INNER JOIN vozila AS v
-		ON v.id = vm.id_vozilo
-	INNER JOIN vozilo_na_turi AS vt
-		ON vt.id_vozilo = v.id
-	INNER JOIN osoblje_na_turi AS ot
-		ON ot.id = vt.id_odgovorni
-	INNER JOIN osoblje AS o
-		ON o.id = ot.id_osoblje
-	WHERE v.vrsta = "Helikopteri"
-	GROUP BY v.id) AS l
-	ORDER BY broj_popravka DESC
-    LIMIT 1;
+SELECT trosak() AS ukupni_trosak FROM DUAL;
 
 
 
--- Prikazi naziv ture kod koje je izdano najmanje opreme
+-- Funkcija racuna koliko je novca ostalo "viska" iz proracuna:
 
-SELECT naziv
-FROM
-	(SELECT t.naziv, SUM(izdana_kolicina) AS izdano_na_turi
-	FROM izdana_oprema AS i
-	INNER JOIN osoblje_na_misiji AS om
-		ON i.id_osoblje_na_misiji = om.id
-	INNER JOIN misija AS m
-		ON om.id_misija = m.id
-	INNER JOIN tura AS t
-		ON t.id = m.id_tura
-	GROUP BY t.id) AS l
-    ORDER BY izdano_na_turi ASC
-    LIMIT 1;
+DROP FUNCTION IF EXISTS visak;
 
+DELIMITER //
+CREATE FUNCTION visak() RETURNS DECIMAL(22,2)
+DETERMINISTIC
+BEGIN
+    DECLARE proracun_svih_sektora DECIMAL(22,2);
 
+    SELECT SUM(ukupni_proracun) INTO proracun_svih_sektora
+    FROM sektor;
 
- -- Prikaži ukupni proracun sektora koji ima drugi najveci broj osoblja koji nisu bili na lijecenju niti jedanput te koji su sudjelovali
- -- na najmanje jednom treningu ciji datum pocetka nije bio prije 23 godinu dana od sada.
+    RETURN proracun_svih_sektora - trosak();
+END//
+DELIMITER ;
 
-
-SELECT ukupni_proracun
-FROM
-	(SELECT ukupni_proracun, COUNT(*) AS br_osoblja_uvjeti
-	FROM osoblje AS o
-	INNER JOIN sektor AS s
-		ON o.id_sektor = s.id
-	INNER JOIN osoblje_na_treningu AS ot
-		ON ot.id_osoblje = o.id
-	INNER JOIN trening AS t
-		ON t.id = ot.id_trening
-	WHERE o.id NOT IN (SELECT id_osoblje FROM lijecenje) AND DATE(vrijeme_pocetka) + INTERVAL 23 YEAR >= NOW()
-	GROUP BY id_sektor) AS l
-    ORDER BY br_osoblja_uvjeti DESC
-    LIMIT 1, 1;
+SELECT visak() AS visak FROM DUAL;
 
 
 
+-- Funkcija koja vraća broj osoblja koje je imalo uvijek perofrmans na treningu viši od 6 te da nikad nisu bili na liječenju.
 
- -- Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije
- -- od 31 godinu i koje je bilo odgovorno za najmanje jedno vozilo u nekoj turi.
+DROP FUNCTION IF EXISTS br_os_tr_i_li;
 
-SELECT m.naziv AS naziv_misije, l.naziv AS naziv_lokacije
-FROM lokacija AS l
-INNER JOIN misija AS m
-	ON m.id_lokacija = l.id
-INNER JOIN osoblje_na_misiji AS om
-	ON om.id_misija = m.id
-INNER JOIN osoblje AS o
-	ON o.id = om.id_osoblje
-WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN
-(SELECT id_osoblje FROM vozilo_na_turi AS vt INNER JOIN osoblje_na_turi AS ot ON vt.id_odgovorni = ot.id);
+DELIMITER //
+CREATE FUNCTION br_os_tr_i_li() RETURNS INTEGER
+DETERMINISTIC
+BEGIN
+    DECLARE br_os_tr_li INTEGER;
 
+	CREATE TEMPORARY TABLE br_perf_veci_od_sest
+    SELECT id_osoblje, COUNT(*) AS br_perf_vece_sest
+    FROM osoblje_na_treningu
+    WHERE performans > 6
+    GROUP BY id_osoblje;
+    
+    CREATE TEMPORARY TABLE br_perf_po_osobi
+	SELECT id_osoblje AS id_os, COUNT(*) AS br_perf
+    FROM osoblje_na_treningu
+    GROUP BY id_osoblje;
 
+	SELECT COUNT(*) INTO br_os_tr_li
+    FROM
+	(SELECT id_osoblje
+    FROM br_perf_veci_od_sest
+    INNER JOIN br_perf_po_osobi
+    ON br_perf_veci_od_sest.id_osoblje = br_perf_po_osobi.id_os
+    WHERE br_perf_vece_sest = br_perf) AS l
+    WHERE id_osoblje 
+	NOT IN (SELECT id_osoblje FROM lijecenje);
 
--- jan
--- navedi sva imena i prezimena ozlijedenih vojnika na misiji kojima lijecenje kosta vise od 500 i manje od 5000
-select o.id,o.ime,o.prezime
-from osoblje_na_misiji as onm
-inner join osoblje as o 
-on onm.id_osoblje= o.id
-inner join lijecenje as l
-on l.id_osoblje = o.id
-where l.trosak_lijecenja>10000;
+	DROP TEMPORARY TABLE br_perf_veci_od_sest;
+    DROP TEMPORARY TABLE br_perf_po_osobi;
 
--- navedi koliko se izdanih samokresa na misiji koristi od strane mornarice
-select sum(izo.izdana_kolicina) as samokresa_u_mornarici
-from izdana_oprema as izo
-inner join oprema as op
-on op.id= izo.id_oprema
-inner join osoblje_na_misiji as onm
-on onm.id=izo.id_osoblje_na_misiji
-inner join osoblje as o
-on o.id=onm.id_osoblje
-inner join sektor as s
-on s.id=o.id_sektor
-where s.naziv= "Hrvatska ratna mornarica" and op.vrsta="Samokres";
+    RETURN br_os_tr_li;
+END//
+DELIMITER ;
 
--- Hrvatska ratna mornarica
--- nabroji sva vozila na popravku koja su ujedno i na misiji te ih nabroji koliko ih je
-select sum(ukupna_kolicina) as totalni_br
-from vozila as v
-inner join vozilo_na_misiji as vnm
-on v.id=vnm.id_vozilo
-inner join misija as m
-on m.id=vnm.id_misija
-where m.naziv="UNOCI";
-
--- svo osoblje koje je na misiji u ohiu
-Select * 
-from osoblje as o
-inner join osoblje_na_misiji as onm
-on onm.id_osoblje= o.id
-inner join misija as m
-on onm.id_misija= m.id
-inner join lokacija as l
-on l.id=m.id_lokacija
-where l.naziv="Ohio";
--- svi idevi osoblja krvne grupe 0+ koje je na lijecenju i u sektoru je "Hrvatska kopnena vojska"
-Select l.id_osoblje, o.ime, o.prezime
-from lijecenje as l
-inner join osoblje as o
-on l.id_osoblje= o.id
-inner join sektor as s
-on s.id=o.id_sektor
-where o.krvna_grupa="0+" and s.naziv="Hrvatska kopnena vojska";
-
-select ime, prezime,cin,ocjena,cin from osoblje,sektor where osoblje.id_sektor = sektor.id;
+SELECT br_os_tr_i_li() AS br_osoblja_dobar_performans_nikad_na_lijecenju FROM DUAL;
 
 
-show TABLES;
-SHOW COLUMNS  FROM osoblje;
+/*
+Za određeni id osoblja treba se dati tekstualni odgovor u čemu je sve osoba sujelovala. 
+Npr. "Arabela Herceg je sudjelovala u najmanje jednoj/m: treningu i lijecenju."
+Moguće je više kombinacija, a najduža je npr "Arabela Herceg je sudjelovao/la u najmanje 
+jednoj: turi, misiji,treningu i lijecenju." U slučaju da osoba nije sudjelovala još uvijek u ničemu bit će ispisano npr 
+"Arabela Herceg nije sudjelovao/la ni u jednoj: turi, misiji,treningu ili lijecenju."
+*/
+
+
+DROP FUNCTION IF EXISTS os_sudjelovanje;
+
+DELIMITER //
+CREATE FUNCTION os_sudjelovanje(id_os INTEGER) RETURNS VARCHAR(100)
+DETERMINISTIC
+BEGIN
+    DECLARE odg VARCHAR(100);
+	DECLARE brojac INTEGER;
+    DECLARE tura VARCHAR(20);
+    DECLARE misija VARCHAR(20);
+    DECLARE trening VARCHAR(20);
+    DECLARE lijecenje VARCHAR(20);
+    
+	SELECT CONCAT(ime, " ",prezime) INTO odg
+    FROM osoblje 
+    WHERE id = id_os;
+
+	IF id_os IN (SELECT id_osoblje FROM osoblje_na_turi) THEN
+		SET tura = " turi,";
+        SET brojac = brojac + 1;
+	ELSE  
+		SET tura = "";
+	END IF;
+
+
+    IF id_os IN (SELECT id_osoblje FROM osoblje_na_misiji) THEN
+		SET misija = " misiji,";
+        SET brojac = brojac + 1;
+	ELSE  
+		SET misija = "";
+	END IF;
+    
+    IF id_os IN (SELECT id_osoblje FROM osoblje_na_treningu) THEN
+		SET trening = " treningu,";
+        SET brojac = brojac + 1;
+	ELSE  
+		SET trening = "";
+	END IF;
+    
+    IF id_os IN (SELECT id_osoblje FROM lijecenje) THEN
+		SET lijecenje = " lijecenju,";
+        SET brojac = brojac + 1;
+	ELSE  
+		SET lijecenje = "";
+	END IF;
+    
+    
+    IF brojac = 0 THEN 
+		SET odg = CONCAT(odg," nije sudjelovao/la ni u jednoj: turi, misiji,treningu ili lijecenju.");
+    ELSE 
+		SET odg = CONCAT(odg," je sudjelovao/la u najmanje jednoj:", tura, misija, trening, lijecenje);
+	END IF;	
+    
+    SET odg = CONCAT(LEFT(odg, LENGTH(odg)-3),".");
+    
+    RETURN odg;
+END//
+DELIMITER ;
+
+SELECT os_sudjelovanje(10009) AS os_sudjelovanje FROM DUAL;
+
+
+
+
+
+/*
+Performans na treningu može bit od 1 do 10 ([1,10]). Želi se pratiti koliki je bio broj osoblja po određenom činu s pojedinom
+ocijenom performansa. Ne treba prikazat čin čije osoblje uopće nije dio tog performansa.
+Format treba izgledat kao:
+performans   cinovi_i_br_pojavljivanja
+10            skupnik: 3 , brigadir: 3 , bojnik: 1 , pukovnik: 1 , poručnik: 2 , narednik: 2 
+9             pozornik: 1 , narednik: 2 , bojnik: 3 , satnik: 1 , brigadir: 2 , poručnik: 2 , skupnik: 1 , razvodnik: 1 
+...           ...
+*/
+
+DROP FUNCTION IF EXISTS performans_cinovi;
+
+DELIMITER //
+CREATE FUNCTION performans_cinovi(perf INTEGER) RETURNS VARCHAR(500)
+DETERMINISTIC
+BEGIN
+    DECLARE red VARCHAR(100);
+    DECLARE cin_i_br_pojavljivanja VARCHAR(800)  DEFAULT "";
+    DECLARE finished INTEGER DEFAULT 0;
+
+	DECLARE cur CURSOR FOR
+	SELECT CONCAT(LOWER(cin), ": ",COUNT(*)) AS perf_des
+	FROM osoblje_na_treningu
+	INNER JOIN osoblje ON osoblje.id = osoblje_na_treningu.id_osoblje
+	WHERE performans = perf
+	GROUP BY cin;
+ 
+	DECLARE CONTINUE HANDLER 
+	FOR SQLSTATE '02000' SET finished = 1;
+
+	OPEN cur;
+		 iteriraj_cinove: LOOP
+			 FETCH cur INTO red;
+             
+			 IF finished = 1 THEN
+				LEAVE iteriraj_cinove;
+			 END IF;
+             
+			 SET cin_i_br_pojavljivanja = CONCAT(cin_i_br_pojavljivanja, ", ", red, " ");
+             
+		 END LOOP iteriraj_cinove;
+	CLOSE cur;
+    
+    SET cin_i_br_pojavljivanja = TRIM(LEADING "," FROM cin_i_br_pojavljivanja);
+    
+    RETURN cin_i_br_pojavljivanja;
+END //
+DELIMITER ;
+
+SELECT DISTINCT performans, performans_cinovi(performans) AS cinovi_i_br_pojavljivanja
+FROM osoblje_na_treningu
+ORDER BY performans DESC;
+
+
+
+-- MK
+
+-- Jednostavna funkcija koja vraća broj osoblja u određenom sektoru
+DELIMITER //
+CREATE FUNCTION broj_osoblja_u_sektoru( p_id_sektor INTEGER) RETURNS INTEGER
+DETERMINISTIC
+BEGIN
+	DECLARE broj INTEGER;
+    
+	SELECT COUNT(*) INTO broj 
+		FROM osoblje 
+			WHERE id_sektor = p_id_sektor;
+            
+  RETURN broj;
+END//
+DELIMITER ;
+
+SELECT broj_osoblja_u_sektoru(1) AS broj_osoblja_u_sektoru;
+
+-- Primjer funkcije koja koristi while loop, imamo varijable u koje cemo spremati potrebne podatke i imamo veliki varchar u koji će ići rezultat, sa jednostavnim while loopom smo prosli kroz sve id-eve sektora te u svakoj iteraciji vezali rezultat sa concatom
+/*
+DROP FUNCTION IF EXISTS prosjecna_ocjena_po_sektoru;
+
+DELIMITER //
+CREATE FUNCTION prosjecna_ocjena_po_sektoru() RETURNS VARCHAR(1000)
+DETERMINISTIC
+BEGIN
+	DECLARE p_id_sektor INTEGER;
+	DECLARE broj_osoblja INTEGER;
+	DECLARE sum_ocjena INTEGER;
+	DECLARE prosjek DECIMAL(3,2);
+	DECLARE rezultat VARCHAR(1000) DEFAULT '';
+
+	SELECT id INTO p_id_sektor
+		FROM sektor
+        GROUP BY id ASC
+        LIMIT 1;
+
+	WHILE p_id_sektor IS NOT NULL DO
+
+		SELECT COUNT(*) INTO broj_osoblja 
+			FROM osoblje 
+				WHERE id_sektor = p_id_sektor;
+		SELECT SUM(ocjena) INTO sum_ocjena 
+			FROM osoblje 
+				WHERE id_sektor = p_id_sektor;
+                
+		SET prosjek = sum_ocjena / broj_osoblja;
+
+		SET rezultat = CONCAT(rezultat, 'Sektor ', (SELECT naziv FROM sektor AS s WHERE s.id =p_id_sektor LIMIT 1), ': ', prosjek);
+
+		SELECT id INTO p_id_sektor
+			FROM sektor WHERE id > p_id_sektor 
+				ORDER BY id ASC
+                LIMIT 1;
+	END WHILE;
+    
+    RETURN rezultat;
+END//
+DELIMITER ;
+SELECT prosjecna_ocjena_po_sektoru() AS rezultat;
+*/
+
+
+
+
+
+
+
+-- varijacija prijašnje funkcije samo što sam koristio kursor i repeat čisto za promjenu :) masu vremena su mi potrošila ova dva
+DROP FUNCTION IF EXISTS trosak_misija_po_sektoru;
+
+DELIMITER //
+CREATE FUNCTION trosak_misija_po_sektoru() RETURNS VARCHAR(1000)
+DETERMINISTIC
+BEGIN
+    DECLARE p_id_sektor INTEGER;
+    DECLARE ukupni_trosak DECIMAL(20,2) DEFAULT 0;
+    DECLARE gotov INTEGER DEFAULT 0;
+    DECLARE rezultat VARCHAR(1000) DEFAULT '';
+    DECLARE cur CURSOR FOR SELECT id FROM sektor;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET gotov = 1;
+
+    SET rezultat = ' ';
+
+    OPEN cur;
+        iteracija_sektora: LOOP
+            FETCH cur INTO p_id_sektor;
+
+            IF gotov = 1 THEN
+                LEAVE iteracija_sektora;
+            END IF;
+
+            SELECT SUM(trosak_misije) INTO ukupni_trosak 
+                FROM misija AS m
+                INNER JOIN osoblje_na_misiji AS onm ON m.id = onm.id_misija
+                INNER JOIN osoblje AS o ON o.id = onm.id_osoblje
+                    WHERE o.id_sektor = p_id_sektor;
+
+            SET rezultat = CONCAT(rezultat, 'Sektor ', (SELECT naziv FROM sektor AS s WHERE s.id = p_id_sektor), ': ', ukupni_trosak, " ");
+        END LOOP;
+    CLOSE cur;
+
+    RETURN rezultat;
+END//
+DELIMITER ;
+
+SELECT trosak_misija_po_sektoru();
+
+
+
+-- primjer funkcije koja poziva drugu funkciju, jedna provjerava je li ta osoba na misiji tj. gleda postoji li ongoing misija gdje je ta osoba te vraca true or false
+-- onda sa tom informacijom i provjerom dobi sa selekcijom u glavnoj funkciji odlućujemo je li dobar odabir za misiju :)
+DELIMITER //
+CREATE FUNCTION osoblje_na_misiji_mod(p_id_osoblje INTEGER) RETURNS BOOLEAN
+DETERMINISTIC
+BEGIN
+	DECLARE jeilinije BOOLEAN DEFAULT FALSE;
+    
+    SELECT EXISTS(
+		SELECT 1
+			FROM osoblje AS o
+			INNER JOIN osoblje_na_misiji AS onm ON o.id = onm.id_osoblje
+			INNER JOIN misija AS m ON onm.id_misija = m.id
+			INNER JOIN lokacija AS l ON m.id_lokacija = l.id
+				WHERE m.vrijeme_kraja IS NULL AND o.id = p_id_osoblje
+		) INTO jeilinije;
+	RETURN jeilinije;
+END//
+DELIMITER ;
+-- --------
+DELIMITER //
+CREATE FUNCTION dostupnost_za_misiju(p_id_osoblje INTEGER, p_dob_misija INTEGER) RETURNS VARCHAR(30)
+DETERMINISTIC
+BEGIN
+	DECLARE trenutna_dob INTEGER;
+    DECLARE jeilinije BOOLEAN DEFAULT FALSE;
+
+	SELECT (DATEDIFF(NOW(), o.datum_rodenja) DIV 365.25) INTO trenutna_dob
+		FROM osoblje AS o
+			WHERE o.id = p_id_osoblje;
+
+	SELECT osoblje_na_misiji_mod(p_id_osoblje) INTO jeilinije;
+
+    IF NOT jeilinije AND trenutna_dob <= p_dob_misija THEN
+        RETURN 'Dostupan';
+    ELSE
+        RETURN 'Nedostupan';
+    END IF;
+END//
+DELIMITER ;
+
+SELECT dostupnost_za_misiju(10360, 30) AS dostupnost_za_misiju;
+
+
+
+-- PROCEDURE:
+	
+-- DK
+-- Za određeni id_osoblja treba vratit koliko je sati proveo/la na misiji, na treningu a koliko na liječenju.
+
+DROP PROCEDURE IF EXISTS sati_provedeno_osoblje;
+
+DELIMITER //
+CREATE PROCEDURE sati_provedeno_osoblje(IN id_os INTEGER, OUT misija_h INTEGER, OUT trening_h INTEGER, OUT lijecenje_h INTEGER)
+DETERMINISTIC
+BEGIN
+
+	SELECT SUM(TIMESTAMPDIFF(DAY, vrijeme_pocetka, vrijeme_kraja)) INTO misija_h
+    FROM misija
+    INNER JOIN osoblje_na_misiji
+    ON misija.id = osoblje_na_misiji.id_misija
+    WHERE id_osoblje = id_os;
+    
+    SELECT IFNULL(misija_h, 0) INTO misija_h;
+    
+    SELECT SUM(TIMESTAMPDIFF(DAY, vrijeme_pocetka, vrijeme_kraja)) INTO trening_h
+    FROM trening
+    INNER JOIN osoblje_na_treningu
+    ON trening.id = osoblje_na_treningu.id_trening
+    WHERE id_osoblje = id_os;
+    
+    SELECT IFNULL(trening_h, 0) INTO trening_h;
+    
+    SELECT SUM(TIMESTAMPDIFF(DAY, pocetak_lijecenja, kraj_lijecenja)) INTO lijecenje_h
+    FROM lijecenje
+    WHERE id_osoblje = id_os;
+
+	SELECT IFNULL(lijecenje_h, 0) INTO lijecenje_h;
+
+END//
+DELIMITER ;
+
+CALL sati_provedeno_osoblje(10322, @h_m, @h_t, @h_l);
+SELECT @h_m AS sati_provedeni_na_misiji, @h_t AS sati_provedeni_na_treningu, @h_l AS sati_provedeni_na_lijecenju FROM DUAL;  
+     
+     
+     
+  /*
+  Za određeni iznos novca se gleda da li bi taj novac mogao pokriti troškove najmanje pola misija te vraća odgovor
+  'DA' ili 'NE'
+  */
+     
+DROP PROCEDURE IF EXISTS novac_misije;
+
+DELIMITER //
+CREATE PROCEDURE novac_misije(IN iznos DECIMAL(30, 2), OUT odg CHAR(2))
+DETERMINISTIC
+BEGIN
+	DECLARE br_pola_misija INTEGER;
+    DECLARE trosak_najmanje_polovice DECIMAL(30, 2);
+
+	SELECT (COUNT(*)/2) INTO br_pola_misija
+	FROM misija;
+		 
+	SELECT SUM(trosak_misije) INTO trosak_najmanje_polovice
+	FROM misija
+	ORDER BY trosak_misije ASC
+	LIMIT br_pola_misija;
+
+	IF iznos >= trosak_najmanje_polovice THEN
+		SET odg = 'DA';
+	ELSE 
+		SET odg = 'NE';
+	END IF;
+END//
+DELIMITER ;
+
+CALL novac_misije(30000000, @odg);
+SELECT @odg AS Da_li_iznos_pokriva_troskove_pola_misija FROM DUAL;      
+     
+     
+
+            
+            /*
+Ispisati koliki je broj osoblja, vozila, opreme trenutačno dostupno(3 vrijednosti) u danom intervalu (dva datuma
+koje korisnik izabere kao ulazne argumente          																				*/
+
+DROP PROCEDURE IF EXISTS br_dostupnog_os_vo_op;
+
+DELIMITER //
+CREATE PROCEDURE br_dostupnog_os_vo_op(IN datum_p DATETIME, IN datum_k DATETIME, OUT dost_os INT, OUT dost_vo INT, OUT dost_op INT)
+DETERMINISTIC
+BEGIN
+   DECLARE oduzet_br_voz INTEGER;
+   DECLARE oduzet_br_op INTEGER;
+   
+   SELECT COUNT(*) INTO dost_os
+   FROM osoblje 
+   WHERE id NOT IN
+    (SELECT DISTINCT id_osoblje
+    FROM osoblje_na_treningu
+    INNER JOIN trening
+    ON trening.id = osoblje_na_treningu.id_trening
+    WHERE (datum_p > vrijeme_pocetka AND datum_p < vrijeme_kraja) OR (datum_k > vrijeme_pocetka AND datum_k < vrijeme_kraja)
+    UNION
+	SELECT DISTINCT id_osoblje
+    FROM lijecenje
+    WHERE (datum_p > pocetak_lijecenja AND datum_p < kraj_lijecenja) OR (datum_k > pocetak_lijecenja AND datum_k < kraj_lijecenja)
+    UNION
+    SELECT DISTINCT id_osoblje
+    FROM osoblje_na_turi
+    WHERE (datum_p > datum_pocetka AND datum_p < datum_kraja) OR (datum_k > datum_pocetka AND datum_k < datum_kraja));
+    
+    
+    
+   SELECT SUM(ukupna_kolicina) INTO dost_vo
+   FROM vozila;
+    
+   SELECT SUM(br_voz_zauzet) INTO oduzet_br_voz
+   FROM
+   (SELECT COUNT(*) AS br_voz_zauzet
+   FROM popravak 
+   INNER JOIN vozilo_na_misiji
+   ON popravak.id_vozilo_na_misiji = vozilo_na_misiji.id
+   WHERE (datum_p > pocetak_popravka AND datum_p < kraj_popravka) OR (datum_k > pocetak_popravka AND datum_k < kraj_popravka)
+   UNION ALL
+   SELECT SUM(kolicina) AS br_voz_zauzet
+   FROM misija
+   INNER JOIN vozilo_na_misiji
+   ON misija.id = vozilo_na_misiji.id
+   WHERE (datum_p > vrijeme_pocetka AND datum_p < vrijeme_kraja) OR (datum_k > vrijeme_pocetka AND datum_k < vrijeme_kraja)) AS l;
+   
+   SET dost_vo = dost_vo - oduzet_br_voz;
+    
+    
+    
+    SELECT SUM(ukupna_kolicina) INTO dost_op
+    FROM oprema;
+    
+    SELECT SUM(izdana_kolicina) INTO oduzet_br_op
+    FROM izdana_oprema
+    INNER JOIN osoblje_na_misiji
+    ON osoblje_na_misiji.id = izdana_oprema.id_osoblje_na_misiji
+    INNER JOIN 
+    (SELECT id
+    FROM misija
+    WHERE (datum_p > vrijeme_pocetka AND datum_p < vrijeme_kraja) OR (datum_k > vrijeme_pocetka AND datum_k < vrijeme_kraja)) AS l
+    ON l.id = osoblje_na_misiji.id_misija;
+    
+    SET dost_op = dost_op - oduzet_br_op;
+END//
+DELIMITER ;
+
+CALL br_dostupnog_os_vo_op(STR_TO_DATE("1.10.1991.  12:37:13", "%d.%m.%Y. %H:%i:%s"), 
+STR_TO_DATE("1.10.2013.  12:37:13", "%d.%m.%Y. %H:%i:%s"), @a, @b, @c);
+SELECT  @a AS br_dostupnog_osoblja, @b AS br_dostupnih_vozila, @c AS br_dostupne_opreme FROM DUAL;
+
+
+
+
+
+
+/*
+Za dva vremenski intervala (pojedini će biti određen s dvije datumske vrijednosti) se mora odrediti  pojedinačni 
+ukupni trošak za misije, ukupni trošak za popravak, ukupni trošak za liječenje te usporedit. 
+Ispis treba biti u obliku:
+	Vremensko razdoblje od 1.10.1991. do 11.07.1998. ima manji trošak kada je riječ o misijama u usporedbi s razdobljem od 23.04.1997. do 2.12.2001..
+    Vremensko razdoblje od 23.04.1997. do 2.12.2001. ima manji trošak kada je riječ o popravcima u usporedbi s razdobljem od 1.10.1991. do 11.07.1998..
+    Vremensko razdoblje od 1.10.1991. do  11.07.1998. ima manji trošak kada je riječ liječenju u usporedbi s razdobljem od 23.04.1997. do 2.12.2001..
+*/
+
+DROP PROCEDURE IF EXISTS usporedba;
+
+DELIMITER //
+CREATE PROCEDURE usporedba(IN prvi_datum_p DATETIME, IN prvi_datum_k DATETIME, IN drugi_datum_p DATETIME, IN drugi_datum_k DATETIME, OUT txt_mi VARCHAR(200), OUT txt_po VARCHAR(200), OUT txt_li VARCHAR(200))
+BEGIN
+	DECLARE prvo_misija NUMERIC(15, 2);
+    DECLARE prvo_popravak NUMERIC(15, 2);
+    DECLARE prvo_lijecenje NUMERIC(15, 2);
+    
+    DECLARE drugo_misija NUMERIC(15, 2);
+    DECLARE drugo_popravak NUMERIC(15, 2);
+    DECLARE drugo_lijecenje NUMERIC(15, 2);
+    
+    SELECT SUM(trosak_misije) INTO prvo_misija
+    FROM misija
+    WHERE vrijeme_pocetka >= prvi_datum_p AND vrijeme_kraja <= prvi_datum_k;
+    
+    SELECT SUM(trosak_misije) INTO drugo_misija
+    FROM misija
+    WHERE vrijeme_pocetka >= drugi_datum_p AND vrijeme_kraja <= drugi_datum_k;
+    
+    IF prvo_misija = drugo_misija THEN
+		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o misijama u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	ELSEIF prvo_misija > drugo_misija THEN
+		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o misijama u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	ELSE
+		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o misijama u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	END IF;
+    
+    
+	SELECT SUM(trosak_popravka) INTO prvo_popravak
+    FROM popravak
+    WHERE pocetak_popravka >= prvi_datum_p AND kraj_popravka <= prvi_datum_k;
+    
+    SELECT SUM(trosak_popravka) INTO drugo_popravak
+    FROM popravak
+    WHERE pocetak_popravka >= drugi_datum_p AND kraj_popravka <= drugi_datum_k;
+    
+    IF prvo_popravak = drugo_popravak THEN
+		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o popravcima u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	ELSEIF prvo_popravak > drugo_popravak THEN
+		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o popravcima u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	ELSE
+		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o popravcima u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	END IF;
+    
+    
+    SELECT SUM(trosak_lijecenja) INTO prvo_lijecenje
+    FROM lijecenje
+    WHERE pocetak_lijecenja >= prvi_datum_p AND kraj_lijecenja <= prvi_datum_k;
+
+    SELECT SUM(trosak_lijecenja) INTO drugo_lijecenje
+    FROM lijecenje
+    WHERE pocetak_lijecenja >= drugi_datum_p AND kraj_lijecenja <= drugi_datum_k;
+
+	IF prvo_lijecenje = drugo_lijecenje THEN
+		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o lijecenju u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	ELSEIF prvo_lijecenje > drugo_lijecenje THEN
+		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o lijecenju u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	ELSE
+		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o lijecenju u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+	END IF;
+
+END //
+DELIMITER ;
+
+CALL usporedba(STR_TO_DATE("1.10.1991.  12:37:13", "%d.%m.%Y. %H:%i:%s"), STR_TO_DATE("1.10.2013.  12:37:13", "%d.%m.%Y. %H:%i:%s"), 
+			   STR_TO_DATE("1.10.1995.  10:45:10", "%d.%m.%Y. %H:%i:%s"), STR_TO_DATE("1.10.2011.  19:37:16", "%d.%m.%Y. %H:%i:%s"),
+@usp_mi, @usp_po, @usp_li);
+SELECT  @usp_mi AS rez_usporedbe_misija, @usp_po AS rez_usporedbe_popravci, @usp_li AS rez_usporedbe_lijecenje FROM DUAL;
+
+
+
+/*
+Treba odrediti koje misije su održane na području sjeverne polutke, a koje na području južne polutke. Prilikom 
+navoda se koristi naziv misije. Format mora bit sličan: 
+  Misije održane na sjevernoj polutci: naziv1, naziv2, ...
+  Misije održane na južnoj polutci: naziv1, naziv2, ...
+  Misije održane na ekvatoru: naziv1, naziv2, ...
+*/
+
+DROP PROCEDURE IF EXISTS polutke_misije;
+
+DELIMITER //
+CREATE PROCEDURE polutke_misije(OUT sj_misije VARCHAR(1000), OUT ju_misije VARCHAR(1000), OUT ekv_misije VARCHAR(1000))
+BEGIN
+	DECLARE ime_misije VARCHAR(50) ;
+    DECLARE sirina DECIMAL(10, 7);
+	DECLARE finished INTEGER DEFAULT 0;
+
+    DECLARE cur CURSOR FOR
+	SELECT misija.naziv, zemljopisna_sirina
+	FROM misija
+	INNER JOIN lokacija
+	ON misija.id_lokacija = lokacija.id;
+
+	DECLARE CONTINUE HANDLER
+	FOR SQLSTATE '02000' SET finished = 1;
+
+	SET sj_misije = "Misije održane na sjevernoj polutci: ";
+    SET ju_misije = "Misije održane na južnoj polutci: ";
+    SET ekv_misije = "Misije održane na ekvatoru: ";
+
+	OPEN cur;
+		iteriraj_kordinate: LOOP
+
+			FETCH cur INTO ime_misije, sirina;
+
+			IF finished = 1 THEN
+			   LEAVE iteriraj_kordinate;
+			END IF;
+            
+            IF sirina > 0 THEN
+				SET sj_misije = CONCAT(sj_misije, ime_misije, ", ");
+			ELSEIF sirina < 0 THEN
+				SET ju_misije = CONCAT(ju_misije, ime_misije, ", ");
+			ELSE
+				SET ekv_misije = CONCAT(ekv_misije, ime_misije, ", ");
+			END IF;
+            
+	  END LOOP iteriraj_kordinate;
+  CLOSE cur;
+	 
+  SET sj_misije = TRIM(TRAILING ", " FROM sj_misije);
+  SET ju_misije = TRIM(TRAILING ", " FROM ju_misije);
+  SET ekv_misije = TRIM(TRAILING ", " FROM ekv_misije);
+END //
+DELIMITER ;
+
+CALL polutke_misije(@sj_naziv, @ju_naziv, @ekv_naziv);
+
+SELECT @sj_naziv AS nazivi_misija FROM DUAL
+UNION
+SELECT @ju_naziv FROM DUAL
+UNION 
+SELECT @ekv_naziv FROM DUAL;
+
+
+
+-- MK
+
+-- jednostavna procedura za promjenu statusa osoblja. Ima 2 IN parametra jedan za ID i jedan za status te koristi jednostavnu update komandu da promjeni status
+DELIMITER //
+CREATE PROCEDURE promjena_statusa_osoblja(IN p_id_osoblje INT, IN p_status_osoblja VARCHAR(50))
+BEGIN
+	UPDATE osoblje
+		SET status_osoblja = p_status_osoblja
+			WHERE id = p_id_osoblje;
+END//
+DELIMITER ;
+
+
+
+-- procedura za pogledati svo aktivno osoblje koje se trenutno nalazi na misiji preko jednostavnog upita koji spaja nekoliko tablica sa inner joinom
+DROP PROCEDURE IF EXISTS svo_osoblje_na_misiji;
+
+DELIMITER //
+CREATE PROCEDURE svo_osoblje_na_misiji()
+BEGIN
+	SELECT o.*, m.naziv, l.naziv
+		FROM osoblje AS o
+        INNER JOIN osoblje_na_misiji AS onm ON o.id = onm.id_osoblje
+        INNER JOIN misija AS m ON onm.id_misija = m.id
+        INNER JOIN lokacija AS l ON m.id_lokacija = l.id
+			WHERE m.vrijeme_kraja IS NULL;
+END//
+DELIMITER ;
+
+CALL svo_osoblje_na_misiji();
+
+-- primjer procedure koji ovisno o performansi na zadnjem treningu povecava ocjenu ili ju smanjuje i onda preporucuje da osoblje dobije promociju ili ne
+DELIMITER //
+CREATE PROCEDURE provjera_promocija_sniženje_cin(IN p_id_osoblje INT)
+BEGIN
+    DECLARE p_ocjena INT;
+    DECLARE p_performans INT;
+
+    SELECT ocjena INTO p_ocjena
+		FROM osoblje
+			WHERE id = p_id_osoblje;
+	
+	SELECT performans INTO p_performans
+        FROM osoblje_na_treningu
+			WHERE id_osoblje = p_id_osoblje AND datum_kraja IS NOT NULL
+			ORDER BY datum_pocetka DESC
+			LIMIT 1;
+
+    IF p_performans < 4 THEN
+        SET p_ocjena = ocjena - 5;
+    ELSEIF p_performans < 5 THEN
+        SET p_ocjena = ocjena - 3;
+    ELSEIF p_performans < 6 THEN
+        SET p_ocjena = ocjena - 1;
+    ELSEIF p_performans >= 9 THEN
+        SET p_ocjena = ocjena + 5;
+    ELSEIF p_performans >= 8 THEN
+        SET p_ocjena = ocjena + 3;
+    ELSEIF p_performans >= 7 THEN
+        SET p_ocjena = ocjena + 1;
+    END IF;
+
+	IF p_ocjena < 1 THEN
+		SET p_ocjena = 1;
+		SIGNAL SQLSTATE '40000'
+			SET MESSAGE_TEXT = 'Ocjena je prešla najniže prihvatljive razine te se preporućuje sniženje čina';
+	ELSEIF p_ocjena > 5 THEN
+		SET p_ocjena = 5;
+		SIGNAL SQLSTATE '40000'
+			SET MESSAGE_TEXT = 'Ocjena je prešla najvišu razinu te se preporućuje povečanje čina';
+	ELSE
+		UPDATE osoblje
+			SET ocjena = p_ocjena
+				WHERE id = p_id_osoblje;
+	END IF;
+END//
+DELIMITER ;
+
+
+-- promjeni status osoblja ako nije bio na treningu ili na turi u zadnjih godinu dana
+DELIMITER //
+CREATE PROCEDURE promjena_statusa_na_neaktivan()
+BEGIN
+    UPDATE osoblje
+    SET status_osoblja = 'neaktivan'
+    WHERE status_osoblja = 'aktivan' AND id NOT IN (SELECT id_osoblje FROM osoblje_na_turi WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR)) AND id NOT IN (SELECT id_osoblje FROM osoblje_na_treningu WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR));
+END //
+DELIMITER ;
+
+
+-- Svo osoblje u određenom sektoru koje nije mrtvo 
+DELIMITER //
+CREATE PROCEDURE ukupno_osoblje_u_sektoru(IN p_id_sektor INT)
+BEGIN
+    SELECT COUNT(*)
+    FROM osoblje
+    WHERE id_sektor = p_id_sektor;
+END//
+DELIMITER ;
+
+CALL ukupno_osoblje_u_sektoru(1);

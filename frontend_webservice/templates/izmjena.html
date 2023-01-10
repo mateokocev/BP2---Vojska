@@ -4,23 +4,97 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/izmjeni.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <title>Ocjenjivanje</title>
 </head>
 <body>
-    <form action ="" method="GET" style="display: inline;">
-        <h3>Prijavi se ovdje!</h3>
-
-        <label for="username">Korisnicko ime</label>
-        <input type="text" placeholder="Korisnicko ime" id="username" name="username" value="{{request.form.username}}" >
-
-        <label for="password">Lozinka</label>
-        <input type="password" placeholder="Lozinka" id="password" name="password" value="{{request.form.password}}">
+<div class="center">
+    <div style="text-align: center; margin-top: 10%;" class="cube">
+       
+        <a href="/"><img  src=""><button class="button-24"  role="button">Home</button></a> 
+        <h2 style="font-size: 100px; color: wheat;">Uredi Podatke</h2>
+       
 
 
-        <button type="submit" >Log In</button>
-        <h4 style="color: red; margin-top: 10px;">{{ error }}</h4>
-    </form>
+        <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">{{err}}</h1>
+        <a href="/izmjena/insert"><button style=" margin-bottom: 10px;" class="button-24" role="button">Insert</button></a>  
+        <a href="/izmjena/update"><button style=" margin-bottom: 10px;" class="button-24" role="button">Update</button></a>
+   <div class="grid8">
+     
+   
+    <a href="/izmjena/insert/lijecenje"><button style=" margin-bottom: 10px;" class="newButton" role="button">lijecenje</button></a>
+    <a href="/izmjena/insert/misija"><button style=" margin-bottom: 10px;" class="newButton" role="button">misija</button></a>
+    <a href="/izmjena/insert/oprema"><button style=" margin-bottom: 10px;" class="newButton" role="button">oprema</button></a>
+    <a href="/izmjena/insert/osoblje"><button style=" margin-bottom: 10px;" class="newButton" role="button">osoblje</button></a>
+    <a href="/izmjena/insert/popravak"><button style=" margin-bottom: 10px;" class="newButton" role="button">popravak</button></a>
+    <a href="/izmjena/insert/trening"><button style=" margin-bottom: 10px;" class="newButton" role="button">trening</button></a>
+    <a href="/izmjena/insert/tura"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
+    <a href="/izmjena/insert/vozila"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
 
-    <h1>{{status}}</h1>
+        
+   </div>
+    
+    
+      
+       
+                
+            <form method="POST" style="text-align: center" margin="10px 0px">
+               
+                <label>Ime</label>
+                <input id="ime" name="ime" placeholder="test">
+                <label>Prezime</label>
+                <input id="" name="prezime" placeholder="test">
+                <label>Sektor</label>
+                
+                <select id="menu1" name="menu1" style="margin: 5px 5px">
+                    <option value="1">Hrvatska kopnena vojska  </option>
+                    <option value="2">Hrvatska ratna mornarica  </option>
+                    <option value="3">Hrvatsko ratno zrakoplovstvo </option>
+                    <option value="4">Hrvatska vojna policija </option>
+                    <option value="5">Hrvatska vojna policija </option>
+
+
+
+
+
+                </select>
+
+                <label>Cin</label>
+                <input id="" name="cin" placeholder="test">
+                <label>Datum Rođenja</label>
+                <input type="date" name="datum1" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                <label>Datum Učlanjenja</label>
+                <input type="date" name="datum2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                <label>Status Osoblja</label>
+                <input id="" name="status" placeholder="test">
+                <label>Krvna Grupa</label>
+                <input id="" name="krv" placeholder="test">
+                <label>Ocjena</label>
+                <input id="" name="ocjena" placeholder="test">
+                
+
+                  <br>
+                <button type="submit" style=" margin-bottom: 10px;" class="newButton" role="button">Insert</button> 
+              </form>
+            
+
+       
+        <hr>
+      
+
+
+
+
+        <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button">Home</button></a> 
+      
+        
+
+
+       
+    </div>
+</div>
 </body>
 </html>
+
+

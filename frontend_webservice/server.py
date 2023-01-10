@@ -23,6 +23,7 @@ def BP_Update(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
+    vojska.commit()
     return "Done"
 
 def BP_DataAll(sql):
@@ -109,73 +110,30 @@ def kopnenaVojska():
 
 
 
-@app.route('/izmjena/<radnja>', methods = ['GET', 'POST'])
-def database(radnja):
-    item= ""
-    selection1=""
-    MaxId=""
-    tables = BP_DataAll('show TABLES;')
-    if radnja == "novo":
-        if request.method == 'POST':
-            selection1 = request.form['menu1']
-            selection2 = request.form['menu2']
+@app.route('/izmjena/insert/<tablica>', methods = ['GET', 'POST'])
+def database(tablica):
+    
+    if request.method == 'POST':
+        
+        if tablica == "osoblje":
             
-            data = []
-            for x in range(len(item)):
-                print(request.form['podatak'+str(x)])
-                #data.append(request.form['podatak'+str(x)])
-            # BP_Update("Insert into")
-            print(data)
-
-            item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
-            MaxId = BP_DataRow('Select max(id) from '+selection2+';')
-        return render_template('edit.html',MaxId = MaxId,selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
-
-       
-    
-    #SHOW COLUMNS  FROM osoblje;
-    
-
-    if radnja == "izbrisi":
-        if request.method == 'POST':
-            selection1 = request.form['menu1']
-            selection2 = request.form['menu2']
+            maxid = BP_DataRow("select max(id) from osoblje limit 1")            #STR_TO_DATE("12.12.1991.", "%d.%m.%Y.")
             
-            data = []
-            for x in range(len(item)):
-                print(request.form['podatak'+str(x)])
-                #data.append(request.form['podatak'+str(x)])
-            # BP_Update("Insert into")
-            print(data)
+            datum1 = request.form["datum1"]
+            datum2 = request.form["datum2"]
 
-            item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
-            MaxId = BP_DataRow('Select max(id) from '+selection2+';')
-        return render_template('edit.html',MaxId = MaxId,selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
 
-       
-    
-    #SHOW COLUMNS  FROM osoblje;
-    
-
-    if radnja == "izmjeni":
-        if request.method == 'POST':
-            selection1 = request.form['menu1']
-            selection2 = request.form['menu2']
+            datum1 = datum1.split("-")
+            datum2 = datum2.split("-")  
+            print(request.form["menu1"])
             
-            data = []
-            for x in range(len(item)):
-                print(request.form['podatak'+str(x)])
-                #data.append(request.form['podatak'+str(x)])
-            # BP_Update("Insert into")
-            print(data)
+            BP_Update("INSERT INTO osoblje VALUES ("+str(maxid[0]+1)+","+request.form["menu1"]+",'"+request.form["ime"]+"','"+request.form["prezime"]+"','"+request.form["cin"]+"', STR_TO_DATE('"+datum1[2]+"."+datum1[1]+"."+datum1[0]+"', '%d.%m.%Y.'), STR_TO_DATE('"+datum2[2]+"."+datum2[1]+"."+datum2[0]+"', '%d.%m.%Y.'),'"+request.form["status"]+"','"+request.form["krv"]+"',"+request.form["ocjena"]+");")
 
-            item = BP_DataAll('SHOW COLUMNS  FROM '+str(selection2)+';')
-            MaxId = BP_DataRow('Select max(id) from '+selection2+';')
-        return render_template('edit.html',MaxId = MaxId,selection1 = selection1, tables = tables,item=item,tablesLen = len(tables),itemLen = len(item))
+    return render_template('izmjena.html')
 
-       
-    return "error"
-    #SHOW COLUMNS  FROM osoblje;
+    
+
+    
     
 
 
