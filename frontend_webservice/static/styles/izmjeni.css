@@ -68,7 +68,7 @@ body
 
 form
 {
-    text-align: center;
+    text-align: left;
     padding: 30px;
     display: grid;
     grid-template-columns: auto auto;
@@ -78,9 +78,27 @@ form
 }
 label
 {
-    font-size: 30px;
+    font-size: 20px;
     text-align: left;
 }
+
+
+    select{
+        display: block;
+        height: 40px;
+        width: 80%;
+        background-color: rgba(255,255,255,0.07);
+        border-radius: 3px;
+        padding: 0 10px;
+        margin-top: 8px;
+        font-size: 20px;
+        font-weight: 300;
+        margin-bottom: 10px;
+    }
+    ::placeholder{
+        color: #e2e2e2;
+    }
+
 
 .leftbar
 {   
@@ -221,18 +239,18 @@ label
 
 input{
     display: block;
-    height: 50px;
-    width: auto;
+    height: 40px;
+    width: 80%;
     background-color: rgba(255,255,255,0.07);
     border-radius: 3px;
     padding: 0 10px;
     margin-top: 8px;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 300;
     margin-bottom: 10px;
 }
 ::placeholder{
-    color: #e5e5e5;
+    color: #e2e2e2;
 }
 
 
