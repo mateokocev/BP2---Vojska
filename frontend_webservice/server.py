@@ -306,6 +306,25 @@ def oprema():
     return render_template('oprema.html', oprema = oprema, opremaLen = opremaLen)
 
 
+@app.route("/garaza", methods = ['GET', 'POST'])
+def garaza():
+    garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila")
+    garazaLen = len(garaza)
+
+    if request.method == 'POST':
+        Search = request.form['search']    
+        
+        if Search.lower() in garaza:     
+            garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where naziv = '"+Search+"';")
+            return render_template('garaza.html', garaza = garaza, garazaLen = garazaLen)    
+
+        else:
+            garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where vrsta = '"+Search+"';")
+            return render_template('garaza.html', garaza = garaza, garazaLen = garazaLen)
+
+    return render_template('garaza.html', garaza = garaza, garazaLen = garazaLen)
+
+
 @app.route("/ocjenjivanje/<Stype>", methods = ['GET', 'POST'])  #Exception
 def ocjenjivanje(Stype):  
 

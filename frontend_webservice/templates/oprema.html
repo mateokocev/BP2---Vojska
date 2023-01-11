@@ -20,9 +20,8 @@
     
    <div class="sort">
        <form  action ="" method="post" style="display: inline; margin-left: auto;">
-            <input  placeholder="Pretraži opremu..." id="search" name="search" value="{{request.form.search}}"> 
-        </form>
-        
+            <input placeholder="Pretraži opremu..." id="search" name="search" value="{{request.form.search}}">
+        </form>      
    </div>
     
     
@@ -33,22 +32,14 @@
                 <h3>Naziv: {{oprema[i][0]}}</h3>
                 <h3>Vrsta: {{oprema[i][1]}}</h3>
                 <h3>Količina: {{oprema[i][2]}}</h3>
-            
-
         </div>
         <hr>
         {%endfor%}
-
-
-
+        <br/>
 
         <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button">Home</button></a> 
-      
-        
 
-        {% endblock %} 
-
-       
+        {% endblock %}   
     </div>
 </div>
 </body>

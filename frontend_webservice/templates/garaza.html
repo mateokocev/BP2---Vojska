@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/garaza.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <title>Oružarnica</title>
+</head>
+<body>
+<div class="center">
+    <div style="text-align: center; margin-top: 10%;" class="cube">
+        {%block content%} 
+        <a href="/"><img  src=""><button class="button-24"  role="button">Home</button></a> 
+        <h2 style="font-size: 40px; color: wheat;">Garaža</h2>
+        <h3></h3>
+
+        <h1 style="margin-top: 10%; font-size: 100px; color: wheat;"></h1>
+    
+   <div class="sort">
+       <form action ="" method="post" style="display: inline; margin: 30px; width: 1000px;">
+            <input placeholder="Pretraži vozila..." id="search" name="search" value="{{request.form.search}}"> 
+        </form>
+   </div>
+   <hr><hr>
+    
+    
+        {% for i in range(0, garazaLen) %}
+        <!-- <img src = "static/img/vozilaSlike/",{{garaza[i]}},".jpg" width = 100 height = 50 style = "float: left;">
+        <br/> -->
+        <div class="garaza-list">
+                <h3>#{{i+1}}</h3>
+                <h3>Naziv: {{garaza[i][0]}}</h3>
+                <h3>Vrsta: {{garaza[i][1]}}</h3>
+                <h3>Količina: {{garaza[i][2]}}</h3>
+                <h3>Kapacitet garaza: {{garaza[i][3]}}</h3>            
+
+        </div>
+        <hr>
+        {%endfor%}
+        <br/>
+        {% endblock %} 
+    </div>
+</div>
+</body>
+</html>
