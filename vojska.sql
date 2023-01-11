@@ -179,7 +179,6 @@ CREATE TABLE trening(
     vrijeme_pocetka DATETIME NOT NULL,
     vrijeme_kraja DATETIME NOT NULL,
     id_lokacija INTEGER NOT NULL,
-    opis VARCHAR(80) NOT NULL,
     FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
 );
 -- DROP TABLE trening;
