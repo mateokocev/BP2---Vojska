@@ -114,6 +114,10 @@ button{
     cursor: pointer;
 }
 
+.jump:hover
+{
+    
+}
 
     </style>
 </head>
@@ -131,7 +135,9 @@ button{
         <input type="password" placeholder="Lozinka" id="password" name="password" value="{{request.form.password}}">
 
 
-        <button type="submit" >Log In</button>
+        <div class="jump">
+            <button type="submit" >Log In</button>
+        </div>
         <h4 style="color: red; margin-top: 10px;">{{ error }}</h4>
     </form>
     {% if error %}

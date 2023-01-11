@@ -143,9 +143,17 @@ a
 .homebutton
 {   background-color: #616161;
     text-align: center;
-    width: 100px;
-    height: auto;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: fit-content;
+    padding: 10px;
     border-radius: 3px	;
+}
+
+.homebutton:hover
+{
+    background-color: #828282;
 }
   
 
