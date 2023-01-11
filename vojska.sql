@@ -2504,6 +2504,255 @@ INSERT INTO lijecenje VALUES
 
 
 
+-- UPITI (& POGLEDI):
+
+-- DK
+
+/*
+Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje na listi
+je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu.   */
+
+
+SELECT os.id, ime, prezime
+FROM osoblje_na_treningu AS o
+INNER JOIN trening AS t
+	ON o.id_trening = t.id
+INNER JOIN osoblje AS os
+	ON os.id = o.id_osoblje
+INNER JOIN osoblje_na_misiji AS om
+	ON om.id_osoblje = os.id
+INNER JOIN misija AS m
+	ON om.id_misija = m.id
+WHERE 12 - MONTH(m.vrijeme_pocetka) <= TIMESTAMPDIFF(MONTH, m.vrijeme_pocetka, m.vrijeme_kraja)
+ORDER BY performans DESC
+LIMIT 10;
+
+
+
+/*
+Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Helikopteri"
+koje je bilo na najviše popravaka.             */
+
+
+SELECT ime, prezime, cin
+FROM
+	(SELECT ime, prezime, cin, COUNT(*) AS broj_popravka
+	FROM popravak AS p
+	INNER JOIN vozilo_na_misiji AS vm
+		ON p.id_vozilo_na_misiji = vm.id
+	INNER JOIN vozila AS v
+		ON v.id = vm.id_vozilo
+	INNER JOIN vozilo_na_turi AS vt
+		ON vt.id_vozilo = v.id
+	INNER JOIN osoblje_na_turi AS ot
+		ON ot.id = vt.id_odgovorni
+	INNER JOIN osoblje AS o
+		ON o.id = ot.id_osoblje
+	WHERE v.vrsta = "Helikopteri"
+	GROUP BY v.id) AS l
+	ORDER BY broj_popravka DESC
+    LIMIT 1;
+
+
+
+-- Prikazi naziv ture kod koje je izdano najmanje opreme
+
+SELECT naziv
+FROM
+	(SELECT t.naziv, SUM(izdana_kolicina) AS izdano_na_turi
+	FROM izdana_oprema AS i
+	INNER JOIN osoblje_na_misiji AS om
+		ON i.id_osoblje_na_misiji = om.id
+	INNER JOIN misija AS m
+		ON om.id_misija = m.id
+	INNER JOIN tura AS t
+		ON t.id = m.id_tura
+	GROUP BY t.id) AS l
+    ORDER BY izdano_na_turi ASC
+    LIMIT 1;
+
+
+/*
+Prikaži ukupni proracun sektora koji ima drugi najveci broj osoblja koji nisu bili na lijecenju niti jedanput te koji su sudjelovali
+na najmanje jednom treningu ciji datum pocetka nije bio prije 23 godinu dana od sada.      */
+
+
+SELECT ukupni_proracun
+FROM
+	(SELECT ukupni_proracun, COUNT(*) AS br_osoblja_uvjeti
+	FROM osoblje AS o
+	INNER JOIN sektor AS s
+		ON o.id_sektor = s.id
+	INNER JOIN osoblje_na_treningu AS ot
+		ON ot.id_osoblje = o.id
+	INNER JOIN trening AS t
+		ON t.id = ot.id_trening
+	WHERE o.id NOT IN (SELECT id_osoblje FROM lijecenje) AND DATE(vrijeme_pocetka) + INTERVAL 23 YEAR >= NOW()
+	GROUP BY id_sektor) AS l
+    ORDER BY br_osoblja_uvjeti DESC
+    LIMIT 1, 1;
+
+
+
+/*
+ Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije
+ od 31 godinu i koje je bilo odgovorno za najmanje jedno vozilo u nekoj turi.   */
+
+SELECT m.naziv AS naziv_misije, l.naziv AS naziv_lokacije
+FROM lokacija AS l
+INNER JOIN misija AS m
+	ON m.id_lokacija = l.id
+INNER JOIN osoblje_na_misiji AS om
+	ON om.id_misija = m.id
+INNER JOIN osoblje AS o
+	ON o.id = om.id_osoblje
+WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN
+(SELECT id_osoblje FROM vozilo_na_turi AS vt INNER JOIN osoblje_na_turi AS ot ON vt.id_odgovorni = ot.id);
+
+
+/*
+Treba se napraviti pogled koji će prikazat dodatne podatke vezane uz turu. Treba se prikazat od koliko se misija ta tura sastoji,
+koliki je trosak ture, broj osoblja koji je sudjelovao, broj opreme koji je određen za tu turu te broj vozila koji je određen 
+za tu turu.                                                                                                                */
+
+DROP VIEW IF EXISTS tura_informacije;
+
+CREATE VIEW tura_informacije AS
+SELECT t_id AS tura_id, t_naziv AS tura_naziv, broj_misija, trosak_ture, broj_osoblja_na_turi, COUNT(*) AS broj_vozila_na_turi
+FROM 
+(SELECT t_id, t_naziv, broj_misija, trosak_ture, COUNT(*) AS broj_osoblja_na_turi
+FROM 
+(SELECT tura.id AS t_id, tura.naziv AS t_naziv, COUNT(*) AS broj_misija, SUM(trosak_misije) AS trosak_ture
+FROM tura
+INNER JOIN misija ON misija.id_tura = tura.id
+GROUP BY tura.id) AS l
+INNER JOIN osoblje_na_turi ON osoblje_na_turi.id_tura = l.t_id
+GROUP BY id_tura) AS k
+INNER JOIN vozilo_na_turi ON vozilo_na_turi.id_tura = k.t_id
+GROUP BY id_tura;
+
+SELECT * FROM tura_informacije;
+
+
+/*
+Treba se napraviti pogled koji će prikazat dodatne podatke vezane uz misiju. Treba se prikazat koliki je trosak misije,
+broj osoblja koji je sudjelovao, broj opreme koji je određen za tu misiju te broj vozila koji je određen za tu misiju.  */
+
+DROP VIEW IF EXISTS misija_informacije;
+
+CREATE VIEW misija_informacije AS
+SELECT m_id AS misija_id, m_naziv AS misija_naziv, trosak_misije, broj_osoblja_na_misiji, broj_opreme_na_misiji, COUNT(*) AS broj_vozila_na_misiji
+FROM
+(SELECT misija.id AS m_id, misija.naziv AS m_naziv, trosak_misije, COUNT(*) AS broj_osoblja_na_misiji, SUM(izdana_kolicina) AS broj_opreme_na_misiji
+FROM misija
+INNER JOIN osoblje_na_misiji ON osoblje_na_misiji.id_misija = misija.id
+INNER JOIN izdana_oprema ON izdana_oprema.id_osoblje_na_misiji = osoblje_na_misiji.id
+GROUP BY id_misija) AS p
+INNER JOIN vozilo_na_misiji ON vozilo_na_misiji.id_misija = p.m_id
+GROUP BY id_misija;
+
+SELECT * FROM misija_informacije;
+
+
+-- Treba se napraviti pogled koji će prikazat koliko je puta pojedina osoba bila na treningu, misiji i lijecenju.
+
+DROP VIEW IF EXISTS osoblje_informacije;
+
+CREATE VIEW osoblje_informacije AS
+SELECT o_id AS osoblje_id, o_ime AS osoblje_ime, o_p AS osoblje_prezime, broj_sudjelovanja_na_treningu, broj_lijecenja, broj_sudjelovanja_na_misiji
+FROM 
+((SELECT l.o_id, l.o_ime, l.o_p, broj_sudjelovanja_na_treningu, broj_lijecenja, broj_sudjelovanja_na_misiji
+FROM
+(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_sudjelovanja_na_treningu
+FROM osoblje
+INNER JOIN osoblje_na_treningu ON osoblje.id = osoblje_na_treningu.id_osoblje
+GROUP BY id_osoblje
+UNION
+SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(osoblje_na_treningu.id, 0) AS broj_sudjelovanja_na_treningu
+FROM osoblje
+LEFT JOIN osoblje_na_treningu ON osoblje.id = osoblje_na_treningu.id_osoblje
+WHERE ISNULL(osoblje_na_treningu.id) = 1) AS l
+INNER JOIN
+(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_lijecenja
+FROM osoblje
+INNER JOIN lijecenje ON osoblje.id = lijecenje.id_osoblje
+GROUP BY id_osoblje
+UNION
+SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(lijecenje.id, 0) AS  broj_lijecenja
+FROM osoblje
+LEFT JOIN lijecenje ON osoblje.id = lijecenje.id_osoblje
+WHERE ISNULL(lijecenje.id) = 1) AS k
+ON l.o_id = k.o_id
+INNER JOIN
+(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_sudjelovanja_na_misiji
+FROM osoblje
+INNER JOIN osoblje_na_misiji ON osoblje.id = osoblje_na_misiji.id_osoblje
+GROUP BY id_osoblje
+UNION
+SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(osoblje_na_misiji.id, 0) AS broj_sudjelovanja_na_misiji
+FROM osoblje
+LEFT JOIN osoblje_na_misiji ON osoblje.id = osoblje_na_misiji.id_osoblje
+WHERE ISNULL(osoblje_na_misiji.id) = 1) AS z
+ON l.o_id = z.o_id)) AS r
+ORDER BY o_id;
+
+SELECT * FROM osoblje_informacije;
+
+
+
+-- JB
+
+-- navedi sva imena i prezimena ozlijedenih vojnika na misiji kojima lijecenje kosta vise od 500 i manje od 5000
+select o.id,o.ime,o.prezime
+from osoblje_na_misiji as onm
+inner join osoblje as o 
+on onm.id_osoblje= o.id
+inner join lijecenje as l
+on l.id_osoblje = o.id
+where l.trosak_lijecenja>10000;
+
+-- navedi koliko se izdanih samokresa na misiji koristi od strane mornarice
+select sum(izo.izdana_kolicina) as samokresa_u_mornarici
+from izdana_oprema as izo
+inner join oprema as op
+on op.id= izo.id_oprema
+inner join osoblje_na_misiji as onm
+on onm.id=izo.id_osoblje_na_misiji
+inner join osoblje as o
+on o.id=onm.id_osoblje
+inner join sektor as s
+on s.id=o.id_sektor
+where s.naziv= "Hrvatska ratna mornarica" and op.vrsta="Samokres";
+
+-- Hrvatska ratna mornarica
+-- nabroji sva vozila na popravku koja su ujedno i na misiji te ih nabroji koliko ih je
+select sum(ukupna_kolicina) as totalni_br
+from vozila as v
+inner join vozilo_na_misiji as vnm
+on v.id=vnm.id_vozilo
+inner join misija as m
+on m.id=vnm.id_misija
+where m.naziv="UNOCI";
+
+-- svo osoblje koje je na misiji u ohiu
+Select * 
+from osoblje as o
+inner join osoblje_na_misiji as onm
+on onm.id_osoblje= o.id
+inner join misija as m
+on onm.id_misija= m.id
+inner join lokacija as l
+on l.id=m.id_lokacija
+where l.naziv="Ohio";
+
+-- svi idevi osoblja krvne grupe 0+ koje je na lijecenju i u sektoru je "Hrvatska kopnena vojska"
+Select l.id_osoblje, o.ime, o.prezime
+from lijecenje as l
+inner join osoblje as o
+on l.id_osoblje= o.id
+inner join sektor as s
+on s.id=o.id_sektor
+where o.krvna_grupa="0+" and s.naziv="Hrvatska kopnena vojska";
 
 
 
