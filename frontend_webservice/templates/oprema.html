@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/oprema.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <title>Oružarnica</title>
+</head>
+<body>
+<div class="center">
+    <div style="text-align: center; margin-top: 10%;" class="cube">
+        {%block content%} 
+        <a href="/"><img  src=""><button class="button-24"  role="button">Home</button></a> 
+        <h2 style="font-size: 40px; color: wheat;">Dobrodošli u e-Oružarnicu</h2>
+        <h3>Ovdje možete pronaći potpuni popis opreme koja Vam se može izdati na upit u kancelariji vojarne</h3>
+
+        <h1 style="margin-top: 10%; font-size: 100px; color: wheat;"></h1>
+    
+   <div class="sort">
+       <form  action ="" method="post" style="display: inline; margin-left: auto;">
+            <input  placeholder="Pretraži opremu..." id="search" name="search" value="{{request.form.search}}"> 
+        </form>
+        
+   </div>
+    
+    
+        {% for i in range(0, opremaLen) %}
+        <div class="oprema-list">
+                <h3>#{{i+1}}</h3>
+               
+                <h3>Naziv: {{oprema[i][0]}}</h3>
+                <h3>Vrsta: {{oprema[i][1]}}</h3>
+                <h3>Količina: {{oprema[i][2]}}</h3>
+            
+
+        </div>
+        <hr>
+        {%endfor%}
+
+
+
+
+        <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button">Home</button></a> 
+      
+        
+
+        {% endblock %} 
+
+       
+    </div>
+</div>
+</body>
+</html>

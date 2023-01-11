@@ -232,12 +232,6 @@ def database(tablica):
 
     return render_template('izmjena.html',cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
-    
-
-    
-    
-
-
 
 @app.route('/informacije/<sektor>/<data>')  #Exception
 def informacije (data,sektor):
@@ -291,6 +285,25 @@ def PrikazTura (misija,sektor):
     MisijenaTuri= BP_DataAll("select * from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     MisijenaTuriDatumi= BP_DataAll("select date(misija.vrijeme_pocetka), date(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     return render_template('testnewdesign.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
+
+
+@app.route("/oprema", methods = ['GET', 'POST'])
+def oprema():
+    oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema")
+    opremaLen = len(oprema)
+
+    if request.method == 'POST':
+        Search = request.form['search']    
+        
+        if Search.lower() in oprema:     
+            oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema where naziv = '"+Search+"';")
+            return render_template('oprema.html', oprema = oprema, opremaLen = opremaLen)    
+
+        else:
+            oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema where vrsta = '"+Search+"';")
+            return render_template('oprema.html', oprema = oprema, opremaLen = opremaLen)
+
+    return render_template('oprema.html', oprema = oprema, opremaLen = opremaLen)
 
 
 @app.route("/ocjenjivanje/<Stype>", methods = ['GET', 'POST'])  #Exception
