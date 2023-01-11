@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles/bolnica.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <title>Bolnica</title>
+</head>
+<body>
+<div class="center">
+    <div style="text-align: center; margin-top: 10%;" class="cube">
+        {%block content%} 
+        <a href="/"><img  src=""><button class="button-24"  role="button">Home</button></a> 
+        <h2 style="font-size: 70px; color: white;">Hospitalizirano osoblje</h2>
+        <h3 style="color: red">K L A S I F I C I R A N O</h3>
+        <h4 style="color: white">Napomena: vidljivo osoblje je hospitalizirano i <u>nije otpušteno</u> iz bolnice!</h4>
+    
+   <div class="sort">
+       <form action ="" method="post" style="display: inline; margin: 30px; width: 1000px;">
+            <input placeholder="Pretraži osoblje u bolnici..." id="search" name="search" value="{{request.form.search}}" style="width: 90%"> 
+        </form>
+   </div>
+   <hr><hr>
+  
+        {% for i in range(0, bolnicaLen) %}
+        <div class="bolnica-list">
+                <h3>#{{i+1}}</h3>
+                <h3>Ime i prezime: {{bolnica[i][0]}} {{bolnica[i][1]}}</h3>
+                <h3>Čin {{bolnica[i][2]}}</h3>
+                <h3>Početak liječenja: {{bolnica[i][3]}}</h3>
+                <h3>Opis ozljede: {{bolnica[i][4]}}</h3>
+                <h3>Trošak liječenja: {{bolnica[i][5]}}</h3>     
+        </div>
+        <hr>
+        {%endfor%}
+        <br/>
+        {% endblock %} 
+    </div>
+</div>
+</body>
+</html>

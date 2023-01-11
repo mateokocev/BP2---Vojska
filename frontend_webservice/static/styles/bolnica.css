@@ -5,7 +5,7 @@
 
 body
 {
-    background-image: url(../img/garaza.png);
+    background-image: url(../img/bolnica.png);
     background-repeat: no-repeat;
     background-attachment: fixed;
      background-size: cover; 
@@ -21,7 +21,7 @@ body
     border-radius: 5px;
     width: 1000px;
     height: fit-content;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(50px);
     border: 2px solid rgba(255,255,255,0.1);
     box-shadow: 0 0 40px rgba(8,7,16,0.6);
     padding: 10px;
@@ -157,7 +157,7 @@ body
 
 
 
-  .garaza-list
+  .bolnica-list
   {
     background-color: rgba(250, 235, 215, 0.182);
     display: grid;
@@ -198,4 +198,5 @@ input{
 }
 ::placeholder{
     color: #e5e5e5;
+    width: 300px;
 }
