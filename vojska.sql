@@ -474,21 +474,14 @@ CREATE FUNCTION dostupni_id_izdana_oprema() RETURNS INTEGER
 DETERMINISTIC
 BEGIN
     DECLARE id_dostupnost INTEGER DEFAULT 5001;
-    DECLARE dostupan_id INTEGER;
     
-    WHILE dostupan_id IS NULL DO
-        SET id_dostupnost = id_dostupnost + 1;
-        
-        SELECT id INTO dostupan_id
-            FROM izdana_oprema
-            WHERE id = id_dostupnost;
-    END WHILE;
+    SELECT MAX(id) + 1 INTO id_dostupnost
+		FROM izdana_oprema;
     
     RETURN id_dostupnost;
 END//
 DELIMITER ;
-
-
+/* OVAJ TRIGGER POKRENUTI NAKON BAZE PODATAKA INACE NECE RADITI
 DELIMITER //
 CREATE TRIGGER minoprema_pre_misija AFTER INSERT ON osoblje_na_misiji
 FOR EACH ROW
@@ -512,8 +505,9 @@ BEGIN
 	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
     VALUES(dostupni_id_izdana_oprema(), 1363, NEW.id, 1);
 END//
-DELIMITER ;
-
+DELIMITER ; */
+-- SELECT * FROM izdana_oprema;
+-- INSERT INTO osoblje_na_misiji VALUES (4100, 10631, 3016);
 
 -- promjena odgovornog za vozilo u slučaju ranog povlačenja iz ture. Uzme rezultat za novog odgovornog i spremi ga u @zamjena te ako nije null updatea id_odgovorni.
 DELIMITER //
@@ -538,26 +532,28 @@ BEGIN
 END//
 DELIMITER ;
 
-/*
+
 -- Provjerava je li osoblje koje se salje na misiju uopce dostupno s time da broji koliko ima aktivnih misija tj. koliko misija kojima je datum kraja na NULL
 DELIMITER //
 CREATE TRIGGER dostupnost_osoblja BEFORE INSERT ON osoblje_na_misiji
 FOR EACH ROW
 BEGIN
 	
-	SELECT COUNT(id) INTO @dostupan
+	SELECT COUNT(onm.id) INTO @dostupan
         FROM osoblje_na_misiji AS onm
         INNER JOIN osoblje AS o ON onm.id_osoblje = o.id
         INNER JOIN osoblje_na_turi AS ont ON o.id = ont.id_osoblje
-			WHERE onm.id_osoblje = NEW.id_osoblje AND ont.id_osoblje = NEW.id_osoblje AND onm.datum_kraja = NULL;
+        INNER JOIN misija AS m ON onm.id_misija = m.id
+			WHERE onm.id_osoblje = NEW.id_osoblje AND ont.id_osoblje = NEW.id_osoblje AND m.vrijeme_kraja = NULL;
 	IF @dostupan > 0 THEN
 		SIGNAL SQLSTATE '40000'
 			SET MESSAGE_TEXT = 'Osoblje nije dostupno za novu misiju';
 	END IF;
 END//
 DELIMITER ;
-*/
-
+-- DROP TRIGGER dostupnost_osoblja;
+-- DELETE FROM izdana_oprema WHERE id_osoblje_na_misiji = 4100;
+-- DELETE FROM osoblje_na_misiji WHERE id = 4100;
 
 
 -- BACKEND:
