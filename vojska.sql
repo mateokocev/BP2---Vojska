@@ -82,7 +82,6 @@ CREATE TABLE osoblje_na_misiji(
 -- DROP TABLE osoblje_na_misiji;
 
 
-
 CREATE TABLE osoblje_na_turi(
     id INTEGER PRIMARY KEY,
     id_osoblje INTEGER NOT NULL,
@@ -468,16 +467,16 @@ BEGIN
 END//
 DELIMITER ;
 
-/*
+
 -- kada vojnik ide na misiju poslužuje se tom osoblju na misiji osnovnu opremu, imamo funkciju koja provjerava dostupne id-eve te ih vraca u trigger kako bi mogli izvesti uspjesan insert. Također ima 
 DELIMITER //
 CREATE FUNCTION dostupni_id_izdana_oprema() RETURNS INTEGER
 DETERMINISTIC
 BEGIN
-    DECLARE id_dostupnost INTEGER DEFAULT 5000;
+    DECLARE id_dostupnost INTEGER DEFAULT 5001;
     DECLARE dostupan_id INTEGER;
     
-    WHILE dostupan_id != NULL DO
+    WHILE dostupan_id IS NULL DO
         SET id_dostupnost = id_dostupnost + 1;
         
         SELECT id INTO dostupan_id
@@ -489,12 +488,13 @@ BEGIN
 END//
 DELIMITER ;
 
+
 DELIMITER //
 CREATE TRIGGER minoprema_pre_misija AFTER INSERT ON osoblje_na_misiji
 FOR EACH ROW
 BEGIN
     DECLARE rand_samokres INTEGER;
-	SELECT FLOOR(1001 + RAND() * (1003-1001)) INTO rand_samokres;
+	SELECT FLOOR(1301 + RAND() * (1303-1301)) INTO rand_samokres;
     
     -- garantira jedan od dva dostupna samokresa
 	INSERT INTO izdana_oprema(id, id_oprema, id_osoblje_na_misiji, izdana_kolicina)
@@ -513,7 +513,7 @@ BEGIN
     VALUES(dostupni_id_izdana_oprema(), 1363, NEW.id, 1);
 END//
 DELIMITER ;
-*/
+
 
 -- promjena odgovornog za vozilo u slučaju ranog povlačenja iz ture. Uzme rezultat za novog odgovornog i spremi ga u @zamjena te ako nije null updatea id_odgovorni.
 DELIMITER //
@@ -1642,6 +1642,8 @@ INSERT INTO tura VALUES
 
 
 
+
+
 INSERT INTO misija VALUES
  ( 3001 , "UNAVEM III" , STR_TO_DATE("7.12.1996.", "%d.%m.%Y.") , STR_TO_DATE("24.6.2003.", "%d.%m.%Y.") , 29 , 10 , null, 5507101 ),
  ( 3002 , "UNAVEM II" , STR_TO_DATE("18.11.1995.", "%d.%m.%Y.") , STR_TO_DATE("20.2.2022.", "%d.%m.%Y.") , 20 , 10 , null, 6541048 ),
@@ -1698,6 +1700,73 @@ INSERT INTO misija VALUES
  ( 3053 , "UNOSOM I" , STR_TO_DATE("17.7.1993.", "%d.%m.%Y.") , STR_TO_DATE("16.5.2028.", "%d.%m.%Y.") , 22 , 11 , null, 1358647 ),
  ( 3054 , "UNOGIL" , STR_TO_DATE("25.6.2017.", "%d.%m.%Y.") , STR_TO_DATE("10.2.2007.", "%d.%m.%Y.") , 40 , 11 , null, 8713394 ),
  ( 3055 , "UNAMSIL" , STR_TO_DATE("6.2.2017.", "%d.%m.%Y.") , STR_TO_DATE("22.7.2033.", "%d.%m.%Y.") , 31 , 5 , null, 7138853 );
+
+
+INSERT INTO oprema VALUES
+(1301, "HS Produkt HS", "Samokres", 40000),
+(1302, "HS Produkt SF", "Samokres", 20000),
+(1303, "Heckler & Koch USP", "Samokres", 10000),
+(1304, "Heckler & Koch MP7", "Strojnica", 80),
+(1305, "Heckler & Koch UMP", "Strojnica", 100),
+(1306, "Heckler & Koch MP5", "Strojnica", 100),
+(1307, "ERO", "Strojnica", 500),
+(1308, "HS Produkt VHS-2", "Jurišna strojnica", 20000),
+(1309, "HS Produkt VHS", "Jurišna strojnica", 7800),
+(1310, "Heckler & Koch G-36", "Jurišna strojnica", 750),
+(1311, "Heckler & Koch HK416", "Jurišna strojnica", 250),
+(1312, "FN F2000", "Jurišna strojnica", 100),
+(1313, "Zastava M70", "Jurišna strojnica", 88640),
+(1314, "PM md. 63/65", "Jurišna strojnica", 3420),
+(1315, "FN Minimi", "Puškostrojnica", 100),
+(1316, "FN MAG", "Puškostrojnica", 400),
+(1317, "Ultimax 100", "Puškostrojnica", 100),
+(1318, "Heckler & Koch HK21", "Puškostrojnica", 300),
+(1319, "Zastava M84", "Puškostrojnica", 1400),
+(1320, "Browning M2", "Puškostrojnica", 700),
+(1321, "Heckler & Koch HK417", "Snajperska puška", 250),
+(1322, "Remington M40", "Snajperska puška", 70),
+(1323, "SAKO TRG-42", "Snajperska puška", 240),
+(1324, "MACS M3", "Snajperska puška", 20),
+(1325, "Barrett M82", "Snajperska puška", 24),
+(1326, "RT-20", "Snajperska puška", 4),
+(1327, "Franchi SPAS-12", "Sačmarica", 100),
+(1328, "Benelli M4 Super 90", "Sačmarica", 250),
+(1329, "Heckler & Koch AG36", "Bacač granata", 300),
+(1330, "RBG-6", "Bacač granata", 124),
+(1331, "Mk 19 bacač granata", "Bacač granata", 92),
+(1332, "Spike LR2", "Protuoklopno naoružanje || ATGM", 16),
+(1333, "FGM-148 Javelin", "Protuoklopno naoružanje || ATGM", 5),
+(1334, "BGM-71 TOW-2", "Protuoklopno naoružanje || ATGM", 134),
+(1335, "9K115-2 Metis-M", "Protuoklopno naoružanje || ATGM", 54),
+(1336, "9M113 Konkurs", "Protuoklopno naoružanje || ATGM", 42),
+(1337, "9M111 Fagot", "Protuoklopno naoružanje || ATGM", 119),
+(1338, "9M14 Maljutka", "Protuoklopno naoružanje || ATGM", 216),
+(1339, "RPG-22", "Protuoklopno naoružanje || RPG", 300),
+(1340, "AT4", "Protuoklopno naoružanje || RPG", 55),
+(1341, "M57", "Minobacač", 69),
+(1342, "M96", "Minobacač", 69),
+(1343, "M75", "Minobacač", 43),
+(1344, "Thales SSARF", "Daljinometar", 20),
+(1345, "Safran Jim Compact", "Daljinometar", 30),
+(1346, "SAGEM Sigma 30", "Oprema za navigaciju", 20),
+(1347, "Kongsberg EriTac", "Oprema za komunikaciju", 10),
+(1348, "Saab Giraffe M85", "Oprema za komunikaciju", 2),
+(1349, "Aeronautics Orbiter", "UAV || Letjelica", 6),
+(1350, "Elbit Skylark", "UAV || Letjelica", 20),
+(1351, "DJI Matrice 600", "UAV || Dron", 15),
+(1352, "DJI Mavic 2", "UAV || Dron", 10),
+(1353, "Med-Eng EOD 9 Odjelo", "Protueksplozivna oprema", 5),
+(1354, "DOK-ING MV-4 Robot/Čistač mina", "Protueksplozivna oprema", 4),
+(1355, "Telerob tEODor Robot", "Protueksplozivna oprema", 2),
+(1356, "Alaska vojni šatori", "Prijenosna struktura", 50),
+(1357, "Role 2B / Vojna terenska bolnica", "Prijenosna struktura", 1),
+(1358, "ACH balistična kaciga", "Osobna zaštitna oprema", 5000),
+(1359, "Kroko vojna pancirka", "Osobna zaštitna oprema", 5000),
+(1360, "Standardna vojna uniforma", "Osobna zaštitna oprema", 2000),
+(1361, "Veliki vojni ruksak", "Ruksak", 1100),
+(1362, "Mali vojni ruksak", "Ruksak", 1920),
+(1363, "Vojne čizme Jelen", "Osobna zaštitna oprema", 2500);
+
 
 INSERT INTO osoblje_na_misiji VALUES
  ( 4000 , 10631 , 3029 ),
@@ -2018,74 +2087,6 @@ INSERT INTO popravak VALUES
  ( 6018 , 9006 , "Manja šteta na oklopu i manji popravci" , STR_TO_DATE("9.1.2003.", "%d.%m.%Y.") , STR_TO_DATE("12.12.1994.", "%d.%m.%Y.") , 213060 ),
  ( 6019 , 9004 , "Potrebni mali popravci" , STR_TO_DATE("14.3.2022.", "%d.%m.%Y.") , STR_TO_DATE("1.2.2007.", "%d.%m.%Y.") , 277448 ),
  ( 6020 , 9016 , "Popravci na rubu neisplativosti" , STR_TO_DATE("3.2.2029.", "%d.%m.%Y.") , STR_TO_DATE("5.12.2020.", "%d.%m.%Y.") , 441037 );
-
-
-
-INSERT INTO oprema VALUES
-(1301, "HS Produkt HS", "Samokres", 40000),
-(1302, "HS Produkt SF", "Samokres", 20000),
-(1303, "Heckler & Koch USP", "Samokres", 10000),
-(1304, "Heckler & Koch MP7", "Strojnica", 80),
-(1305, "Heckler & Koch UMP", "Strojnica", 100),
-(1306, "Heckler & Koch MP5", "Strojnica", 100),
-(1307, "ERO", "Strojnica", 500),
-(1308, "HS Produkt VHS-2", "Jurišna strojnica", 20000),
-(1309, "HS Produkt VHS", "Jurišna strojnica", 7800),
-(1310, "Heckler & Koch G-36", "Jurišna strojnica", 750),
-(1311, "Heckler & Koch HK416", "Jurišna strojnica", 250),
-(1312, "FN F2000", "Jurišna strojnica", 100),
-(1313, "Zastava M70", "Jurišna strojnica", 88640),
-(1314, "PM md. 63/65", "Jurišna strojnica", 3420),
-(1315, "FN Minimi", "Puškostrojnica", 100),
-(1316, "FN MAG", "Puškostrojnica", 400),
-(1317, "Ultimax 100", "Puškostrojnica", 100),
-(1318, "Heckler & Koch HK21", "Puškostrojnica", 300),
-(1319, "Zastava M84", "Puškostrojnica", 1400),
-(1320, "Browning M2", "Puškostrojnica", 700),
-(1321, "Heckler & Koch HK417", "Snajperska puška", 250),
-(1322, "Remington M40", "Snajperska puška", 70),
-(1323, "SAKO TRG-42", "Snajperska puška", 240),
-(1324, "MACS M3", "Snajperska puška", 20),
-(1325, "Barrett M82", "Snajperska puška", 24),
-(1326, "RT-20", "Snajperska puška", 4),
-(1327, "Franchi SPAS-12", "Sačmarica", 100),
-(1328, "Benelli M4 Super 90", "Sačmarica", 250),
-(1329, "Heckler & Koch AG36", "Bacač granata", 300),
-(1330, "RBG-6", "Bacač granata", 124),
-(1331, "Mk 19 bacač granata", "Bacač granata", 92),
-(1332, "Spike LR2", "Protuoklopno naoružanje || ATGM", 16),
-(1333, "FGM-148 Javelin", "Protuoklopno naoružanje || ATGM", 5),
-(1334, "BGM-71 TOW-2", "Protuoklopno naoružanje || ATGM", 134),
-(1335, "9K115-2 Metis-M", "Protuoklopno naoružanje || ATGM", 54),
-(1336, "9M113 Konkurs", "Protuoklopno naoružanje || ATGM", 42),
-(1337, "9M111 Fagot", "Protuoklopno naoružanje || ATGM", 119),
-(1338, "9M14 Maljutka", "Protuoklopno naoružanje || ATGM", 216),
-(1339, "RPG-22", "Protuoklopno naoružanje || RPG", 300),
-(1340, "AT4", "Protuoklopno naoružanje || RPG", 55),
-(1341, "M57", "Minobacač", 69),
-(1342, "M96", "Minobacač", 69),
-(1343, "M75", "Minobacač", 43),
-(1344, "Thales SSARF", "Daljinometar", 20),
-(1345, "Safran Jim Compact", "Daljinometar", 30),
-(1346, "SAGEM Sigma 30", "Oprema za navigaciju", 20),
-(1347, "Kongsberg EriTac", "Oprema za komunikaciju", 10),
-(1348, "Saab Giraffe M85", "Oprema za komunikaciju", 2),
-(1349, "Aeronautics Orbiter", "UAV || Letjelica", 6),
-(1350, "Elbit Skylark", "UAV || Letjelica", 20),
-(1351, "DJI Matrice 600", "UAV || Dron", 15),
-(1352, "DJI Mavic 2", "UAV || Dron", 10),
-(1353, "Med-Eng EOD 9 Odjelo", "Protueksplozivna oprema", 5),
-(1354, "DOK-ING MV-4 Robot/Čistač mina", "Protueksplozivna oprema", 4),
-(1355, "Telerob tEODor Robot", "Protueksplozivna oprema", 2),
-(1356, "Alaska vojni šatori", "Prijenosna struktura", 50),
-(1357, "Role 2B / Vojna terenska bolnica", "Prijenosna struktura", 1),
-(1358, "ACH balistična kaciga", "Osobna zaštitna oprema", 5000),
-(1359, "Kroko vojna pancirka", "Osobna zaštitna oprema", 5000),
-(1360, "Standardna vojna uniforma", "Osobna zaštitna oprema", 2000),
-(1361, "Veliki vojni ruksak", "Ruksak", 1100),
-(1362, "Mali vojni ruksak", "Ruksak", 1920),
-(1363, "Vojne čizme Jelen", "Osobna zaštitna oprema", 2500);
-
 
 
 INSERT INTO izdana_oprema VALUES
