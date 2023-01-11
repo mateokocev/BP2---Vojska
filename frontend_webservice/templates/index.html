@@ -12,15 +12,15 @@
 <body>
     
     <topbar>
-        <i class="fa-solid fa-pen-to-square"></i>
-       <ul class="wrapper">
-        <li class="icon github">
-           <a href="https://github.com/mateokocev/BP2---Vojska"><img style="margin-right: 29px; margin-top: 5px;" src="/static/img/github.png"></a>
-          <span class="tooltip">Github</span>
-          <span><i class="fab fa-github"></i></span>
-        </li>
-      </ul>
-    </topbar>
+       
+        <ul class="wrapper">
+         <li class="icon github">
+            <a href="https://github.com/mateokocev/BP2---Vojska"><img style="margin-right: 29px; margin-top: 5px;" src="/static/img/github.png"></a>
+           <span class="tooltip">Github</span>
+          
+         </li>
+       </ul>
+     </topbar>
     
 
   
@@ -29,12 +29,12 @@
         <h1>
 
         {% if cin == "General" %}
-            <a href="/izmjena/insert/osoblje"><button style="margin-left: 20px;" class="button-24" role="button">Uredi</button></a>
+            <a href="/izmjena/insert/osoblje"><button style="margin-left: 20px;" class="button-24" role="button"><i class="fa-solid fa-file-pen"></i></button></a>
         {% endif %}
        
         </h1>
         <h1>Dobro došao, {{ime}} {{cin}}</h1>
-        <a href="/ocjenjivanje/all"><button style="margin-top: 20px;" class="button-24" role="button">⭐</button></a>
+        <a href="/ocjenjivanje/all"><button style="margin-top: 20px;" class="button-24" role="button"><i class="fa-solid fa-ranking-star"></i></button></a>
         <div class="imgalign">
 
             <ul class="wrapper">
@@ -42,7 +42,7 @@
                     
                     <a href="/profile"><img style="margin-bottom: 6px;" src="{{randimg}}"></a> 
                   <span class="tooltip">Profile</span>
-                  <span><i class="fab fa-github"></i></span>
+                
                 </li>
               </ul>
              
@@ -58,23 +58,22 @@
     
     
     <imageCover>
-        <h1 style="text-align: center; font-size: 4vw;">HRVATSKA KOPNENA VOJSKA</h1>
+        <h1 style="text-align: left; margin-left: 50px; font-size: 4vw;">HRVATSKA KOPNENA VOJSKA</h1>
            
         
        
        <div>
             <div class="centerText">
-                <div class="textHolder" style="margin-top: 350px;">
+                <div class="textHolder" style="margin-top: 300px;">
                     <h2 style="font-size: 20px;"> {{VojskaText[0][0]}}</h2>
                 </div>
             </div>
         </div>
         
         <div class="alignText">
-            <h3>Saznaj Više!</h3>
         
             <form action="/Kopnena Vojska/SAD%20tura">
-                <button class="button-24" role="button">Saznaj Više!!</button>
+                <button class="button-24" role="button">Više <i class="fa-sharp fa-solid fa-circle-info"></i></button>
             </form>
             
         </div>
@@ -97,9 +96,9 @@
         </div>
         <div class="alignText">
 
-            <h3>Saznaj Više!</h3>
+            
             <form action="/Ratno Zrakoplovstvo/SAD%20tura">
-                <button class="button-24" role="button">Saznaj Više!!</button>
+                <button class="button-24" role="button">Više <i class="fa-sharp fa-solid fa-circle-info"></i></button>
             </form>
             
         </div>
@@ -120,16 +119,16 @@
             <h2 style="font-size: 20px;">{{VojskaText[2][0]}}</h2>
         </div>
        
-            <h3 style="margin-left: 85%; color: rgb(43, 42, 42);">Saznaj Više!</h3>
+            
             <form action="/Ratna Mornarica/SAD%20tura">
-                <button class="button-24" role="button">Saznaj Više!!</button>
+                <button class="button-24" role="button">Više <i class="fa-sharp fa-solid fa-circle-info"></i></button>
             </form>
             
         </div>
         
      </imageCoverPomorksa>
     </div>
-    <h1>razmak</h1>
+   
    </podstranica2>
 
 
@@ -142,9 +141,9 @@
       <h2 style="font-size: 20px;">{{VojskaText[3][0]}}</h2>
      
      </div>
-     <h3 style="font-size: 30px; margin-left: 85%;">Saznaj vise</h3>
+     
      <form action="/Vojna Policija/SAD%20tura">
-        <button class="button-24" role="button">Saznaj Više!!</button>
+        <button class="button-24" role="button">Više <i class="fa-sharp fa-solid fa-circle-info"></i></button>
     </form>
      
   </imageCoverPolicija>

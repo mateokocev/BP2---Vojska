@@ -7,20 +7,21 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/izmjeni.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <title>Ocjenjivanje</title>
+    <script src="https://kit.fontawesome.com/342c3b803b.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="center">
     <div style="text-align: center; margin-top: 10%;" class="cube">
        
-        <a href="/"><img  src=""><button class="button-24"  role="button">Home</button></a> 
+        <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
         <h2 style="font-size: 100px; color: wheat;">Uredi Podatke</h2>
         
        
 
 
         <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">{{err}}</h1>
-        <a href="/izmjena/insert"><button style=" margin-bottom: 10px;" class="button-24" role="button">Insert</button></a>  
-        <a href="/izmjena/update"><button style=" margin-bottom: 10px;" class="button-24" role="button">Update</button></a>
+        <a href="/izmjena/insert"><button style=" margin-bottom: 10px;" class="button-24" role="button"><i class="fa-solid fa-pen"></i></button></a>  
+        <a href="/izmjena/update"><button style=" margin-bottom: 10px;" class="button-24" role="button"><i class="fa-solid fa-wrench"></i></button></a>
         
         <p style="font-size: 20px; color: rgb(154, 2, 2);">{{error}}</p>
    
@@ -33,6 +34,7 @@
     <a href="/izmjena/insert/trening"><button style=" margin-bottom: 10px;" class="newButton" role="button">trening</button></a>
     <a href="/izmjena/insert/tura"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
     <a href="/izmjena/insert/vozila"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
+    <a href="/izmjena/insert/lokacija"><button style=" margin-bottom: 10px;" class="newButton" role="button">lokacija</button></a>  
    
         
    </div>
@@ -65,10 +67,16 @@
                     </select>
                 </div>
                 
-                    <div>
-                        <label>Cin</label>
-                        <input id="" name="cin" placeholder="test">
-                    </div>
+                <div>
+                    <label>Sektor</label>
+                    <br>
+                    <select id="menu1" name="menu1" style="margin: 5px 5px">
+                        {% for x in range(0, cinLen) %}
+                        <option value="{{cinovi[x]}}">{{cinovi[x]}} </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
 
                     <div>
                         <label>Datum Rođenja</label>
@@ -96,7 +104,7 @@
                     <input id="" name="ocjena" placeholder="test">
                 </div>
 
-
+                
                 
                 {% endif %}
 
@@ -227,9 +235,132 @@
                 {% endif %}
 
 
+                {% if tablica == "oprema" %}
+                <h1>ID</h1>
+                <h1>{{maxid[0]+1}}</h1>
+
+                <div>
+                    <label>Naziv</label>
+                    <input id="" name="podatak1" placeholder="naziv">
+                </div>
+
+
+                <div>
+                    <label>Vrsta</label>
+                    <input  id="" type="text" name="podatak2" placeholder="vrsta">
+                </div>
+
+               <div>
+                <label>Ukupna Kolicina</label>
+                <input  id="" type="text" name="podatak3" placeholder="ukupni broj">
+               
+            </div>              
+                {% endif %}
+
+                {% if tablica == "misija" %}
+                <h1>ID</h1>
+                <h1>{{maxid[0]+1}}</h1>
+
+                <div>
+                    <label>Naziv</label>
+                    <input id="" name="podatak1" placeholder="naziv">
+                </div>
+
+                
+                <div>
+                    <label>Datum kraja</label>
+                    <input type="date" name="podatak2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                </div>
+
+                
+                <div>
+                    <label>Datum kraja</label>
+                    <input type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                </div>
+
+                <div>
+                    <label>Lokacija</label>
+                    <select id="menu1" name="podatak4" style="margin: 5px 5px">
+                   
+    
+                        {% for x in range(0, lokacijaLen) %}
+    
+                        <option value="{{lokacija[x][0]}}">{{lokacija[x][1]}}</option>
+    
+                        {%endfor%}
+                    </select>
+                </div>
+                <div>
+                    <label>Tura</label>
+                    <select id="menu1" name="podatak5" style="margin: 5px 5px">
+                   
+    
+                        {% for x in range(0, turaLen) %}
+    
+                        <option value="{{tura[x][0]}}">{{tura[x][1]}}</option>
+    
+                        {%endfor%}
+                    </select>
+                </div>
+
+                <div>
+                    <label>Ishod</label>
+                    <input  id="" type="text" name="podatak6" placeholder="vrsta">
+                </div>
+
+               <div>
+                <label>Trosak misije</label>
+                <input  id="" type="text" name="podatak7" placeholder="ukupni broj">
+               
+            </div>
+
+
+
+                
+                {% endif %}
+
+
+              
+
+
+                {% if tablica == "lokacija" %}
+                <h1>ID</h1>
+                <h1>{{maxid[0]+1}}</h1>
+
+                <div>
+                    <label>Sektor</label>
+                    <br>
+                    <select id="menu1" name="podatak1" style="margin: 5px 5px">
+                        <option value="1">Hrvatska kopnena vojska  </option>
+                        <option value="2">Hrvatska ratna mornarica  </option>
+                        <option value="3">Hrvatsko ratno zrakoplovstvo </option>
+                        <option value="4">Hrvatska vojna policija </option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Naziv</label>
+                    <input  id="" type="text" name="podatak2" placeholder="vrsta">
+                </div>
+
+
+                <div>
+                    <label>zemljopisna Dužina</label>
+                    <input  id="" type="text" name="podatak3" placeholder="test">
+                </div>
+
+
+            <div>
+                <label>zemljopisna Širina</label>
+                <input  id="" type="text" name="podatak4" placeholder="test">
+            </div>
+
+                <br>
+                {% endif %}
+
 
                   <br>
-                <button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button">Insert</button> 
+                <button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> 
               </form>
 
             
@@ -259,8 +390,8 @@
 
 
 
-        <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button">Home</button></a> 
-        <a href="/izmjena/insert/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button">Refresh / Top</button></a> 
+        <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
+        <a href="/izmjena/insert/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-arrows-rotate"></i></button></a> 
       
         
 

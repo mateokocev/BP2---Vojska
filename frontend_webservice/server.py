@@ -48,7 +48,7 @@ def BP_Insert (array, tablica,maxId): # does not work with date
     sqlTxt += ");"
 
     print(sqlTxt)
-    print(sqlTxt+";")
+    print(sqlTxt)
 
 def BP_DataAll(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
@@ -142,6 +142,7 @@ def database(tablica):
     getRowLen = len(getData[0])
     error=""
     lokacija = BP_DataAll("select id, naziv from lokacija;")
+    tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1")  
     if request.method == 'POST':
         
@@ -191,7 +192,36 @@ def database(tablica):
                         polje.append(request.form["podatak"+str(x)])
 
                 BP_Insert(polje,tablica,maxid[0]+1)
-            
+
+            if tablica == "oprema":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+
+            if tablica == "misija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+
+            if tablica == "lokacija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
             
             if error != "":                     #dodati kasnije
                 error= "Uspjesno Dodano!"
@@ -200,7 +230,7 @@ def database(tablica):
             except Exception as e:
                   error=e
 
-    return render_template('izmjena.html',tablica= tablica,lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    return render_template('izmjena.html',cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
     
 
