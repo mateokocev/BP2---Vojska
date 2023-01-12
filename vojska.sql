@@ -2995,8 +2995,7 @@ DELIMITER ;
 SELECT broj_osoblja_u_sektoru(1) AS broj_osoblja_u_sektoru;
 
 -- Primjer funkcije koja koristi while loop, imamo varijable u koje cemo spremati potrebne podatke i imamo veliki varchar u koji će ići rezultat, sa jednostavnim while loopom smo prosli kroz sve id-eve sektora te u svakoj iteraciji vezali rezultat sa concatom
-/*
-DROP FUNCTION IF EXISTS prosjecna_ocjena_po_sektoru;
+
 
 DELIMITER //
 CREATE FUNCTION prosjecna_ocjena_po_sektoru() RETURNS VARCHAR(1000)
@@ -3010,12 +3009,12 @@ BEGIN
 
 	SELECT id INTO p_id_sektor
 		FROM sektor
-        GROUP BY id ASC
+        ORDER BY id ASC
         LIMIT 1;
 
-	WHILE p_id_sektor IS NOT NULL DO
+	myloop: WHILE (p_id_sektor <= (SELECT MAX(id) FROM sektor)) DO
 
-		SELECT COUNT(*) INTO broj_osoblja 
+		SELECT COUNT(osoblje.id) INTO broj_osoblja 
 			FROM osoblje 
 				WHERE id_sektor = p_id_sektor;
 		SELECT SUM(ocjena) INTO sum_ocjena 
@@ -3024,24 +3023,23 @@ BEGIN
                 
 		SET prosjek = sum_ocjena / broj_osoblja;
 
-		SET rezultat = CONCAT(rezultat, 'Sektor ', (SELECT naziv FROM sektor AS s WHERE s.id =p_id_sektor LIMIT 1), ': ', prosjek);
-
+		SET rezultat = CONCAT(rezultat, 'Sektor ', (SELECT id FROM sektor AS s WHERE s.id = p_id_sektor LIMIT 1), ': ', prosjek, '  ');
+        
+		IF p_id_sektor = (SELECT MAX(id) FROM sektor) THEN
+			LEAVE myloop;
+		END IF;
+		
 		SELECT id INTO p_id_sektor
 			FROM sektor WHERE id > p_id_sektor 
 				ORDER BY id ASC
                 LIMIT 1;
-	END WHILE;
+	END WHILE myloop;
     
     RETURN rezultat;
 END//
 DELIMITER ;
 SELECT prosjecna_ocjena_po_sektoru() AS rezultat;
-*/
-
-
-
-
-
+DROP FUNCTION IF EXISTS prosjecna_ocjena_po_sektoru;
 
 
 -- varijacija prijašnje funkcije samo što sam koristio kursor i repeat čisto za promjenu :) masu vremena su mi potrošila ova dva
@@ -3538,3 +3536,35 @@ END//
 DELIMITER ;
 
 CALL ukupno_osoblje_u_sektoru(1);
+
+-- --------------------------------------
+-- TRANSAKCIJE --------------------------
+-- --------------------------------------
+SELECT @@autocommit;
+SET AUTOCOMMIT = OFF;
+SET AUTOCOMMIT = ON;
+-- MK
+
+-- Osnovna transakcija koja će updateati količinu ukupnog proračuna za određenu količinu koju će odrediti korisnik, select smo ubacili kako bi se korisnici mogli osigurati 
+SET AUTOCOMMIT = OFF;
+SET @isplata_sektoru = 50000;
+SET @id_sektor_transakcija1 = 2;
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+START TRANSACTION;
+	
+    SELECT id, naziv, ukupni_proracun FROM sektor WHERE id = @id_sektor_transakcija1;
+    
+    UPDATE sektor
+		SET ukupni_proracun = ukupni_proracun + @isplata_sektoru
+			WHERE id = @id_sektor_transakcija1;
+	
+    SELECT id, naziv, ukupni_proracun FROM sektor WHERE id = @id_sektor_transakcija1;
+
+COMMIT;
+SET AUTOCOMMIT = ON;
+
+
+-- primjer transakcije
+SET AUTOCOMMIT = OFF;
+SET @isplata_sektoru = 50000;
+SET @id_sektor_transakcija1 = 2;
