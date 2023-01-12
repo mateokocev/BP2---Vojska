@@ -345,11 +345,44 @@ def bolnica():
     return render_template('bolnica.html', bolnica = bolnica, bolnicaLen = bolnicaLen)
 
 
+
+
+@app.route("/statistika", methods = ['GET', 'POST'])
+def statistika():
+
+    trosak = BP_DataRow("SELECT trosak() AS ukupni_trosak FROM DUAL;")
+    visak = BP_DataRow("SELECT visak() AS visak FROM DUAL;")
+    kuna = str(visak[0])[:-3]
+    euri=float(visak[0]) // float(7.53)
+    tura_informacije = BP_DataAll("SELECT * FROM tura_informacije;")
+
+        #troskovi
+    trosak_misije = BP_DataAll("SELECT * FROM (SELECT IFNULL(DATE(vrijeme_kraja), DATE(NOW())) AS datum, SUM(trosak_misije) AS trosak_misije FROM misija GROUP BY DATE(vrijeme_kraja)) AS l ORDER BY datum ASC;")
+    trosak_popravak = BP_DataAll("SELECT * FROM (SELECT IFNULL(DATE(kraj_popravka), DATE(NOW())) AS datum, SUM(trosak_popravka) AS trosak_popravka FROM popravak GROUP BY DATE(kraj_popravka)) AS l ORDER BY datum ASC;")
+    trosak_ljecenje = BP_DataAll("SELECT * FROM (SELECT IFNULL(DATE(kraj_lijecenja), DATE(NOW())) AS datum, SUM(trosak_lijecenja) AS trosak_lijecenja FROM lijecenje GROUP BY DATE(kraj_lijecenja)) AS l ORDER BY datum ASC;")
+    trosak_svega = BP_DataAll("SELECT SUM(trosak_misije) AS trosak_svih_misija FROM misija union  SELECT SUM(trosak_popravka) AS trosak_svih_popravka FROM popravak union SELECT SUM(trosak_lijecenja) AS trosak_svih_lijecenja FROM lijecenje;")
+        #osoblje
+    kopnenaBroj = BP_DataRow("SELECT broj_osoblja_u_sektoru(1) AS broj_osoblja_u_sektoru;")
+    mornaricaBroj = BP_DataRow("SELECT broj_osoblja_u_sektoru(2) AS broj_osoblja_u_sektoru;")
+    zrakoplovnaBroj = BP_DataRow("SELECT broj_osoblja_u_sektoru(3) AS broj_osoblja_u_sektoru;")
+    policijaBroj = BP_DataRow("SELECT broj_osoblja_u_sektoru(4) AS broj_osoblja_u_sektoru;")
+    godine = BP_DataAll("SELECT osoblje_godina, COUNT(*) AS broj_osoba_s_tim_godinama FROM (select id, timestampdiff(year,datum_rodenja,curdate()) as osoblje_godina  from osoblje) AS l GROUP BY osoblje_godina;")
+    statusosoblja = BP_DataAll("SELECT status_osoblja, COUNT(*) AS broj_pojedinaca_u_statusu FROM osoblje GROUP BY status_osoblja;")
+    cinosoblje = BP_DataAll("SELECT cin, COUNT(*) AS broj_pojedinaca_u_statusu FROM osoblje GROUP BY cin;")
+
+    
+        
+
+    
+    return render_template('statistika.html',cinosoblje=cinosoblje,cinosobljeLen=len(cinosoblje),statusosoblja=statusosoblja,statusosobljaLen = len(statusosoblja),godineLen= len(godine),godine=godine,kopnenaBroj = kopnenaBroj, mornaricaBroj= mornaricaBroj, zrakoplovnaBroj = zrakoplovnaBroj, policijaBroj= policijaBroj,trosak=trosak,trosak_svega=trosak_svega,trosak_ljecenje=trosak_ljecenje,trosak_ljecenjeLen=len(trosak_ljecenje),trosak_popravak=trosak_popravak,trosak_popravakLen=len(trosak_popravak),trosak_misije=trosak_misije,trosak_misijeLen=len(trosak_misije),euri=euri,kuna=kuna,visak= visak,tura_informacije=tura_informacije,tura_informacijeLen = len(tura_informacije))
+
+
 @app.route("/ocjenjivanje/<Stype>", methods = ['GET', 'POST'])  #Exception
 def ocjenjivanje(Stype):  
 
     osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id;")
     accountRating = BP_DataRow("select ocjena from osoblje where ime = '"+name+"' and prezime = '"+ UpisLozinka+"';")
+    
     if request.method == 'POST':
         Search = request.form['search']
         
