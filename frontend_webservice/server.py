@@ -35,6 +35,20 @@ def BP_Update(sql):
     vojska.commit()
     return "Done"
 
+def BP_UpdateSql(tablename,data):
+    sql = "UPDATE "+ tablename+" SET "
+    tabela = BP_DataAll("Show COLUMNS from "+tablename+";")
+
+    for x in range(2,len(data)):
+        sql = sql+ str(tabela[x][0]) + " = '" + str(data[x]) +"',"
+
+    sql = sql [ : -1]
+    sql = sql + " WHERE "+ str(tabela[0][0]) +" = "+ str(data[0])+";"
+    print(sql)
+    BP_Update(sql)
+
+    return "Done"
+
 def BP_Insert (array, tablica,maxId): # does not work with date
 
     sqlTxt="INSERT INTO "+ tablica+" VALUES("+ str(maxId)+","
@@ -49,7 +63,8 @@ def BP_Insert (array, tablica,maxId): # does not work with date
     sqlTxt += ");"
 
     print(sqlTxt)
-    print(sqlTxt)
+    BP_DataAll(sqlTxt)
+    
 
 def BP_DataAll(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
@@ -77,8 +92,7 @@ def GetCin(cin,sektor):
 # Route for handling the login page logic
 @app.route('/', methods = ['GET', 'POST'])
 def login():
-    kurac = BP_Function("SELECT trosak() AS ukupni_trosak FROM DUAL;")
-    print(kurac[0][0])
+    
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     krusor = vojska.cursor()
     error = ""
@@ -144,13 +158,14 @@ def database(tablica):
     error=""
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
-    maxid = BP_DataRow("select max(id) from "+tablica+" limit 1")  
+    maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
+   
     if request.method == 'POST':
         
         
             
             if tablica == "osoblje":
-
+                        # stara metoda
                 maxid = BP_DataRow("select max(id) from osoblje limit 1")            #STR_TO_DATE("12.12.1991.", "%d.%m.%Y.")
 
                 datum1 = request.form["datum1"]
@@ -158,12 +173,10 @@ def database(tablica):
 
                 datum1 = datum1.split("-")
                 datum2 = datum2.split("-")  
-
-
                 BP_Update("INSERT INTO osoblje VALUES ("+str(maxid[0]+1)+","+request.form["menu1"]+",'"+request.form["ime"]+"','"+request.form["prezime"]+"','"+request.form["cin"]+"', STR_TO_DATE('"+datum1[2]+"."+datum1[1]+"."+datum1[0]+"', '%d.%m.%Y.'), STR_TO_DATE('"+datum2[2]+"."+datum2[1]+"."+datum2[0]+"', '%d.%m.%Y.'),'"+request.form["status"]+"','"+request.form["krv"]+"',"+request.form["ocjena"]+");")
 
             if tablica == "vozila":
-
+                    # nova laksa metoda
                 polje = []
 
                 for x in range(10):
@@ -233,6 +246,99 @@ def database(tablica):
 
     return render_template('izmjena.html',cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
+
+
+@app.route('/izmjena/update/<tablica>', methods = ['GET', 'POST'])
+def Update(tablica):
+    
+        
+    
+
+   
+    getData = BP_DataAll("Select * from "+ tablica+" ;")
+    getRowLen = len(getData[0])
+    error=""
+    lokacija = BP_DataAll("select id, naziv from lokacija;")
+    tura = BP_DataAll("select id, naziv from tura;")
+    maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
+    IDosoblje = BP_DataAll("select id from osoblje;")
+
+
+    if request.method == 'POST':
+        
+            if tablica == "osoblje":
+                        # nova laksa metoda
+                polje = []
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "vozila":
+                    # nova laksa metoda
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+            
+            if tablica == "tura":
+
+                        
+
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "trening":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "oprema":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "misija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "lokacija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+   
+    
+    return render_template('update.html',IDosoblje=IDosoblje,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    
 
 @app.route('/informacije/<sektor>/<data>')  #Exception
 def informacije (data,sektor):

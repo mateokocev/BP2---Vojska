@@ -27,15 +27,15 @@
         <p style="font-size: 20px; color: rgb(154, 2, 2);">{{error}}</p>
    
         <div class="grid8">
-    <a href="/izmjena/insert/lijecenje"><button style=" margin-bottom: 10px;" class="newButton" role="button">lijecenje</button></a>
-    <a href="/izmjena/insert/misija"><button style=" margin-bottom: 10px;" class="newButton" role="button">misija</button></a>
-    <a href="/izmjena/insert/oprema"><button style=" margin-bottom: 10px;" class="newButton" role="button">oprema</button></a>
-    <a href="/izmjena/insert/osoblje"><button style=" margin-bottom: 10px;" class="newButton" role="button">osoblje</button></a>
-    <a href="/izmjena/insert/popravak"><button style=" margin-bottom: 10px;" class="newButton" role="button">popravak</button></a>
-    <a href="/izmjena/insert/trening"><button style=" margin-bottom: 10px;" class="newButton" role="button">trening</button></a>
-    <a href="/izmjena/insert/tura"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
-    <a href="/izmjena/insert/vozila"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
-    <a href="/izmjena/insert/lokacija"><button style=" margin-bottom: 10px;" class="newButton" role="button">lokacija</button></a>  
+    <a href="/izmjena/update/lijecenje"><button style=" margin-bottom: 10px;" class="newButton" role="button">lijecenje</button></a>
+    <a href="/izmjena/update/misija"><button style=" margin-bottom: 10px;" class="newButton" role="button">misija</button></a>
+    <a href="/izmjena/update/oprema"><button style=" margin-bottom: 10px;" class="newButton" role="button">oprema</button></a>
+    <a href="/izmjena/update/osoblje"><button style=" margin-bottom: 10px;" class="newButton" role="button">osoblje</button></a>
+    <a href="/izmjena/update/popravak"><button style=" margin-bottom: 10px;" class="newButton" role="button">popravak</button></a>
+    <a href="/izmjena/update/trening"><button style=" margin-bottom: 10px;" class="newButton" role="button">trening</button></a>
+    <a href="/izmjena/update/tura"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
+    <a href="/izmjena/update/vozila"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
+    <a href="/izmjena/update/lokacija"><button style=" margin-bottom: 10px;" class="newButton" role="button">lokacija</button></a>  
    
         
    </div>
@@ -48,19 +48,25 @@
             <form method="POST" margin="10px 0px">
                 {% if tablica == "osoblje" %}
                 <div>
+                    <label>Id</label>
+                    <input id="ime" name="podatak1" placeholder="id">
+                </div>
+
+
+                <div>
                     <label>Ime</label>
-                    <input id="ime" name="ime" placeholder="test">
+                    <input id="ime" name="podatak2" placeholder="ime">
                 </div>
 
                 <div>
                     <label>Prezime</label>
-                    <input id="" name="prezime" placeholder="test">
+                    <input id="" name="podatak3" placeholder="prezime">
                 </div>
 
                 <div>
                     <label>Sektor</label>
                     <br>
-                    <select id="menu1" name="menu1" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak4" style="margin: 5px 5px">
                         <option value="1">Hrvatska kopnena vojska  </option>
                         <option value="2">Hrvatska ratna mornarica  </option>
                         <option value="3">Hrvatsko ratno zrakoplovstvo </option>
@@ -71,7 +77,7 @@
                 <div>
                     <label>Sektor</label>
                     <br>
-                    <select id="menu1" name="menu1" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak5" style="margin: 5px 5px">
                         {% for x in range(0, cinLen) %}
                         <option value="{{cinovi[x]}}">{{cinovi[x]}} </option>
                         {% endfor %}
@@ -81,28 +87,28 @@
 
                     <div>
                         <label>Datum Rođenja</label>
-                        <input type="date" name="datum1" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input type="date" name="podatak6" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                         <div>
                             <label>Datum Učlanjenja</label>
                           
-                            <input type="date" name="datum2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                            <input type="date" name="podatak7" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
             
                         </div>
                     <div>
                         <label>Status Osoblja</label>
-                        <input id="" name="status" placeholder="test">
+                        <input id="" name="podatak8" placeholder="test">
                     </div>
 
                     <div>
                         <label>Krvna Grupa</label>
-                        <input id="" name="krv" placeholder="test">
+                        <input id="" name="podatak9" placeholder="test">
                     </div>
 
                 <div>
                     <label>Ocjena</label>
-                    <input id="" name="ocjena" placeholder="test">
+                    <input id="" name="podatak10" placeholder="test">
                 </div>
 
                 
@@ -111,38 +117,47 @@
 
 
                 {% if tablica == "vozila" %}
+
+                <div>
+                    <label>Id</label>
+                    <input id="" name="podatak1" placeholder="id">
+                </div>
+
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak1" placeholder="Naziv">
-                </div>
-                <div>
-                    <label>Vrsta</label>
                     <input id="" name="podatak2" placeholder="Naziv">
                 </div>
                 <div>
+                    <label>Vrsta</label>
+                    <input id="" name="podatak3" placeholder="Naziv">
+                </div>
+                <div>
                     <label>Ukupna Količina</label>
-                    <input id="" name="podatak3" placeholder="Broj">
+                    <input id="" name="podatak4" placeholder="Broj">
                 </div>
                 <div>
                     <label>Kapacitet</label>
-                    <input id="" name="podatak4" placeholder="Broj">
+                    <input id="" name="podatak5" placeholder="Broj">
                 </div>
 
                 {% endif %}
 
 
                 {% if tablica == "tura" %}
-                <h1>ID</h1>
-                <h1>{{maxid[0]+1}}</h1>
+
+                <div>
+                    <label>Id</label>
+                    <input id="" name="podatak1" placeholder="id">
+                </div>
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak1" placeholder="test">
+                    <input id="" name="podatak2" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrsta Ture</label>
-                    <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak3" style="margin: 5px 5px">
                         <option value="Mirovna tura">Mirovna tura</option>
                         <option value="Vojna tura">Vojna tura</option>
                     </select>
@@ -150,12 +165,12 @@
                 
                     <div>
                         <label>Vrijeme početka</label>
-                        <input type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                     <div>
                         <label>Vrijeme Kraja</label>
-                        <input type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input type="date" name="podatak5" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                 
@@ -163,23 +178,26 @@
 
 
                 {% if tablica == "trening" %}
-                <h1>ID</h1>
-                <h1>{{maxid[0]+1}}</h1>
+                
+                <div>
+                    <label>Id</label>
+                    <input id="" name="podatak1" placeholder="id">
+                </div>
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input id="" name="podatak1" placeholder="test">
+                    <input id="" name="podatak2" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input id="appt-time" type="time" name="podatak2" step="2" />
+                    <input id="appt-time" type="time" name="podatak3" step="2" />
                 </div>
 
                <div>
                 <label>Lokacija</label>
-                <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                <select id="menu1" name="podatak4" style="margin: 5px 5px">
                
 
                     {% for x in range(0, lokacijaLen) %}
@@ -191,7 +209,7 @@
             </div>
             <div>
                 <label>Opis</label>
-                <input  id="" type="text" name="podatak3" placeholder="test">
+                <input  id="" type="text" name="podatak5" placeholder="test">
             </div>
 
 
@@ -200,23 +218,25 @@
 
 
                 {% if tablica == "popravak" %}
-                <h1>ID</h1>
-                <h1>{{maxid[0]+1}}</h1>
+                <div>
+                    <label>Id</label>
+                    <input id="" name="podatak1" placeholder="id">
+                </div>
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input id="" name="podatak1" placeholder="test">
+                    <input id="" name="podatak2" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input id="appt-time" type="time" name="podatak2" step="2" />
+                    <input id="appt-time" type="time" name="podatak3" step="2" />
                 </div>
 
                <div>
                 <label>Lokacija</label>
-                <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                <select id="menu1" name="podatak4" style="margin: 5px 5px">
                
 
                     {% for x in range(0, lokacijaLen) %}
@@ -228,7 +248,7 @@
             </div>
             <div>
                 <label>Opis</label>
-                <input  id="" type="text" name="podatak3" placeholder="test">
+                <input  id="" type="text" name="podatak5" placeholder="test">
             </div>
 
 
@@ -237,40 +257,39 @@
 
 
                 {% if tablica == "oprema" %}
-                <h1>ID</h1>
-                <h1>{{maxid[0]+1}}</h1>
+
+                <div>
+                    <label>Id</label>
+                    <input id="" name="podatak1" placeholder="id">
+                </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak1" placeholder="naziv">
+                    <input id="" name="podatak2" placeholder="naziv">
                 </div>
 
 
                 <div>
                     <label>Vrsta</label>
-                    <input  id="" type="text" name="podatak2" placeholder="vrsta">
+                    <input  id="" type="text" name="podatak3" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Ukupna Kolicina</label>
-                <input  id="" type="text" name="podatak3" placeholder="ukupni broj">
+                <input  id="" type="text" name="podatak4" placeholder="ukupni broj">
                
             </div>              
                 {% endif %}
 
                 {% if tablica == "misija" %}
-                <h1>ID</h1>
-                <h1>{{maxid[0]+1}}</h1>
+                <div>
+                    <label>Id</label>
+                    <input id="" name="podatak1" placeholder="id">
+                </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak1" placeholder="naziv">
-                </div>
-
-                
-                <div>
-                    <label>Datum kraja</label>
-                    <input type="date" name="podatak2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input id="" name="podatak2" placeholder="naziv">
                 </div>
 
                 
@@ -279,9 +298,15 @@
                     <input type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
+                
+                <div>
+                    <label>Datum kraja</label>
+                    <input type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                </div>
+
                 <div>
                     <label>Lokacija</label>
-                    <select id="menu1" name="podatak4" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak5" style="margin: 5px 5px">
                    
     
                         {% for x in range(0, lokacijaLen) %}
@@ -293,7 +318,7 @@
                 </div>
                 <div>
                     <label>Tura</label>
-                    <select id="menu1" name="podatak5" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak6" style="margin: 5px 5px">
                    
     
                         {% for x in range(0, turaLen) %}
@@ -306,12 +331,12 @@
 
                 <div>
                     <label>Ishod</label>
-                    <input  id="" type="text" name="podatak6" placeholder="vrsta">
+                    <input  id="" type="text" name="podatak7" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Trosak misije</label>
-                <input  id="" type="text" name="podatak7" placeholder="ukupni broj">
+                <input  id="" type="text" name="podatak8" placeholder="ukupni broj">
                
             </div>
 
@@ -325,13 +350,15 @@
 
 
                 {% if tablica == "lokacija" %}
-                <h1>ID</h1>
-                <h1>{{maxid[0]+1}}</h1>
+                <div>
+                    <label>Id</label>
+                    <input id="" name="podatak1" placeholder="id">
+                </div>
 
                 <div>
                     <label>Sektor</label>
                     <br>
-                    <select id="menu1" name="podatak1" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak2" style="margin: 5px 5px">
                         <option value="1">Hrvatska kopnena vojska  </option>
                         <option value="2">Hrvatska ratna mornarica  </option>
                         <option value="3">Hrvatsko ratno zrakoplovstvo </option>
@@ -341,19 +368,19 @@
 
                 <div>
                     <label>Naziv</label>
-                    <input  id="" type="text" name="podatak2" placeholder="vrsta">
+                    <input  id="" type="text" name="podatak3" placeholder="vrsta">
                 </div>
 
 
                 <div>
                     <label>zemljopisna Dužina</label>
-                    <input  id="" type="text" name="podatak3" placeholder="Broj">
+                    <input  id="" type="text" name="podatak4" placeholder="Broj">
                 </div>
 
 
             <div>
                 <label>zemljopisna Širina</label>
-                <input  id="" type="text" name="podatak4" placeholder="Broj">
+                <input  id="" type="text" name="podatak5" placeholder="Broj">
             </div>
 
                 <br>
@@ -376,9 +403,11 @@
                     {% for x in range(0, 10) %}
 
                         {% if getData[i][x] or getData[i][x] == None or getData[i][x] == "" %}
+                          
+                          
                         
-                        <p>{{getData[i][x]}}</p>
-                       
+                            <p>{{getData[i][x]}}</p>
+                        
                         {% endif %}
                        
                     {%endfor%}
@@ -396,7 +425,7 @@
 
 
         <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
-        <a href="/izmjena/insert/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-arrows-rotate"></i></button></a> 
+        <a href="/izmjena/update/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-arrows-rotate"></i></button></a> 
       
         
 
