@@ -1,0 +1,105 @@
+*
+{
+    font-family: 'Poppins',sans-serif;
+    
+}
+body
+{
+    background-color:rgb(228, 237, 246)
+}
+
+.leftbar
+{background-color: brown;
+    position: absolute;
+    position: fixed;
+    width: 150px;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    
+
+}
+.sredina
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+.canvas
+{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.naslov
+{   
+    text-align: center;
+  
+    font-size: 30px;
+   
+}
+
+
+.grid2 {
+ 
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    grid-auto-rows: minmax(100px, auto);
+  }
+
+.space
+{
+    
+    width: 1600px;
+    height: fit-content;
+  
+    margin-left: auto;
+    margin-right: auto;
+}
+.grid8
+{
+    text-align: center;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto;
+    
+    height: 60%;
+    grid-auto-rows: 100px;
+}
+
+.item
+{   font-size: 20px;
+    color: white;
+    text-align: center;
+}
+.buble
+{
+    background-color: white;
+    border-radius: 10px;
+    
+    margin: 30px;
+    width: 100%;
+    height: 100%;
+    color:black;
+}
+
+.canvas
+{
+    width: 300px;
+}
+
+
+.fourTile {
+    grid-column: 2 / 4;
+    grid-row: 1 / 3;
+  }
+
+  .visak
+  {
+    text-align: center;
+    background-color: brown;
+    color: aliceblue;
+    height: 50%;
+    border-radius: 10px;
+    
+    padding: 50px;
+  }

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/statistika.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/342c3b803b.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<body>
+
+ 
+       
+    </div>
+    <div class="space">
+        <div class="naslov"><h1>Statistika Financije</h1></div>
+        <div class="grid2">
+
+          <div style="grid-row: 1 / 2; height: 100%;" class="buble">
+            <h1 style="color: rgb(187, 187, 187);" >Preostalo Financije</h1>
+            <div class="visak">
+              <h1 style="font-size: 50px;"><i class="fa-solid fa-landmark"></i> {{kuna}} Kn</h1>
+              <h1 style="font-size: 30px;color: rgb(255, 162, 162);"> <i class="fa-solid fa-sort-down"></i> {{trosak[0]}} Kn</h1>
+
+             
+              <h3 style="color: rgb(252, 64, 64);"><hr></h3>
+              <h3>{{euri}} €</h3>
+            </div>
+            <h1 style="text-align: center; font-size: 20px;color: rgb(105, 105, 105);">Fixna valuta eura: 7.53</h1>
+            
+            
+          </div>
+
+            <div  class="buble">  
+              
+              <h1 style="color: rgb(187, 187, 187);" >Trošak svih resursa</h1>
+              <div class="sredina" style="width:80%;">
+                <canvas id="trosak_svega"></canvas>
+              </div>
+              
+            </div>
+            <div class="fourTile">
+              <div  class="buble">
+                <h1 style="color: rgb(187, 187, 187); padding: 30px;" >Trošak Ture</h1>
+                <div class="sredina" style="width:100%;">
+                  <canvas id="myChart"></canvas>
+                </div>
+  
+              </div>
+            </div>
+
+            <div style="grid-column: 1 / span 3;" class="buble">
+              <h1 style="color: rgb(187, 187, 187);" >Trošak Misija Tijekom godina</h1>
+              <div class="sredina" style="width:90%; padding: 30px;">
+                <canvas id="misija"></canvas>
+              </div>
+              
+            </div>
+            <div style="grid-column: 1 / span 3;" class="buble">
+              <h1 style="color: rgb(187, 187, 187);" >Trošak Popravka</h1>
+              <div class="sredina"  style="width:90%; padding: 30px;">
+                <canvas id="popravak"></canvas>
+              </div>
+
+            </div>
+
+            <div style="grid-column: 1 / span 3;" class="buble">
+              <h1 style="color: rgb(187, 187, 187);" >Trošak liječenja</h1>
+              <div class="sredina" style="width:90%; padding: 30px;">
+                <canvas id="lijecenje"></canvas>
+              </div>
+            </div>
+
+
+        </div>
+
+       
+    </div>
+
+    
+    <div class="space">
+      <div class="naslov" style="margin-top: 100px;"><h1>Statistika Osoblje</h1></div>
+      <hr>
+
+      <div class="grid2">
+  
+        <div class="buble">
+          
+
+            <div style="height: fit-content; background-color: rgb(34, 72, 197);" class="visak">
+              <h1 style="font-size: 50px;"><i class="fa-solid fa-person"></i> {{statusosoblja[3][1]+statusosoblja[2][1]+statusosoblja[1][1]+statusosoblja[0][1]}}</h1>
+              <h1 style="font-size: 30px;color: rgb(132, 167, 213);"> <i class="fa-solid fa-sort-down"></i> {{statusosoblja[0][0]}} {{statusosoblja[0][1]}}</h1>
+      
+             
+              <h3 style="color: rgb(252, 64, 64);"><hr></h3>
+              
+              <h3><i class="fa-solid fa-person-rifle"></i> Aktivnih {{statusosoblja[3][1]}} </h3>
+              <h3><i class="fa-solid fa-person-cane"></i> Umirovljenih{{statusosoblja[2][1]}} </h3>
+              <h3><i class="fa-solid fa-person-military-to-person"></i> Neaktivnih {{statusosoblja[1][1]}} </h3>
+              <h3><i class="fa-solid fa-skull"></i> Mrtvih {{statusosoblja[0][1]}} </h3>
+
+
+              
+            </div>
+            <h1 style="text-align: center; font-size: 20px;color: rgb(105, 105, 105);">Fixna valuta eura: 7.53</h1>
+            
+            
+        
+
+
+          <div class="sredina" style="width:80%;">
+            <canvas id="statusosoblja"></canvas>
+          </div>
+          
+        </div>
+
+     
+
+        <div class="buble">
+          <h1 style="color: rgb(187, 187, 187); padding: 30px;" >Trošak Ture2</h1>
+          <div class="sredina" style="width:90%;">
+            <canvas id="brojOsoblja"></canvas>
+          </div>
+        
+
+        </div>
+        
+        <div class="fourTile">
+          <div  class="buble">
+            <h1 style="color: rgb(187, 187, 187); padding: 30px;" >Trošak Ture3</h1>
+            <div class="sredina" style="width:100%;">
+              <canvas id="cinosoblje"></canvas>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="grid-column: 1 / span 3;" class="buble">
+          <h1 style="color: rgb(187, 187, 187); padding: 30px;" >Godine Osoblja</h1>
+          <div class="sredina" style="width:60%;">
+            <canvas id="godine"></canvas>
+          </div>
+        </div>
+
+
+    </div>
+
+
+
+
+</body>
+</html>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      
+      labels: [
+      {% for x in range(0, tura_informacijeLen) %}
+        '{{tura_informacije[x][1]}}',
+        {% endfor %}
+      ],
+      datasets: [{
+        label: 'Potrošeno',
+        data: [
+        {%for x in range(tura_informacijeLen)%}
+        '{{tura_informacije[x][3]}}',
+        {% endfor %}
+        ],
+        borderWidth: 3
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+
+
+
+  const ctx2 = document.getElementById('misija');
+
+  new Chart(ctx2, {
+    type: 'line',
+    data: {
+      
+      labels: [
+      {% for x in range(0, trosak_misijeLen) %}
+        
+        '{{trosak_misije[x][0]}}',
+        {% endfor %}
+      ],
+      datasets: [{
+        label: 'Potrošeno',
+        data: [
+        {%for x in range(trosak_misijeLen)%}
+        '{{trosak_misije[x][1]}}',
+        {% endfor %}
+        ],
+        borderWidth: 3
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+const ctx1 = document.getElementById('popravak');
+
+
+new Chart(ctx1, {
+  type: 'bar',
+  data: {
+    
+    labels: [
+    {% for x in range(0, trosak_popravakLen) %}
+      '{{trosak_popravak[x][0]}}',
+      {% endfor %}
+    ],
+    datasets: [{
+      label: 'Potrošeno',
+      data: [
+      {%for x in range(trosak_popravakLen)%}
+      '{{trosak_popravak[x][1]}}',
+      {% endfor %}
+      ],
+      borderWidth: 3
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+
+
+const ctx3 = document.getElementById('lijecenje');
+
+
+new Chart(ctx3, {
+  type: 'line',
+  data: {
+    
+    labels: [
+    {% for x in range(0, trosak_ljecenjeLen) %}
+      '{{trosak_ljecenje[x][0]}}',
+      {% endfor %}
+    ],
+    datasets: [{
+      label: 'Potrošeno',
+      data: [
+      {%for x in range(trosak_ljecenjeLen)%}
+      '{{trosak_ljecenje[x][1]}}',
+      {% endfor %}
+      ],
+      borderWidth: 3
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+
+const ctx4 = document.getElementById('trosak_svega');
+
+new Chart(ctx4, {
+  type: 'pie',
+  data: {
+    
+    labels: ['Trošak Misija',' Trošak Popravka','Trošak liječenja'
+     
+    ],
+    datasets: [{
+      label: 'Potrošeno',
+      data: [ '{{trosak_svega[0][0]}}','{{trosak_svega[1][0]}}','{{trosak_svega[2][0]}}'
+      
+      ],
+      borderWidth: 3
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+
+
+const ctx5 = document.getElementById('brojOsoblja');
+
+
+new Chart(ctx5, {
+  type: 'pie',
+  data: {
+    
+    labels: ['Hrvatska kopnena vojska','Hrvatska ratna mornarica','Hrvatsko ratno zrakoplovstvo','Hrvatska vojna policija'
+     
+    ],
+    datasets: [{
+      label: 'Potrošeno',
+      data: [ '{{kopnenaBroj[0]}}','{{mornaricaBroj[0]}}','{{zrakoplovnaBroj[0]}}','{{policijaBroj[0]}}'
+      
+      ],
+      borderWidth: 3
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+
+
+const ctx6 = document.getElementById('godine');
+
+new Chart(ctx6, {
+  type: 'bar',
+  data: {
+    
+    labels: [
+    {% for x in range(0, godineLen) %}
+     
+      '{{godine[x][0]}}',
+      
+      {% endfor %}
+    ],
+    datasets: [{
+      label: 'Osoblje sa godina:',
+      data: [
+      {%for x in range(godineLen)%}
+      '{{godine[x][1]}}',
+      {% endfor %}
+      ],
+      borderWidth: 3
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+
+
+const ctx7 = document.getElementById('statusosoblja');
+
+new Chart(ctx7, {
+  type: 'doughnut',
+  data: {
+    
+    labels: [
+    {% for x in range(0, statusosobljaLen) %}
+     
+      '{{statusosoblja[x][0]}}',
+      
+      {% endfor %}
+    ],
+    datasets: [{
+      label: 'Osoblje sa godina:',
+      data: [
+      {%for x in range(statusosobljaLen)%}
+      '{{statusosoblja[x][1]}}',
+      {% endfor %}
+      ],
+      borderWidth: 3
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+
+const ctx8 = document.getElementById('cinosoblje');
+
+new Chart(ctx8, {
+  type: 'doughnut',
+  data: {
+    
+    labels: [
+    {% for x in range(0, cinosobljeLen) %}
+     
+      '{{cinosoblje[x][0]}}',
+      
+      {% endfor %}
+    ],
+    datasets: [{
+      label: 'Osoblje sa godina:',
+      data: [
+      {%for x in range(cinosobljeLen)%}
+      '{{cinosoblje[x][1]}}',
+      {% endfor %}
+      ],
+      borderWidth: 3
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+</script>
