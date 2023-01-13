@@ -63,8 +63,11 @@ body
     grid-template-columns: auto auto auto auto auto auto auto auto;
     
     height: 60%;
+   
     grid-auto-rows: 100px;
 }
+
+
 
 form
 {

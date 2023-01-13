@@ -14,33 +14,37 @@
     <div style="text-align: center; margin-top: 10%;" class="cube">
         
         
-        <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
+        <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i> Početna</button></a> 
         <h2 style="font-size: 100px; color: wheat;">Uredi Podatke</h2>
         
        
 
 
         <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">{{err}}</h1>
-        <a href="/izmjena/insert/osoblje"><button style=" margin-bottom: 10px;" class="button-24" role="button"><i class="fa-solid fa-pen"></i></button></a>  
-        <a href="/izmjena/update/osoblje"><button style=" margin-bottom: 10px;" class="button-24" role="button"><i class="fa-solid fa-wrench"></i></button></a>
+        <a href="/izmjena/insert/osoblje"><button style=" margin-bottom: 10px;" class="button-24" role="button"><i class="fa-solid fa-pen"></i> Dodaj</button></a>  
+        <a href="/izmjena/update/osoblje"><button style=" margin-bottom: 10px;" class="button-24" role="button"><i class="fa-solid fa-wrench"></i> Promjeni</button></a>
+        <a href="/izmjena/update/osoblje"><button style=" margin-bottom: 10px;" class="button-24" role="button"> <i class="fa-solid fa-trash-can"></i> Izbriši</button></a>
         
+
+
+       
         <p style="font-size: 20px; color: rgb(154, 2, 2);">{{error}}</p>
    
         <div class="grid8">
-    <a href="/izmjena/insert/lijecenje"><button style=" margin-bottom: 10px;" class="newButton" role="button">lijecenje</button></a>
-    <a href="/izmjena/insert/misija"><button style=" margin-bottom: 10px;" class="newButton" role="button">misija</button></a>
-    <a href="/izmjena/insert/oprema"><button style=" margin-bottom: 10px;" class="newButton" role="button">oprema</button></a>
-    <a href="/izmjena/insert/osoblje"><button style=" margin-bottom: 10px;" class="newButton" role="button">osoblje</button></a>
-    <a href="/izmjena/insert/popravak"><button style=" margin-bottom: 10px;" class="newButton" role="button">popravak</button></a>
-    <a href="/izmjena/insert/trening"><button style=" margin-bottom: 10px;" class="newButton" role="button">trening</button></a>
-    <a href="/izmjena/insert/tura"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
-    <a href="/izmjena/insert/vozila"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
-    <a href="/izmjena/insert/lokacija"><button style=" margin-bottom: 10px;" class="newButton" role="button">lokacija</button></a>  
+    <a href="/izmjena/insert/lijecenje"><button style=" margin-bottom: 10px;" class="newButton" role="button"> lijecenje</button></a>
+    <a href="/izmjena/insert/misija"><button style=" margin-bottom: 10px;" class="newButton" role="button"> misija</button></a>
+    <a href="/izmjena/insert/oprema"><button style=" margin-bottom: 10px;" class="newButton" role="button"> oprema</button></a>
+    <a href="/izmjena/insert/osoblje"><button style=" margin-bottom: 10px;" class="newButton" role="button"> osoblje</button></a>
+    <a href="/izmjena/insert/popravak"><button style=" margin-bottom: 10px;" class="newButton" role="button"> popravak</button></a>
+    <a href="/izmjena/insert/trening"><button style=" margin-bottom: 10px;" class="newButton" role="button"> trening</button></a>
+    <a href="/izmjena/insert/tura"><button style=" margin-bottom: 10px;" class="newButton" role="button"> tura</button></a>
+    <a href="/izmjena/insert/vozila"><button style=" margin-bottom: 10px;" class="newButton" role="button"> vozila</button></a>  
+    <a href="/izmjena/insert/lokacija"><button style=" margin-bottom: 10px;" class="newButton" role="button"> lokacija</button></a>  
    
         
    </div>
    <hr>
-   <h3 style="font-size: 60px; color: wheat;">{{tablica}}</h3>
+   <h3 style="font-size: 60px; color: wheat;">Dodaj {{tablica}}</h3>
     
       
        
@@ -357,13 +361,14 @@
             </div>
 
                 <br>
-                {% endif %}
+               
 
-
+                {% endif %}  
                   <br>
-                <button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> 
-              </form>
-
+                <a href="/izmjena/insert/vozila"><button  type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> </a>
+               
+            </form>
+          
             
 
        

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for,flash
 from random import randrange
 from graph import pie
 import sqlite3 as sql
@@ -62,8 +62,8 @@ def BP_Insert (array, tablica,maxId): # does not work with date
     sqlTxt =sqlTxt[:-1] 
     sqlTxt += ");"
 
-    print(sqlTxt)
-    BP_DataAll(sqlTxt)
+   
+    BP_Update(sqlTxt)
     
 
 def BP_DataAll(sql):
@@ -105,7 +105,7 @@ def login():
 
         name = request.form['username']
         UpisLozinka = request.form['password']
-
+        
         krusor.execute("select * from login where md5(concat('"+name+"','"+UpisLozinka+"')) = lozinka;")
                         
         error=""
@@ -116,11 +116,11 @@ def login():
             osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
             
             VojskaText = BP_DataAll("select opis from sektor;")
-            print(VojskaText)
+           
             global randimg
             randimg = RandomImageGenerator()
             
-            print(randimg)
+            
             return render_template('index.html', randimg = randimg , ime = name, VojskaText = VojskaText, cin = osoblje[2])
     
     return render_template('Login.html',error = error)
@@ -159,7 +159,7 @@ def database(tablica):
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
-   
+ 
     if request.method == 'POST':
         
         
@@ -237,13 +237,16 @@ def database(tablica):
 
                 BP_Insert(polje,tablica,maxid[0]+1)
             
+            
             if error != "":                     #dodati kasnije
                 error= "Uspjesno Dodano!"
+                
             try:
-                print("a")  
+                print("Uspjesno dodano!")
+                
             except Exception as e:
                   error=e
-
+     #flash('Thanks for submitting your name, {}!'.format(name))
     return render_template('izmjena.html',cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
 
