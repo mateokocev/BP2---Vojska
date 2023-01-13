@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/izmjeni.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <title>Ocjenjivanje</title>
+    <script src="https://kit.fontawesome.com/342c3b803b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="center">
+        <div style="text-align: center; margin-top: 10%;" class="cube">
+            
+            
+            <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i> Početna</button></a> 
+            <h2 style="font-size: 100px; color: wheat;">Uredi Podatke</h2>
+            
+           
+    
+    
+            <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">{{err}}</h1>
+            <a href="/izmjena/insert/osoblje"><button style=" margin-bottom: 10px;" class="button-24" role="button"><i class="fa-solid fa-pen"></i> Dodaj</button></a>  
+            <a href="/izmjena/update/osoblje"><button style=" margin-bottom: 10px;" class="button-24" role="button"><i class="fa-solid fa-wrench"></i> Promjeni</button></a>
+            <a href="/izmjena/delete/osoblje/0"><button style=" margin-bottom: 10px;" class="button-24" role="button"> <i class="fa-solid fa-trash-can"></i> Izbriši</button></a>
+            
+            <p style="font-size: 20px; color: rgb(154, 2, 2);">{{error}}</p>
+       
+            <div class="grid8">
+        <a href="/izmjena/delete/lijecenje/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">lijecenje</button></a>
+        <a href="/izmjena/delete/misija/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">misija</button></a>
+        <a href="/izmjena/delete/oprema/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">oprema</button></a>
+        <a href="/izmjena/delete/osoblje/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">osoblje</button></a>
+        <a href="/izmjena/delete/popravak/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">popravak</button></a>
+        <a href="/izmjena/delete/trening/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">trening</button></a>
+        <a href="/izmjena/delete/tura/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
+        <a href="/izmjena/delete/vozila/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
+        <a href="/izmjena/delete/lokacija/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">lokacija</button></a>  
+       
+            
+       </div>
+       <hr>
+       <h3 style="font-size: 60px; color: wheat;">Pregledaj {{tablica}}</h3>
+        
+          
+           
+                       
+                <form method="POST" margin="10px 0px">
+                    <div>
+                        <label>ID</label>
+                        <input required type="number" id="osoblje_id" name="podatakid" value="{{ImpotData[0]}}" placeholder="ID">
+                    </div>
+
+
+
+
+
+
+                    <br>
+                    
+               
+                    <button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button>
+                      
+                
+                  
+                </form>
+    
+                
+    
+           
+            <hr>    
+                  <h1>Podatci</h1>
+                  <hr>
+                  <div style="grid-template-columns: {{ getRowLen * 'auto '}} ;" class="gridauto">
+                    {% for i in range(0, getDatalen) %}
+    
+                        {% for x in range(0, 10) %}
+    
+                            {% if getData[i][x] or getData[i][x] == None or getData[i][x] == "" %}
+    
+                                {% if getData[i][x] in poljeID %}
+    
+                                <a href="/izmjena/update/{{tablica}}/{{getData[i][x]}}"><button  style=" margin-bottom: 10px; height: 50%; width: fit-content;" class="newButton" role="button"><i class="fa-solid fa-key"></i> {{getData[i][x]}}</button> </a>
+                                
+                                {% else %}
+                                <p>{{getData[i][x]}}</p>
+                                {% endif %}
+                            {% endif %}
+                           
+                        {%endfor%}
+                        
+                    {%endfor%}
+                    
+                  </div>
+          
+    
+                  <div>
+                    <canvas id="myChart"></canvas>
+                  </div>
+                  
+                  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
+            <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
+                  
+            <a href="/izmjena/update/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-arrows-rotate"></i></button></a> 
+          
+            
+    
+    
+           
+        </div>
+    </div>
+    </body>
+    </html>
