@@ -50,37 +50,39 @@
                 {% if tablica == "osoblje" %}
                 <div>
                     <label>Id</label>
-                    <input id="ime" name="podatak1" placeholder="id">
+                    <input required id="ime" name="podatak1" value="{{ImpotData[0]}}" placeholder="id">
+                </div>
+
+                <div>
+                    <label>Sektor</label>
+                    <br>
+                    <select id="menu1" name="podatak2"  style="margin: 5px 5px">
+                        <option value="1"{% if ImpotData[1]  == 1 %}  selected {% endif %}>Hrvatska kopnena vojska  </option>
+                        <option value="2" {% if ImpotData[1] ==  2 %} selected {% endif %}>Hrvatska ratna mornarica  </option>
+                        <option value="3"{% if ImpotData[1]  == 3 %}  selected {% endif %}>Hrvatsko ratno zrakoplovstvo </option>
+                        <option value="4"{% if ImpotData[1]  == 4 %}  selected {% endif %}>Hrvatska vojna policija </option>
+                    </select>
                 </div>
 
 
                 <div>
                     <label>Ime</label>
-                    <input id="ime" name="podatak2" placeholder="ime">
+                    <input required id="ime" value="{{ImpotData[2]}}" name="podatak3" placeholder="ime">
                 </div>
 
                 <div>
                     <label>Prezime</label>
-                    <input id="" name="podatak3" placeholder="prezime">
+                    <input required id="" name="podatak4" value="{{ImpotData[3]}}" placeholder="prezime">
                 </div>
 
-                <div>
-                    <label>Sektor</label>
-                    <br>
-                    <select id="menu1" name="podatak4" style="margin: 5px 5px">
-                        <option value="1">Hrvatska kopnena vojska  </option>
-                        <option value="2">Hrvatska ratna mornarica  </option>
-                        <option value="3">Hrvatsko ratno zrakoplovstvo </option>
-                        <option value="4">Hrvatska vojna policija </option>
-                    </select>
-                </div>
+            
                 
                 <div>
                     <label>Sektor</label>
                     <br>
-                    <select id="menu1" name="podatak5" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak5" value="{{ImpotData[4]}}" style="margin: 5px 5px">
                         {% for x in range(0, cinLen) %}
-                        <option value="{{cinovi[x]}}">{{cinovi[x]}} </option>
+                        <option value="{{cinovi[x]}}" {% if ImpotData[4]  == cinovi[x] %}  selected {% endif %}>{{cinovi[x]}} </option>
                         {% endfor %}
 
                     </select>
@@ -88,28 +90,28 @@
 
                     <div>
                         <label>Datum Rođenja</label>
-                        <input type="date" name="podatak6" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required type="date" name="podatak6" value="{{ImpotData[5]}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                         <div>
                             <label>Datum Učlanjenja</label>
                           
-                            <input type="date" name="podatak7" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                            <input required type="date" name="podatak7" value="{{ImpotData[6]}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
             
                         </div>
                     <div>
                         <label>Status Osoblja</label>
-                        <input id="" name="podatak8" placeholder="test">
+                        <input required id="" name="podatak8" value="{{ImpotData[7]}}" placeholder="test">
                     </div>
 
                     <div>
                         <label>Krvna Grupa</label>
-                        <input id="" name="podatak9" placeholder="test">
+                        <input required id="" name="podatak9" value="{{ImpotData[8]}}" placeholder="test">
                     </div>
 
                 <div>
                     <label>Ocjena</label>
-                    <input id="" name="podatak10" placeholder="test">
+                    <input required  type="number" id="" name="podatak10"  value="{{ImpotData[9]}}" placeholder="test">
                 </div>
 
                 
@@ -121,24 +123,24 @@
 
                 <div>
                     <label>Id</label>
-                    <input id="" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak2" placeholder="Naziv">
+                    <input required id="" value="{{ImpotData[1]}}" name="podatak2" placeholder="Naziv">
                 </div>
                 <div>
                     <label>Vrsta</label>
-                    <input id="" name="podatak3" placeholder="Naziv">
+                    <input required id="" value="{{ImpotData[2]}}" name="podatak3" placeholder="Naziv">
                 </div>
                 <div>
                     <label>Ukupna Količina</label>
-                    <input id="" name="podatak4" placeholder="Broj">
+                    <input required id="" value="{{ImpotData[3]}}" name="podatak4" placeholder="Broj">
                 </div>
                 <div>
                     <label>Kapacitet</label>
-                    <input id="" name="podatak5" placeholder="Broj">
+                    <input required id=""value="{{ImpotData[4]}}" name="podatak5" placeholder="Broj">
                 </div>
 
                 {% endif %}
@@ -148,30 +150,30 @@
 
                 <div>
                     <label>Id</label>
-                    <input id="" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
                 </div>
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak2" placeholder="test">
+                    <input required id="" value="{{ImpotData[1]}}" name="podatak2" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrsta Ture</label>
                     <select id="menu1" name="podatak3" style="margin: 5px 5px">
-                        <option value="Mirovna tura">Mirovna tura</option>
-                        <option value="Vojna tura">Vojna tura</option>
+                        <option value="Mirovna tura" {% if ImpotData[2]  == "Mirovna tura" %}  selected {% endif %}>Mirovna tura</option>
+                        <option value="Vojna tura" {% if ImpotData[2]  == "Vojna tura" %}  selected {% endif %}>Vojna tura</option>
                     </select>
                 </div>
                 
                     <div>
-                        <label>Vrijeme početka</label>
-                        <input type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <label>Vrijeme početka </label>
+                        <input required type="date" name="podatak6" value="{{ImpotData[3].date()}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                     <div>
                         <label>Vrijeme Kraja</label>
-                        <input type="date" name="podatak5" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required type="date" name="podatak6" value="{{ImpotData[3].date()}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                 
@@ -182,18 +184,18 @@
                 
                 <div>
                     <label>Id</label>
-                    <input id="" name="podatak1" placeholder="id">
+                    <input required id="" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input id="" name="podatak2" placeholder="test">
+                    <input required id="" name="podatak2" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input id="appt-time" type="time" name="podatak3" step="2" />
+                    <input required id="appt-time" type="time" name="podatak3" step="2" />
                 </div>
 
                <div>
@@ -210,7 +212,7 @@
             </div>
             <div>
                 <label>Opis</label>
-                <input  id="" type="text" name="podatak5" placeholder="test">
+                <input required  id="" type="text" name="podatak5" placeholder="test">
             </div>
 
 
@@ -221,18 +223,18 @@
                 {% if tablica == "popravak" %}
                 <div>
                     <label>Id</label>
-                    <input id="" name="podatak1" placeholder="id">
+                    <input required id="" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input id="" name="podatak2" placeholder="test">
+                    <input required id="" name="podatak2" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input id="appt-time" type="time" name="podatak3" step="2" />
+                    <input required id="appt-time" type="time" name="podatak3" step="2" />
                 </div>
 
                <div>
@@ -249,7 +251,7 @@
             </div>
             <div>
                 <label>Opis</label>
-                <input  id="" type="text" name="podatak5" placeholder="test">
+                <input required  id="" type="text" name="podatak5" placeholder="test">
             </div>
 
 
@@ -261,23 +263,23 @@
 
                 <div>
                     <label>Id</label>
-                    <input id="" name="podatak1" placeholder="id">
+                    <input required id="" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak2" placeholder="naziv">
+                    <input required id="" name="podatak2" placeholder="naziv">
                 </div>
 
 
                 <div>
                     <label>Vrsta</label>
-                    <input  id="" type="text" name="podatak3" placeholder="vrsta">
+                    <input required  id="" type="text" name="podatak3" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Ukupna Kolicina</label>
-                <input  id="" type="text" name="podatak4" placeholder="ukupni broj">
+                <input required  id="" type="text" name="podatak4" placeholder="ukupni broj">
                
             </div>              
                 {% endif %}
@@ -285,24 +287,24 @@
                 {% if tablica == "misija" %}
                 <div>
                     <label>Id</label>
-                    <input id="" name="podatak1" placeholder="id">
+                    <input required id="" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak2" placeholder="naziv">
+                    <input required id="" name="podatak2" placeholder="naziv">
                 </div>
 
                 
                 <div>
                     <label>Datum kraja</label>
-                    <input type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input required type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
                 
                 <div>
                     <label>Datum kraja</label>
-                    <input type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input required type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
                 <div>
@@ -332,12 +334,12 @@
 
                 <div>
                     <label>Ishod</label>
-                    <input  id="" type="text" name="podatak7" placeholder="vrsta">
+                    <input required  id="" type="text" name="podatak7" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Trosak misije</label>
-                <input  id="" type="text" name="podatak8" placeholder="ukupni broj">
+                <input required  id="" type="text" name="podatak8" placeholder="ukupni broj">
                
             </div>
 
@@ -353,35 +355,35 @@
                 {% if tablica == "lokacija" %}
                 <div>
                     <label>Id</label>
-                    <input id="" name="podatak1" placeholder="id">
+                    <input required id="" name="podatak1" value="{{ImpotData[0]}}"" placeholder="id">
                 </div>
 
                 <div>
                     <label>Sektor</label>
                     <br>
                     <select id="menu1" name="podatak2" style="margin: 5px 5px">
-                        <option value="1">Hrvatska kopnena vojska  </option>
-                        <option value="2">Hrvatska ratna mornarica  </option>
-                        <option value="3">Hrvatsko ratno zrakoplovstvo </option>
-                        <option value="4">Hrvatska vojna policija </option>
+                        <option value="1"{% if ImpotData[1]  == 1 %}   selected {% endif %}>Hrvatska kopnena vojska  </option>
+                        <option value="2"{% if ImpotData[1]  == 2 %} selected {% endif %}>Hrvatska ratna mornarica  </option>
+                        <option value="3"{% if ImpotData[1]  == 3 %}   selected {% endif %}>Hrvatsko ratno zrakoplovstvo </option>
+                        <option value="4"{% if ImpotData[1]  == 4 %}   selected {% endif %}>Hrvatska vojna policija </option>
                     </select>
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input  id="" type="text" name="podatak3" placeholder="vrsta">
+                    <input required  id="" type="text" value="{{ImpotData[2]}}" name="podatak3" placeholder="vrsta">
                 </div>
 
 
                 <div>
                     <label>zemljopisna Dužina</label>
-                    <input  id="" type="text" name="podatak4" placeholder="Broj">
+                    <input required  id="" type="text" value="{{ImpotData[3]}}" name="podatak4" placeholder="Broj">
                 </div>
 
 
             <div>
                 <label>zemljopisna Širina</label>
-                <input  id="" type="text" name="podatak5" placeholder="Broj">
+                <input required  id="" type="text" name="podatak5" value="{{ImpotData[4]}}" placeholder="Broj">
             </div>
 
                 <br>
@@ -389,14 +391,19 @@
 
 
                   <br>
-                <button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> 
-              </form>
+                
+           
+                  <a href="/izmjena/update/{{tablica}}"><button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> </a>
+                  
+            
+              
+                </form>
 
             
 
        
         <hr>    
-              <h1>Podatci</h1>
+              <h1>Podatci {{getData}}</h1>
               <hr>
               <div style="grid-template-columns: {{ getRowLen * 'auto '}} ;" class="gridauto">
                 {% for i in range(0, getDatalen) %}
@@ -404,11 +411,14 @@
                     {% for x in range(0, 10) %}
 
                         {% if getData[i][x] or getData[i][x] == None or getData[i][x] == "" %}
-                          
-                          
-                        
+
+                            {% if getData[i][x] in poljeID %}
+
+                            <a href="/izmjena/update/{{tablica}}/{{getData[i][x]}}"><button  style=" margin-bottom: 10px; height: 50%; width: fit-content;" class="newButton" role="button"><i class="fa-solid fa-key"></i> {{getData[i][x]}}</button> </a>
+                            
+                            {% else %}
                             <p>{{getData[i][x]}}</p>
-                        
+                            {% endif %}
                         {% endif %}
                        
                     {%endfor%}
@@ -426,6 +436,7 @@
 
 
         <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
+              
         <a href="/izmjena/update/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-arrows-rotate"></i></button></a> 
       
         

@@ -53,12 +53,12 @@
                 {% if tablica == "osoblje" %}
                 <div>
                     <label>Ime</label>
-                    <input id="ime" name="ime" placeholder="test">
+                    <input required  id="ime" name="ime" placeholder="test" >
                 </div>
 
                 <div>
                     <label>Prezime</label>
-                    <input id="" name="prezime" placeholder="test">
+                    <input required  id="" name="prezime" placeholder="test">
                 </div>
 
                 <div>
@@ -85,28 +85,28 @@
 
                     <div>
                         <label>Datum Rođenja</label>
-                        <input type="date" name="datum1" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required  type="date" name="datum1" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                         <div>
                             <label>Datum Učlanjenja</label>
                           
-                            <input type="date" name="datum2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                            <input required  type="date" name="datum2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
             
                         </div>
                     <div>
                         <label>Status Osoblja</label>
-                        <input id="" name="status" placeholder="test">
+                        <input required  id="" name="status" placeholder="test">
                     </div>
 
                     <div>
                         <label>Krvna Grupa</label>
-                        <input id="" name="krv" placeholder="test">
+                        <input required  id="" name="krv" placeholder="test">
                     </div>
 
                 <div>
                     <label>Ocjena</label>
-                    <input id="" name="ocjena" placeholder="test">
+                    <input required  type="number" id="" name="ocjena" placeholder="test">
                 </div>
 
                 
@@ -117,19 +117,19 @@
                 {% if tablica == "vozila" %}
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak1" placeholder="Naziv">
+                    <input required  id="" name="podatak1" placeholder="Naziv">
                 </div>
                 <div>
                     <label>Vrsta</label>
-                    <input id="" name="podatak2" placeholder="Naziv">
+                    <input required  id="" name="podatak2" placeholder="Naziv">
                 </div>
                 <div>
                     <label>Ukupna Količina</label>
-                    <input id="" name="podatak3" placeholder="Broj">
+                    <input  type="number" required  id="" name="podatak3" placeholder="Broj">
                 </div>
                 <div>
                     <label>Kapacitet</label>
-                    <input id="" name="podatak4" placeholder="Broj">
+                    <input type="number"  required  id="" name="podatak4" placeholder="Broj">
                 </div>
 
                 {% endif %}
@@ -140,7 +140,7 @@
                 <h1>{{maxid[0]+1}}</h1>
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak1" placeholder="test">
+                    <input required  id="" name="podatak1" placeholder="test">
                 </div>
 
 
@@ -154,12 +154,12 @@
                 
                     <div>
                         <label>Vrijeme početka</label>
-                        <input type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required  type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                     <div>
                         <label>Vrijeme Kraja</label>
-                        <input type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required  type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                 
@@ -172,13 +172,13 @@
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input id="" name="podatak1" placeholder="test">
+                    <input required  id="" name="podatak1" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input id="appt-time" type="time" name="podatak2" step="2" />
+                    <input required  id="appt-time" type="time" name="podatak2" step="2" />
                 </div>
 
                <div>
@@ -195,7 +195,7 @@
             </div>
             <div>
                 <label>Opis</label>
-                <input  id="" type="text" name="podatak3" placeholder="test">
+                <input required   id="" type="text" name="podatak3" placeholder="test">
             </div>
 
 
@@ -209,13 +209,13 @@
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input id="" name="podatak1" placeholder="test">
+                    <input required  id="" name="podatak1" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input id="appt-time" type="time" name="podatak2" step="2" />
+                    <input required  id="appt-time" type="time" name="podatak2" step="2" />
                 </div>
 
                <div>
@@ -232,7 +232,7 @@
             </div>
             <div>
                 <label>Opis</label>
-                <input  id="" type="text" name="podatak3" placeholder="test">
+                <input required   id="" type="text" name="podatak3" placeholder="test">
             </div>
 
 
@@ -246,18 +246,18 @@
 
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak1" placeholder="naziv">
+                    <input required  id="" name="podatak1" placeholder="naziv">
                 </div>
 
 
                 <div>
                     <label>Vrsta</label>
-                    <input  id="" type="text" name="podatak2" placeholder="vrsta">
+                    <input required   id="" type="text" name="podatak2" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Ukupna Kolicina</label>
-                <input  id="" type="text" name="podatak3" placeholder="ukupni broj">
+                <input  type="number" required   id="" type="text" name="podatak3" placeholder="ukupni broj">
                
             </div>              
                 {% endif %}
@@ -268,19 +268,19 @@
 
                 <div>
                     <label>Naziv</label>
-                    <input id="" name="podatak1" placeholder="naziv">
+                    <input required  id="" name="podatak1" placeholder="naziv">
                 </div>
 
                 
                 <div>
                     <label>Datum kraja</label>
-                    <input type="date" name="podatak2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input required  type="date" name="podatak2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
                 
                 <div>
                     <label>Datum kraja</label>
-                    <input type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input required  type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
                 <div>
@@ -310,12 +310,12 @@
 
                 <div>
                     <label>Ishod</label>
-                    <input  id="" type="text" name="podatak6" placeholder="vrsta">
+                    <input required   id="" type="text" name="podatak6" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Trosak misije</label>
-                <input  id="" type="text" name="podatak7" placeholder="ukupni broj">
+                <input required  type="number" id="" type="text" name="podatak7" placeholder="ukupni broj">
                
             </div>
 
@@ -345,19 +345,19 @@
 
                 <div>
                     <label>Naziv</label>
-                    <input  id="" type="text" name="podatak2" placeholder="vrsta">
+                    <input required   id="" type="text" name="podatak2" placeholder="vrsta">
                 </div>
 
 
                 <div>
                     <label>zemljopisna Dužina</label>
-                    <input  id="" type="text" name="podatak3" placeholder="Broj">
+                    <input type="number" required   id="" type="text" name="podatak3" placeholder="Broj">
                 </div>
 
 
             <div>
                 <label>zemljopisna Širina</label>
-                <input  id="" type="text" name="podatak4" placeholder="Broj">
+                <input type="number" required   id="" type="text" name="podatak4" placeholder="Broj">
             </div>
 
                 <br>
@@ -373,7 +373,7 @@
 
        
         <hr>    
-              <h1>Podatci</h1>
+              <h1 style="color: antiquewhite;">Podatci</h1>
               <hr>
               <div style="grid-template-columns: {{ getRowLen * 'auto '}} ;" class="gridauto">
                 {% for i in range(0, getDatalen) %}
@@ -382,7 +382,7 @@
 
                         {% if getData[i][x] or getData[i][x] == None or getData[i][x] == "" %}
                         
-                        <p>{{getData[i][x]}}</p>
+                        <p style="color: antiquewhite;">{{getData[i][x]}}</p>
                        
                         {% endif %}
                        
