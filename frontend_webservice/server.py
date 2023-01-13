@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for,flash
+from flask import Flask, render_template, request
 from random import randrange
 from graph import pie
 import sqlite3 as sql

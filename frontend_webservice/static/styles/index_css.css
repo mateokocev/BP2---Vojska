@@ -293,8 +293,8 @@ nav:hover {
   transition-timing-function: ease-out;
   -webkit-transition-duration: 0.75s;
   transition-duration: 0.75s;
-  -webkit-clip-path: circle(390px at 225px 24px);
-  clip-path: circle(390px at 150px 24px);
+  -webkit-clip-path: circle(390px at 225px 100px);
+  clip-path: circle(390px at 150px 100px);
 }
 
 
