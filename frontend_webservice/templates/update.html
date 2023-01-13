@@ -150,13 +150,14 @@
 
                 <div>
                     <label>Id</label>
+                    {% if ImpotData[0]  %}
                     <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
                 </div>
                 <div>
                     <label>Naziv</label>
                     <input required id="" value="{{ImpotData[1]}}" name="podatak2" placeholder="test">
                 </div>
-
+                    {% endif %}
 
                 <div>
                     <label>Vrsta Ture</label>
@@ -168,12 +169,12 @@
                 
                     <div>
                         <label>Vrijeme početka </label>
-                        <input required type="date" name="podatak6" value="{{ImpotData[3].date()}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required type="date" name="podatak6"  placeholder="dd-mm-yyyy" value="{{ImpotData[3].date()}}" min="01.01.1900" max="01.01.2030">
                     </div>
 
                     <div>
                         <label>Vrijeme Kraja</label>
-                        <input required type="date" name="podatak6" value="{{ImpotData[3].date()}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required type="date" name="podatak6"  placeholder="dd-mm-yyyy" value="{{ImpotData[4].date()}}" min="01.01.1900" max="01.01.2030">
                     </div>
 
                 
@@ -184,35 +185,31 @@
                 
                 <div>
                     <label>Id</label>
-                    <input required id="" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input required id="" name="podatak2" placeholder="test">
+                    <input required id="appt-time" value="{{ImpotData[1].time()}}" type="time" name="podatak3" step="2" />
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input required id="appt-time" type="time" name="podatak3" step="2" />
+                    <input required id="appt-time" value="{{ImpotData[2].time()}}" type="time" name="podatak3" step="2" />
                 </div>
 
                <div>
                 <label>Lokacija</label>
-                <select id="menu1" name="podatak4" style="margin: 5px 5px">
+                <select id="menu1" name="podatak4" value="{{ImpotData[3]}}" style="margin: 5px 5px">
                
 
                     {% for x in range(0, lokacijaLen) %}
 
-                    <option value="{{lokacija[x][0]}}">{{lokacija[x][1]}}</option>
+                    <option value="{{lokacija[x][0]}}" {% if ImpotData[3]  == lokacija[x][0] %}  selected {% endif %}>{{lokacija[x][1]}}</option>
 
                     {%endfor%}
                 </select>
-            </div>
-            <div>
-                <label>Opis</label>
-                <input required  id="" type="text" name="podatak5" placeholder="test">
             </div>
 
 
@@ -223,18 +220,18 @@
                 {% if tablica == "popravak" %}
                 <div>
                     <label>Id</label>
-                    <input required id="" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImpotData[0]}}"  name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input required id="" name="podatak2" placeholder="test">
+                    <input required id="" value="{{ImpotData[1].time()}}" name="podatak2" placeholder="test">
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input required id="appt-time" type="time" name="podatak3" step="2" />
+                    <input required id="appt-time" value="{{ImpotData[2].time()}}" type="time" name="podatak3" step="2" />
                 </div>
 
                <div>
@@ -263,23 +260,23 @@
 
                 <div>
                     <label>Id</label>
-                    <input required id="" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input required id="" name="podatak2" placeholder="naziv">
+                    <input required id="" value="{{ImpotData[1]}}" name="podatak2" placeholder="naziv">
                 </div>
 
 
                 <div>
                     <label>Vrsta</label>
-                    <input required  id="" type="text" name="podatak3" placeholder="vrsta">
+                    <input required  id="" type="text" value="{{ImpotData[2]}}" name="podatak3" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Ukupna Kolicina</label>
-                <input required  id="" type="text" name="podatak4" placeholder="ukupni broj">
+                <input required  id="" type="text" value="{{ImpotData[3]}}" name="podatak4" placeholder="ukupni broj">
                
             </div>              
                 {% endif %}
@@ -287,24 +284,24 @@
                 {% if tablica == "misija" %}
                 <div>
                     <label>Id</label>
-                    <input required id="" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImpotData[0]}}"  name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input required id="" name="podatak2" placeholder="naziv">
+                    <input required id="" value="{{ImpotData[1]}}"  name="podatak2" placeholder="naziv">
                 </div>
 
                 
                 <div>
                     <label>Datum kraja</label>
-                    <input required type="date" name="podatak3" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input required type="date" name="podatak3" value="{{ImpotData[2].date()}}"  placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
                 
                 <div>
                     <label>Datum kraja</label>
-                    <input required type="date" name="podatak4" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input required type="date" name="podatak4"  value="{{ImpotData[3].date()}}"  placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
                 <div>
@@ -314,7 +311,7 @@
     
                         {% for x in range(0, lokacijaLen) %}
     
-                        <option value="{{lokacija[x][0]}}">{{lokacija[x][1]}}</option>
+                        <option value="{{lokacija[x][0]}}"{% if ImpotData[4]  == lokacija[x][0] %}  selected {% endif %}>{{lokacija[x][1]}}</option>
     
                         {%endfor%}
                     </select>
@@ -326,7 +323,7 @@
     
                         {% for x in range(0, turaLen) %}
     
-                        <option value="{{tura[x][0]}}">{{tura[x][1]}}</option>
+                        <option value="{{tura[x][0]}}" {% if ImpotData[5]  == tura[x][0] %}  selected {% endif %}>{{tura[x][1]}}</option>
     
                         {%endfor%}
                     </select>
@@ -334,12 +331,12 @@
 
                 <div>
                     <label>Ishod</label>
-                    <input required  id="" type="text" name="podatak7" placeholder="vrsta">
+                    <input required  id="" value="{{ImpotData[6]}}" type="text" name="podatak7" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Trosak misije</label>
-                <input required  id="" type="text" name="podatak8" placeholder="ukupni broj">
+                <input required  id="" type="text" value="{{ImpotData[7]}}" name="podatak8" placeholder="ukupni broj">
                
             </div>
 
@@ -403,7 +400,7 @@
 
        
         <hr>    
-              <h1>Podatci {{getData}}</h1>
+              <h1>Podatci </h1>
               <hr>
               <div style="grid-template-columns: {{ getRowLen * 'auto '}} ;" class="gridauto">
                 {% for i in range(0, getDatalen) %}
