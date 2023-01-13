@@ -10,51 +10,54 @@
    
 </head>
 <body>
-    
-    <topbar>
-       
-        <ul class="wrapper">
-         <li class="icon github">
-            <a href="https://github.com/mateokocev/BP2---Vojska"><img style="margin-right: 29px; margin-top: 5px;" src="/static/img/github.png"></a>
-           <span class="tooltip">Github</span>
-          
-         </li>
-       </ul>
-     </topbar>
-    
+
+     {%block content%}   
 
   
-    {%block content%}    
+     
     <topMainbar>
-        <h1>
+        <div class="position">
+            <nav>
+                <div class="navicon">
+                  <div></div>
+                </div>
+                <div class="poz">
+                    <h1><a href="/statistika"><button style="width: 100%" class="button-24" role="button"><i class="fa-solid fa-chart-pie"></i> Statistika</button></a></h1>
+                    <h1><a href="/ocjenjivanje/all"><button style="width: 100%" class="button-24" role="button"><i class="fa-solid fa-ranking-star"></i> Ocjene</button></a></h1>
+                    <h1><a href="/oprema"><button style="width: 100%" class="button-24" role="button"><i class="fa-solid fa-gun"></i> Oprema</button></a></h1>
+                    <h1><a href="/garaza"><button style="width: 100%" class="button-24" role="button"><i class="fa-solid fa-warehouse"></i> Garaza</button></a></h1>
+                    {% if cin == "General" %}
+                    <h1><a href="/izmjena/insert/osoblje"><button style="width: 100%" class="button-24" role="button"><i class="fa-solid fa-file-pen"></i> Uredi Bazu</button></a></h1>
+                    <h1><a href="/bolnica"><button style="width: 100%" class="button-24" role="button"><i class="fa-solid fa-hospital"></i> Bolnica</button></a></h1>
+                    {% endif %}  
+                   
 
-        {% if cin == "General" %}
-            <a href="/izmjena/insert/osoblje"><button style="margin-left: 20px;" class="button-24" role="button"><i class="fa-solid fa-file-pen"></i></button></a>
-        {% endif %}
-        <a href="/statistika"><button style="margin-left: 20px;" class="button-24" role="button"><i class="fa-solid fa-chart-pie"></i></button></a>
-        </h1>
+                </div>
+ 
+              </nav>
+           </div>
+
+
+
         <h1>Dobro došao, {{ime}} {{cin}}</h1>
-        <a href="/ocjenjivanje/all"><button style="margin-top: 20px;" class="button-24" role="button"><i class="fa-solid fa-ranking-star"></i></button></a>
+        
         <div class="imgalign">
 
             <ul class="wrapper">
                 <li class="icon github">
                     
-                    <a href="/profile"><img style="margin-bottom: 6px;" src="{{randimg}}"></a> 
+                    <a href="/profile"><img style="margin-top: 18px;" src="{{randimg}}"></a> 
                   <span class="tooltip">Profile</span>
                 
                 </li>
               </ul>
-             
-             
-        
-          
+
         </div>
         
     </topMainbar>
    
-   
-    
+
+    <h1 style="z-index: -1;"> </h1>
     
     
     <imageCover>
@@ -64,22 +67,23 @@
        
        
             <div class="centerText">
-                <div class="textHolder" style="margin-top: 300px;">
-                    <h2 style="font-size: 20px;"> {{VojskaText[0][0]}}</h2>
+                <div class="textHolder" style="margin-top: 150px;">
+                    <h2 style="font-size: 20px;margin-bottom: 100px;"> {{VojskaText[0][0]}}</h2>
                 </div>
             </div>
         
         
-        <div class="alignText">
+  
         
             <a style="text-align: left; margin-left: 150px;" href="/Kopnena Vojska/SAD%20tura"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button">Više <i class="fa-sharp fa-solid fa-circle-info"></i></button></a> 
             
-        </div>
+            
+   
     </imageCover>
 
     
 
-   <h1>razmak</h1>
+   <h1 style="z-index: -1;"> </h1>
    
    
    
@@ -102,7 +106,7 @@
 
 
 
-    <h1>razmak</h1>
+    <h1 style="z-index: -2;"> </h1>
    </podstranica1>
 
 
@@ -141,6 +145,11 @@
   
 
 {% endblock %}
+
+
+
+
+
 </body>
 </html>
 

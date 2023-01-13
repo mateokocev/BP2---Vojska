@@ -24,12 +24,12 @@
 
     
         {% for i in range(0, garazaLen) %}
-        <!-- <img src = '/static/img/vozilaSlike/{{garaza[i]}}.jpg' width = 100 height = 50 style = "float: left;">
-        <br/> -->
+        <br/>
         <div class="garaza-list">
+                <img src = "/static/img/vozilaSlike/{{i+1}}.jpg" width = 200 height = 100 style = "float: left;">
                 <h3>#{{i+1}}</h3>
                 <h3>Naziv: {{garaza[i][0]}}</h3>
-                <h3>Vrsta: {{garaza[i][1]}}</h3>
+                <h3>Vrsta: {{garaza[i][1]}}</h3><br/>
                 <h3>Količina: {{garaza[i][2]}}</h3>
                 <h3>Kapacitet vozila: {{garaza[i][3]}} osobe/a</h3>            
 
