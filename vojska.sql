@@ -3080,9 +3080,6 @@ BEGIN
 END//
 DELIMITER ;
 
-SELECT trosak_misija_po_sektoru();
-
-
 
 -- primjer funkcije koja poziva drugu funkciju, jedna provjerava je li ta osoba na misiji tj. gleda postoji li ongoing misija gdje je ta osoba te vraca true or false
 -- onda sa tom informacijom i provjerom dobi sa selekcijom u glavnoj funkciji odlućujemo je li dobar odabir za misiju :)
@@ -3117,14 +3114,13 @@ BEGIN
 
 	SELECT osoblje_na_misiji_mod(p_id_osoblje) INTO jeilinije;
 
-    IF NOT jeilinije AND trenutna_dob <= p_dob_misija THEN
+    IF jeilinije IS FALSE AND trenutna_dob <= p_dob_misija THEN
         RETURN 'Dostupan';
     ELSE
         RETURN 'Nedostupan';
     END IF;
 END//
 DELIMITER ;
-
 SELECT dostupnost_za_misiju(10360, 100) AS dostupnost_za_misiju;
 
 
@@ -3551,7 +3547,7 @@ SET @isplata_sektoru = 50000;
 SET @id_sektor_transakcija1 = 2;
 SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 START TRANSACTION;
-	
+
     SELECT id, naziv, ukupni_proracun FROM sektor WHERE id = @id_sektor_transakcija1;
     
     UPDATE sektor
@@ -3564,7 +3560,26 @@ COMMIT;
 SET AUTOCOMMIT = ON;
 
 
--- primjer transakcije
+-- Primjer serializable transakcije koja se mogla poboljsati sa dodatnom tablicom za pračenje dugova i try/catch funkcijom ali pošto se bliži kraj bilo bi greška ići dodavati viška tablice
 SET AUTOCOMMIT = OFF;
-SET @isplata_sektoru = 50000;
-SET @id_sektor_transakcija1 = 2;
+SET @id_misija_za_naplatu = 3003;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+START TRANSACTION;
+
+    SELECT o.id_sektor, COUNT(id_osoblje) AS broj_osoblja INTO @naplata_sektoru, @nekoristena
+		FROM osoblje_na_misiji AS onm
+        INNER JOIN osoblje AS o ON onm.id_osoblje = o.id
+			WHERE id_misija = @id_misija_za_isplatu
+			GROUP BY o.id_sektor
+            ORDER BY broj_osoblja DESC
+			LIMIT 1;
+	
+    UPDATE sektor
+		SET ukupni_proracun = ukupni_proracun - (SELECT trosak_misije FROM misija WHERE id = @id_misija_za_naplatu)
+			WHERE id = @naplata_sektoru;
+
+	SELECT ukupni_proracun
+		FROM sektor
+			WHERE id = @naplata_sektoru;
+COMMIT;
+SET AUTOCOMMIT = ON;
