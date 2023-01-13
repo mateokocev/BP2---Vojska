@@ -288,3 +288,8 @@ input{
     background-position: 0 0;
     color: #FF4742;} 
   .newButton:active { opacity: .5;}
+
+  input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        display: none;
+      }

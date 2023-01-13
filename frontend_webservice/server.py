@@ -433,6 +433,37 @@ def UpdateFetchId(tablica,ID):
 
     return render_template('update.html',ImpotData=ImpotData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
+
+# Mateov Mali Kutak [Ctrl+F: MMK]
+@app.route('/izmjena/delete/<tablica>/<ID>', methods = ['GET', 'POST'])
+def delete (tablica, ID):
+    getData = BP_DataAll("Select * from "+ tablica+" ;")
+    getRowLen = len(getData[0])
+    error=""
+    lokacija = BP_DataAll("select id, naziv from lokacija;")
+    tura = BP_DataAll("select id, naziv from tura;")
+    maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
+    ImportID = BP_DataAll("select id from osoblje;")
+    ImpotData = BP_DataRow("select * from " + tablica + " where id = " + ID + ";")
+    poljeID= []
+    for x in range(len(ImportID)):
+        poljeID.append(ImportID[x][0])
+
+    
+
+
+    
+    if request.method == 'POST':
+
+        unos = request.form["podatakid"]
+        BP_Update("DELETE FROM " + tablica + " WHERE id = " + unos + ";")
+    
+    
+    
+    return render_template('delete.html', ImpotData = ImpotData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+# Kraj MMK-a
+
+
 @app.route('/informacije/<sektor>/<data>')  #Exception
 def informacije (data,sektor):
 
