@@ -437,18 +437,18 @@ def garaza():
 
 @app.route("/bolnica", methods = ['GET', 'POST'])
 def bolnica():
-    bolnica = BP_DataAll("select ime ,prezime, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1;")
+    bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1;")
     bolnicaLen = len(bolnica)
 
     if request.method == 'POST':
         Search = request.form['search']    
         
         if Search.lower() in bolnica:     
-            bolnica = BP_DataAll("select ime ,prezime, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and ime = '"+Search+"';")
+            bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and ime = '"+Search+"';")
             return render_template('bolnica.html', bolnica = bolnica, bolnicaLen = bolnicaLen)    
 
         else:
-            bolnica = BP_DataAll("select ime ,prezime, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and prezime = '"+Search+"';")
+            bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and prezime = '"+Search+"';")
             return render_template('bolnica.html', bolnica = bolnica, bolnicaLen = bolnicaLen)
 
     return render_template('bolnica.html', bolnica = bolnica, bolnicaLen = bolnicaLen)
