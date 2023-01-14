@@ -277,7 +277,7 @@ def Update(tablica):
         getRowLen=0
         print("empty")
     ImportID = BP_DataAll("select id from "+tablica+";")
-    ImpotData=[]
+    ImportData=[]
     poljeID= []
     for x in range(len(ImportID)):
         poljeID.append(ImportID[x][0])
@@ -295,7 +295,7 @@ def Update(tablica):
            
    
     
-    return render_template('update.html',ImpotData= ImpotData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    return render_template('update.html',ImportData= ImportData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
     
 
 @app.route('/izmjena/update/<tablica>/<ID>', methods = ['GET', 'POST'])
@@ -312,7 +312,7 @@ def UpdateFetchId(tablica,ID):
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
     ImportID = BP_DataAll("select id from "+tablica+";")
-    ImpotData = BP_DataRow("select * from "+tablica+" where id = "+ID+";")
+    ImportData = BP_DataRow("select * from "+tablica+" where id = "+ID+";")
     poljeID= []
 
     osobljeIme = BP_DataAll("Select id,ime from osoblje;")
@@ -343,15 +343,12 @@ def delete (tablica, ID):
     
     getData =     BP_DataAll("Select * from "+ tablica+" ;")
     try:
-     try:
+    
      getRowLen = len(getData[0])
     except:
         getRowLen=0
         print("empty")
-    error=""
-    except:
-        getRowLen=0
-        print("empty")
+
     error=""
     popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
     lokacija = BP_DataAll("select id, naziv from lokacija;")
@@ -381,7 +378,7 @@ def delete (tablica, ID):
             return redirect("/izmjena/delete/"+tablica+"/"+ID, code=302)
     
     
-    return render_template('delete.html', poljeID = poljeID ,ImpotData = ImpotData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    return render_template('delete.html', poljeID = poljeID ,ImportData = ImportData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 # Kraj MMK-a
 
 
