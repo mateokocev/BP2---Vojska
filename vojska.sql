@@ -3474,9 +3474,10 @@ BEGIN
 			WHERE id = p_id_osoblje;
 	
 	SELECT performans INTO p_performans
-        FROM osoblje_na_treningu
-			WHERE id_osoblje = p_id_osoblje AND datum_kraja IS NOT NULL
-			ORDER BY datum_pocetka DESC
+        FROM osoblje_na_treningu AS ont
+			INNER JOIN trening AS t ON t.id = ont.id_trening
+			WHERE ont.id_osoblje = p_id_osoblje AND t.vrijeme_kraja IS NOT NULL
+			ORDER BY vrijeme_pocetka DESC
 			LIMIT 1;
 
     IF p_performans < 4 THEN
@@ -3508,18 +3509,18 @@ BEGIN
 	END IF;
 END//
 DELIMITER ;
-
+CALL provjera_promocija_sniženje_cin(10033);
 
 -- promjeni status osoblja ako nije bio na treningu ili na turi u zadnjih godinu dana
 DELIMITER //
 CREATE PROCEDURE promjena_statusa_na_neaktivan()
 BEGIN
     UPDATE osoblje
-    SET status_osoblja = 'neaktivan'
-    WHERE status_osoblja = 'aktivan' AND id NOT IN (SELECT id_osoblje FROM osoblje_na_turi WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR)) AND id NOT IN (SELECT id_osoblje FROM osoblje_na_treningu WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR));
+    SET status_osoblja = 'Umirovljen'
+    WHERE status_osoblja = 'Aktivan' OR status_osoblja = 'Neaktivan' AND id NOT IN (SELECT id_osoblje FROM osoblje_na_turi WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR)) AND id NOT IN (SELECT id_osoblje FROM osoblje_na_treningu AS ont INNER JOIN trening AS t ON t.id = ont.id_trening WHERE t.vrijeme_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR));
 END //
 DELIMITER ;
-
+CALL promjena_statusa_na_neaktivan();
 
 -- Svo osoblje u određenom sektoru koje nije mrtvo 
 DELIMITER //
@@ -3527,7 +3528,7 @@ CREATE PROCEDURE ukupno_osoblje_u_sektoru(IN p_id_sektor INT)
 BEGIN
     SELECT COUNT(*)
     FROM osoblje
-    WHERE id_sektor = p_id_sektor;
+    WHERE id_sektor = p_id_sektor AND status_osoblja != 'Mrtav';
 END//
 DELIMITER ;
 
