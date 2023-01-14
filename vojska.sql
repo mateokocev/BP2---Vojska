@@ -442,7 +442,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
 -- MK
 
 -- Ovaj trigger provjerava ako vojnik nije na aktivnoj turi, te ako nije, postavlja njegov status na "Neaktivan"
@@ -450,9 +449,9 @@ DELIMITER //
 CREATE TRIGGER updtstatus_post_tura AFTER UPDATE ON tura
 FOR EACH ROW
 BEGIN
-	IF tura.datum_kraja != NULL THEN
+	IF NEW.vrijeme_kraja != NULL THEN
 		UPDATE osoblje
-			SET status_osoblja = "Neaktivan" WHERE id IN (SELECT id_osoblje FROM osoblje_na_turi WHERE id_tura = tura.id AND datum_kraja IS NULL);
+			SET status_osoblja = "Neaktivan" WHERE id IN (SELECT id_osoblje FROM osoblje_na_turi WHERE id_tura = NEW.id AND NEW.vrijeme_kraja IS NULL);
 	END IF;
 END//
 DELIMITER ;
@@ -463,13 +462,14 @@ DELIMITER //
 CREATE TRIGGER updtkraj_post_tura AFTER UPDATE ON tura
 FOR EACH ROW
 BEGIN
-	IF tura.datum_kraja != NULL THEN
+	IF NEW.vrijeme_kraja != NULL THEN
 		UPDATE osoblje_na_turi 
-			SET datum_kraja = tura.datum_kraja 
-				WHERE id_tura = tura.id AND datum_kraja IS NULL;
+			SET datum_kraja = NEW.vrijeme_kraja 
+				WHERE id_tura = NEW.id AND datum_kraja IS NULL;
 	END IF;
 END//
 DELIMITER ;
+
 
 
 -- kada vojnik ide na misiju poslužuje se tom osoblju na misiji osnovnu opremu, imamo funkciju koja provjerava dostupne id-eve te ih vraca u trigger kako bi mogli izvesti uspjesan insert. Također ima 

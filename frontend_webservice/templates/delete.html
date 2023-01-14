@@ -82,7 +82,7 @@
     
                                 {% if getData[i][x] in poljeID %}
     
-                                <a href="/izmjena/update/{{tablica}}/{{getData[i][x]}}"><button  style=" margin-bottom: 10px; height: 50%; width: fit-content;" class="newButton" role="button"><i class="fa-solid fa-key"></i> {{getData[i][x]}}</button> </a>
+                                <a href="/izmjena/delete/{{tablica}}/{{getData[i][x]}}"><button  style=" margin-bottom: 10px; height: 50%; width: fit-content;" class="newButton" role="button"><i class="fa-solid fa-key"></i> {{getData[i][x]}}</button> </a>
                                 
                                 {% else %}
                                 <p>{{getData[i][x]}}</p>
@@ -105,7 +105,7 @@
     
             <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
                   
-            <a href="/izmjena/update/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-arrows-rotate"></i></button></a> 
+            <a href="/izmjena/delete/{{tablica}}/{{ID}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-arrows-rotate"></i></button></a> 
           
             
     
