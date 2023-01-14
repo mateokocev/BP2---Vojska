@@ -3564,7 +3564,9 @@ SET AUTOCOMMIT = ON;
 
 -- Primjer serializable transakcije koja se mogla poboljsati sa dodatnom tablicom za pračenje dugova i try/catch funkcijom ali pošto se bliži kraj bilo bi greška ići dodavati viška tablice
 SET AUTOCOMMIT = OFF;
-SET @id_misija_za_naplatu = 3003;
+SET @id_misija_za_naplatu = 3029;
+SET @naplata_sektoru = 1;
+SET @nekoristena = 1;
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 START TRANSACTION;
 
@@ -3585,4 +3587,3 @@ START TRANSACTION;
 			WHERE id = @naplata_sektoru;
 COMMIT;
 SET AUTOCOMMIT = ON;
-
