@@ -51,31 +51,34 @@
                    
             <form method="POST" margin="10px 0px">
                 {% if tablica == "osoblje" %}
-                <div>
-                    <label>Ime</label>
-                    <input required  id="ime" name="ime" placeholder="test" >
-                </div>
-
-                <div>
-                    <label>Prezime</label>
-                    <input required  id="" name="prezime" placeholder="test">
-                </div>
 
                 <div>
                     <label>Sektor</label>
                     <br>
-                    <select id="menu1" name="menu1" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak1" style="margin: 5px 5px">
                         <option value="1">Hrvatska kopnena vojska  </option>
                         <option value="2">Hrvatska ratna mornarica  </option>
                         <option value="3">Hrvatsko ratno zrakoplovstvo </option>
                         <option value="4">Hrvatska vojna policija </option>
                     </select>
                 </div>
+
+                <div>
+                    <label>Ime</label>
+                    <input required  id="ime" name="podatak2" placeholder="test" >
+                </div>
+
+                <div>
+                    <label>Prezime</label>
+                    <input required  id="" name="podatak3" placeholder="test">
+                </div>
+
+              
                 
                 <div>
-                    <label>Sektor</label>
+                    <label>Čin</label>
                     <br>
-                    <select id="menu1" name="menu1" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak4" style="margin: 5px 5px">
                         {% for x in range(0, cinLen) %}
                         <option value="{{cinovi[x]}}">{{cinovi[x]}} </option>
                         {% endfor %}
@@ -85,28 +88,28 @@
 
                     <div>
                         <label>Datum Rođenja</label>
-                        <input required  type="date" name="datum1" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required  type="date" name="podatak5" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                         <div>
                             <label>Datum Učlanjenja</label>
                           
-                            <input required  type="date" name="datum2" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                            <input required  type="date" name="podatak6" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
             
                         </div>
                     <div>
                         <label>Status Osoblja</label>
-                        <input required  id="" name="status" placeholder="test">
+                        <input required  id="" name="podatak7" placeholder="test">
                     </div>
 
                     <div>
                         <label>Krvna Grupa</label>
-                        <input required  id="" name="krv" placeholder="test">
+                        <input required  id="" name="podatak8" placeholder="test">
                     </div>
 
                 <div>
                     <label>Ocjena</label>
-                    <input required  type="number" id="" name="ocjena" placeholder="test">
+                    <input required  type="number" id="" name="podatak9" placeholder="test">
                 </div>
 
                 
@@ -171,19 +174,18 @@
                 <h1>{{maxid[0]+1}}</h1>
 
                 <div>
-                    <label>Vrijeme Pocetka</label>
-                    <input required  id="" name="podatak1" placeholder="test">
+                    <label>Datum Rođenja</label>
+                    <input type="datetime-local" id="meeting-time" name="podatak1"   step="2">
                 </div>
-
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input required  id="appt-time" type="time" name="podatak2" step="2" />
+                    <input type="datetime-local" id="meeting-time" name="podatak2" step="2">
                 </div>
 
                <div>
                 <label>Lokacija</label>
-                <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                <select id="menu1" name="podatak3" style="margin: 5px 5px">
                
 
                     {% for x in range(0, lokacijaLen) %}
@@ -193,10 +195,7 @@
                     {%endfor%}
                 </select>
             </div>
-            <div>
-                <label>Opis</label>
-                <input required   id="" type="text" name="podatak3" placeholder="test">
-            </div>
+
 
 
                 
@@ -208,32 +207,40 @@
                 <h1>{{maxid[0]+1}}</h1>
 
                 <div>
-                    <label>Vrijeme Pocetka</label>
-                    <input required  id="" name="podatak1" placeholder="test">
+                    <label>Lokacija</label>
+                    <select id="menu1" name="podatak1" style="margin: 5px 5px">
+                   
+    
+                        {% for x in range(0, popravakLen) %}
+    
+                        <option value="{{popravak[x][0]}}" >{{popravak[x][1]}}</option>
+    
+                        {%endfor%}
+                    </select>
+                </div>
+
+                <div>
+                    <label>Opis Štete</label>
+                    <input required id=""   name="podatak2" placeholder="id">
                 </div>
 
 
                 <div>
-                    <label>Vrijeme kraja</label>
-                    <input required  id="appt-time" type="time" name="podatak2" step="2" />
+                    <label>Početak popravak</label>
+                    <input required id="appt-time"  type="date" name="podatak3" step="2" />
                 </div>
 
-               <div>
-                <label>Lokacija</label>
-                <select id="menu1" name="podatak2" style="margin: 5px 5px">
-               
+                <div>
+                    <label>Kraj popravka</label>
+                    <input required id="appt-date"  type="date" name="podatak4" step="2" />
+                </div>
 
-                    {% for x in range(0, lokacijaLen) %}
+                <div>
+                    <label>Trosak popravka</label>
+                    <input required id="appt-date"  type="number" name="podatak5" step="2" />
+                </div>
 
-                    <option value="{{lokacija[x][0]}}">{{lokacija[x][1]}}</option>
 
-                    {%endfor%}
-                </select>
-            </div>
-            <div>
-                <label>Opis</label>
-                <input required   id="" type="text" name="podatak3" placeholder="test">
-            </div>
 
 
                 
@@ -364,6 +371,77 @@
                
 
                 {% endif %}  
+
+
+
+
+                {% if tablica == "lijecenje" %}
+                <h1>ID</h1>
+                <h1>{{maxid[0]+1}}</h1>
+
+                <div>
+                    <label>Osoblje</label>
+                    <select id="menu1" name="podatak1" style="margin: 5px 5px">
+                        {% for x in range(0, osobljeImeLen) %}
+    
+                        <option value="{{osobljeIme[x][0]}}">{{1000+x}}: {{osobljeIme[x][1]}}</option>
+    
+                        {%endfor%}
+                    </select>
+                </div>
+
+
+                <div>
+                    <label>Status lijecenja</label>
+                    <br>
+                    <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                        <option value="Izliječen">Izliječen</option>
+                        <option value="U tijeku">U tijeku</option>
+
+                    </select>
+                </div>
+
+                
+                <div>
+                    <label>Početak lijecenja</label>
+                    <input required id="appt-time"  type="date" name="podatak3" step="2" />
+                </div>
+
+
+                <div>
+                    <label>Kraj lijecenja</label>
+                    <input required id="appt-time"  type="date" name="podatak4" step="2" />
+                </div>
+
+
+
+
+                <div>
+                    <label>Opis ozljede</label>
+                    <br>
+                    <select id="menu1" name="podatak5" style="margin: 5px 5px">
+                        <option value="Slabo ozljieđen">Slabo ozljieđen</option>
+                        <option value="Srednje ozlijeđen">Srednje ozlijeđen</option>
+                        <option value="Ozbiljno ozlijeđen">Ozbiljno ozlijeđen</option>
+
+
+                        
+
+                    </select>
+                </div>
+
+                <div>
+                    <label>Trošak Lijecenja</label>
+                    <input type="number" required   id="" type="text" name="podatak6" placeholder="Broj">
+                </div>
+
+
+                <br>
+               
+
+                {% endif %}  
+
+
                   <br>
                 <a href="/izmjena/insert/vozila"><button  type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> </a>
                

@@ -50,29 +50,29 @@
                 {% if tablica == "osoblje" %}
                 <div>
                     <label>Id</label>
-                    <input required id="ime" name="podatak1" value="{{ImpotData[0]}}" placeholder="id">
+                    <input required id="ime" name="podatak1" value="{{ImportData[0]}}" placeholder="id">
                 </div>
 
                 <div>
                     <label>Sektor</label>
                     <br>
                     <select id="menu1" name="podatak2"  style="margin: 5px 5px">
-                        <option value="1"{% if ImpotData[1]  == 1 %}  selected {% endif %}>Hrvatska kopnena vojska  </option>
-                        <option value="2" {% if ImpotData[1] ==  2 %} selected {% endif %}>Hrvatska ratna mornarica  </option>
-                        <option value="3"{% if ImpotData[1]  == 3 %}  selected {% endif %}>Hrvatsko ratno zrakoplovstvo </option>
-                        <option value="4"{% if ImpotData[1]  == 4 %}  selected {% endif %}>Hrvatska vojna policija </option>
+                        <option value="1"{% if ImportData[1]  == 1 %}  selected {% endif %}>Hrvatska kopnena vojska  </option>
+                        <option value="2" {% if ImportData[1] ==  2 %} selected {% endif %}>Hrvatska ratna mornarica  </option>
+                        <option value="3"{% if ImportData[1]  == 3 %}  selected {% endif %}>Hrvatsko ratno zrakoplovstvo </option>
+                        <option value="4"{% if ImportData[1]  == 4 %}  selected {% endif %}>Hrvatska vojna policija </option>
                     </select>
                 </div>
 
 
                 <div>
                     <label>Ime</label>
-                    <input required id="ime" value="{{ImpotData[2]}}" name="podatak3" placeholder="ime">
+                    <input required id="ime" value="{{ImportData[2]}}" name="podatak3" placeholder="ime">
                 </div>
 
                 <div>
                     <label>Prezime</label>
-                    <input required id="" name="podatak4" value="{{ImpotData[3]}}" placeholder="prezime">
+                    <input required id="" name="podatak4" value="{{ImportData[3]}}" placeholder="prezime">
                 </div>
 
             
@@ -80,9 +80,9 @@
                 <div>
                     <label>Sektor</label>
                     <br>
-                    <select id="menu1" name="podatak5" value="{{ImpotData[4]}}" style="margin: 5px 5px">
+                    <select id="menu1" name="podatak5" value="{{ImportData[4]}}" style="margin: 5px 5px">
                         {% for x in range(0, cinLen) %}
-                        <option value="{{cinovi[x]}}" {% if ImpotData[4]  == cinovi[x] %}  selected {% endif %}>{{cinovi[x]}} </option>
+                        <option value="{{cinovi[x]}}" {% if ImportData[4]  == cinovi[x] %}  selected {% endif %}>{{cinovi[x]}} </option>
                         {% endfor %}
 
                     </select>
@@ -90,30 +90,31 @@
 
                     <div>
                         <label>Datum Rođenja</label>
-                        <input required type="date" name="podatak6" value="{{ImpotData[5]}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                        <input required type="date" name="podatak6" value="{{ImportData[5]}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                     </div>
 
                         <div>
                             <label>Datum Učlanjenja</label>
                           
-                            <input required type="date" name="podatak7" value="{{ImpotData[6]}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                            <input required type="date" name="podatak7" value="{{ImportData[6]}}" placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
             
                         </div>
                     <div>
                         <label>Status Osoblja</label>
-                        <input required id="" name="podatak8" value="{{ImpotData[7]}}" placeholder="test">
+                        <input required id="" name="podatak8" value="{{ImportData[7]}}" placeholder="test">
                     </div>
 
                     <div>
                         <label>Krvna Grupa</label>
-                        <input required id="" name="podatak9" value="{{ImpotData[8]}}" placeholder="test">
+                        <input required id="" name="podatak9" value="{{ImportData[8]}}" placeholder="test">
                     </div>
 
                 <div>
                     <label>Ocjena</label>
-                    <input required  type="number" id="" name="podatak10"  value="{{ImpotData[9]}}" placeholder="test">
+                    <input required  type="number" id="" name="podatak10"  value="{{ImportData[9]}}" placeholder="test">
                 </div>
 
+     
                 
                 
                 {% endif %}
@@ -123,24 +124,24 @@
 
                 <div>
                     <label>Id</label>
-                    <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImportData[0]}}" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input required id="" value="{{ImpotData[1]}}" name="podatak2" placeholder="Naziv">
+                    <input required id="" value="{{ImportData[1]}}" name="podatak2" placeholder="Naziv">
                 </div>
                 <div>
                     <label>Vrsta</label>
-                    <input required id="" value="{{ImpotData[2]}}" name="podatak3" placeholder="Naziv">
+                    <input required id="" value="{{ImportData[2]}}" name="podatak3" placeholder="Naziv">
                 </div>
                 <div>
                     <label>Ukupna Količina</label>
-                    <input required id="" value="{{ImpotData[3]}}" name="podatak4" placeholder="Broj">
+                    <input required id="" value="{{ImportData[3]}}" name="podatak4" placeholder="Broj">
                 </div>
                 <div>
                     <label>Kapacitet</label>
-                    <input required id=""value="{{ImpotData[4]}}" name="podatak5" placeholder="Broj">
+                    <input required id=""value="{{ImportData[4]}}" name="podatak5" placeholder="Broj">
                 </div>
 
                 {% endif %}
@@ -150,31 +151,36 @@
 
                 <div>
                     <label>Id</label>
-                    {% if ImpotData[0]  %}
-                    <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
+                  
+                    <input required id="" value="{{ImportData[0]}}" name="podatak1" placeholder="id">
                 </div>
                 <div>
                     <label>Naziv</label>
-                    <input required id="" value="{{ImpotData[1]}}" name="podatak2" placeholder="test">
+                    <input required id="" value="{{ImportData[1]}}" name="podatak2" placeholder="test">
                 </div>
-                    {% endif %}
+                  
 
                 <div>
                     <label>Vrsta Ture</label>
                     <select id="menu1" name="podatak3" style="margin: 5px 5px">
-                        <option value="Mirovna tura" {% if ImpotData[2]  == "Mirovna tura" %}  selected {% endif %}>Mirovna tura</option>
-                        <option value="Vojna tura" {% if ImpotData[2]  == "Vojna tura" %}  selected {% endif %}>Vojna tura</option>
+                        <option value="Mirovna tura" {% if ImportData[2]  == "Mirovna tura" %}  selected {% endif %}>Mirovna tura</option>
+                        <option value="Vojna tura" {% if ImportData[2]  == "Vojna tura" %}  selected {% endif %}>Vojna tura</option>
                     </select>
                 </div>
                 
                     <div>
-                        <label>Vrijeme početka </label>
-                        <input required type="date" name="podatak6"  placeholder="dd-mm-yyyy" value="{{ImpotData[3].date()}}" min="01.01.1900" max="01.01.2030">
+                        <label>Vrijeme početka</label>
+
+                        <input required type="date" name="podatak4"  value="{% if ImportData[3] %}{{ImportData[3].date()}}{% endif %}" min="01.01.1900" max="01.01.2030">
+                        
                     </div>
 
                     <div>
-                        <label>Vrijeme Kraja</label>
-                        <input required type="date" name="podatak6"  placeholder="dd-mm-yyyy" value="{{ImpotData[4].date()}}" min="01.01.1900" max="01.01.2030">
+                        <label>Vrijeme Kraja </label>
+                   
+                        <input required type="date" name="podatak5"  placeholder="dd-mm-yyyy" value="{% if ImportData[4] %}{{ImportData[4].date()}}{% endif %}" min="01.01.1900" max="01.01.2030">
+                     
+                        
                     </div>
 
                 
@@ -185,28 +191,29 @@
                 
                 <div>
                     <label>Id</label>
-                    <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImportData[0]}}" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Vrijeme Pocetka</label>
-                    <input required id="appt-time" value="{{ImpotData[1].time()}}" type="time" name="podatak3" step="2" />
+                    <input required  value="{{ImportData[1]}}" type="datetime-local" name="podatak2" step="2" />
+                 
                 </div>
 
 
                 <div>
                     <label>Vrijeme kraja</label>
-                    <input required id="appt-time" value="{{ImpotData[2].time()}}" type="time" name="podatak3" step="2" />
+                    <input required id="datetime-local" value="{{ImportData[2]}}" type="datetime-local" name="podatak3" step="2" />
                 </div>
 
                <div>
                 <label>Lokacija</label>
-                <select id="menu1" name="podatak4" value="{{ImpotData[3]}}" style="margin: 5px 5px">
+                <select id="menu1" name="podatak4" value="{{ImportData[3]}}" style="margin: 5px 5px">
                
 
                     {% for x in range(0, lokacijaLen) %}
 
-                    <option value="{{lokacija[x][0]}}" {% if ImpotData[3]  == lokacija[x][0] %}  selected {% endif %}>{{lokacija[x][1]}}</option>
+                    <option value="{{lokacija[x][0]}}" {% if ImportData[3]  == lokacija[x][0] %}  selected {% endif %}>{{lokacija[x][1]}}</option>
 
                     {%endfor%}
                 </select>
@@ -220,36 +227,43 @@
                 {% if tablica == "popravak" %}
                 <div>
                     <label>Id</label>
-                    <input required id="" value="{{ImpotData[0]}}"  name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImportData[0]}}"  name="podatak1" placeholder="id">
                 </div>
 
                 <div>
-                    <label>Vrijeme Pocetka</label>
-                    <input required id="" value="{{ImpotData[1].time()}}" name="podatak2" placeholder="test">
+                    <label>Misija</label>
+                    <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                   
+    
+                        {% for x in range(0, popravakLen) %}
+    
+                        <option value="{{popravak[x][0]}}"{% if ImportData[1]  == popravak[x][0] %}  selected {% endif %}>{{popravak[x][1]}}</option>
+    
+                        {%endfor%}
+                    </select>
+                </div>
+
+                <div>
+                    <label>Opis Štete</label>
+                    <input required id="" value="{{ImportData[2]}}"  name="podatak3" placeholder="id">
                 </div>
 
 
                 <div>
-                    <label>Vrijeme kraja</label>
-                    <input required id="appt-time" value="{{ImpotData[2].time()}}" type="time" name="podatak3" step="2" />
+                    <label>Početak popravak</label>
+                    <input required id="appt-time" value="{% if ImportData[3] %}{{ImportData[3].date()}}{%endif%}" type="date" name="podatak4" step="2" />
                 </div>
 
-               <div>
-                <label>Lokacija</label>
-                <select id="menu1" name="podatak4" style="margin: 5px 5px">
-               
+                <div>
+                    <label>Kraj popravka</label>
+                    <input required id="appt-date" value="{% if ImportData[4] %}{{ImportData[4].date()}}{%endif%}" type="date" name="podatak5" step="2" />
+                </div>
 
-                    {% for x in range(0, lokacijaLen) %}
+                <div>
+                    <label>Trosak popravka</label>
+                    <input required id="appt-date" value="{{ImportData[5]}}" type="number" name="podatak6" step="2" />
+                </div>
 
-                    <option value="{{lokacija[x][0]}}">{{lokacija[x][1]}}</option>
-
-                    {%endfor%}
-                </select>
-            </div>
-            <div>
-                <label>Opis</label>
-                <input required  id="" type="text" name="podatak5" placeholder="test">
-            </div>
 
 
                 
@@ -260,23 +274,23 @@
 
                 <div>
                     <label>Id</label>
-                    <input required id="" value="{{ImpotData[0]}}" name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImportData[0]}}" name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input required id="" value="{{ImpotData[1]}}" name="podatak2" placeholder="naziv">
+                    <input required id="" value="{{ImportData[1]}}" name="podatak2" placeholder="naziv">
                 </div>
 
 
                 <div>
                     <label>Vrsta</label>
-                    <input required  id="" type="text" value="{{ImpotData[2]}}" name="podatak3" placeholder="vrsta">
+                    <input required  id="" type="text" value="{{ImportData[2]}}" name="podatak3" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Ukupna Kolicina</label>
-                <input required  id="" type="text" value="{{ImpotData[3]}}" name="podatak4" placeholder="ukupni broj">
+                <input required  id="" type="text" value="{{ImportData[3]}}" name="podatak4" placeholder="ukupni broj">
                
             </div>              
                 {% endif %}
@@ -284,34 +298,34 @@
                 {% if tablica == "misija" %}
                 <div>
                     <label>Id</label>
-                    <input required id="" value="{{ImpotData[0]}}"  name="podatak1" placeholder="id">
+                    <input required id="" value="{{ImportData[0]}}"  name="podatak1" placeholder="id">
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input required id="" value="{{ImpotData[1]}}"  name="podatak2" placeholder="naziv">
+                    <input required id="" value="{{ImportData[1]}}"  name="podatak2" placeholder="naziv">
                 </div>
 
                 
                 <div>
                     <label>Datum kraja</label>
-                    <input required type="date" name="podatak3" value="{{ImpotData[2].date()}}"  placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input required type="date" name="podatak3" value="{% if ImportData[2] %}{{ImportData[2].date()}}{%endif%}"  placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
                 
                 <div>
                     <label>Datum kraja</label>
-                    <input required type="date" name="podatak4"  value="{{ImpotData[3].date()}}"  placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
+                    <input required type="date" name="podatak4"  value="{% if ImportData[3] %}{{ImportData[3].date()}}{%endif%}"  placeholder="dd-mm-yyyy" value="" min="01.01.1900" max="01.01.2030">
                 </div>
 
                 <div>
-                    <label>Lokacija</label>
+                    <label>Misija</label>
                     <select id="menu1" name="podatak5" style="margin: 5px 5px">
                    
     
                         {% for x in range(0, lokacijaLen) %}
     
-                        <option value="{{lokacija[x][0]}}"{% if ImpotData[4]  == lokacija[x][0] %}  selected {% endif %}>{{lokacija[x][1]}}</option>
+                        <option value="{{lokacija[x][0]}}"{% if ImportData[4]  == lokacija[x][0] %}  selected {% endif %}>{{lokacija[x][1]}}</option>
     
                         {%endfor%}
                     </select>
@@ -323,7 +337,7 @@
     
                         {% for x in range(0, turaLen) %}
     
-                        <option value="{{tura[x][0]}}" {% if ImpotData[5]  == tura[x][0] %}  selected {% endif %}>{{tura[x][1]}}</option>
+                        <option value="{{tura[x][0]}}" {% if ImportData[5]  == tura[x][0] %}  selected {% endif %}>{{tura[x][1]}}</option>
     
                         {%endfor%}
                     </select>
@@ -331,12 +345,12 @@
 
                 <div>
                     <label>Ishod</label>
-                    <input required  id="" value="{{ImpotData[6]}}" type="text" name="podatak7" placeholder="vrsta">
+                    <input required  id="" value="{{ImportData[6]}}" type="text" name="podatak7" placeholder="vrsta">
                 </div>
 
                <div>
                 <label>Trosak misije</label>
-                <input required  id="" type="text" value="{{ImpotData[7]}}" name="podatak8" placeholder="ukupni broj">
+                <input required  id="" type="text" value="{{ImportData[7]}}" name="podatak8" placeholder="ukupni broj">
                
             </div>
 
@@ -352,40 +366,108 @@
                 {% if tablica == "lokacija" %}
                 <div>
                     <label>Id</label>
-                    <input required id="" name="podatak1" value="{{ImpotData[0]}}"" placeholder="id">
+                    <input required id="" name="podatak1" value="{{ImportData[0]}}" placeholder="id">
                 </div>
 
                 <div>
                     <label>Sektor</label>
                     <br>
                     <select id="menu1" name="podatak2" style="margin: 5px 5px">
-                        <option value="1"{% if ImpotData[1]  == 1 %}   selected {% endif %}>Hrvatska kopnena vojska  </option>
-                        <option value="2"{% if ImpotData[1]  == 2 %} selected {% endif %}>Hrvatska ratna mornarica  </option>
-                        <option value="3"{% if ImpotData[1]  == 3 %}   selected {% endif %}>Hrvatsko ratno zrakoplovstvo </option>
-                        <option value="4"{% if ImpotData[1]  == 4 %}   selected {% endif %}>Hrvatska vojna policija </option>
+                        <option value="1"{% if ImportData[1]  == 1 %}   selected {% endif %}>Hrvatska kopnena vojska  </option>
+                        <option value="2"{% if ImportData[1]  == 2 %} selected {% endif %}>Hrvatska ratna mornarica  </option>
+                        <option value="3"{% if ImportData[1]  == 3 %}   selected {% endif %}>Hrvatsko ratno zrakoplovstvo </option>
+                        <option value="4"{% if ImportData[1]  == 4 %}   selected {% endif %}>Hrvatska vojna policija </option>
                     </select>
                 </div>
 
                 <div>
                     <label>Naziv</label>
-                    <input required  id="" type="text" value="{{ImpotData[2]}}" name="podatak3" placeholder="vrsta">
+                    <input required  id="" type="text" value="{{ImportData[2]}}" name="podatak3" placeholder="vrsta">
                 </div>
 
 
                 <div>
                     <label>zemljopisna Dužina</label>
-                    <input required  id="" type="text" value="{{ImpotData[3]}}" name="podatak4" placeholder="Broj">
+                    <input required  id="" type="text" value="{{ImportData[3]}}" name="podatak4" placeholder="Broj">
                 </div>
 
 
             <div>
                 <label>zemljopisna Širina</label>
-                <input required  id="" type="text" name="podatak5" value="{{ImpotData[4]}}" placeholder="Broj">
+                <input required  id="" type="text" name="podatak5" value="{{ImportData[4]}}" placeholder="Broj">
             </div>
 
                 <br>
                 {% endif %}
+                {% if tablica == "lijecenje" %}
+                <div>
+                    <label>Id</label>
+                    <input required id="" name="podatak1" value="{{ImportData[0]}}" placeholder="id">
+                </div>
 
+                <div>
+                    <label>Osoblje</label>
+                    <select id="menu1" name="podatak2" style="margin: 5px 5px">
+                        {% for x in range(0, osobljeImeLen) %}
+    
+                        <option value="{{osobljeIme[x][0]}}"{% if osobljeIme[x][0]  == ImportData[1] %}  selected {% endif %}>{{1000+x}}: {{osobljeIme[x][1]}}</option>
+    
+                        {%endfor%}
+                    </select>
+                </div>
+
+
+                <div>
+                    <label>Status lijecenja</label>
+                    <br>
+                    <select id="menu1"  name="podatak3" style="margin: 5px 5px">
+                        <option value="Izliječen"{% if ImportData[2]  == 'Izliječen' %}  selected {% endif %}>Izliječen</option>
+                        <option value="U tijeku"{% if ImportData[2]  == 'U tijeku' %}  selected {% endif %}>U tijeku</option>
+
+                    </select>
+                </div>
+
+                
+                <div>
+                    <label>Početak lijecenja ImportData[3]</label>
+                    <input required id="appt-time" value="{% if ImportData[3] %}{{ImportData[3].date()}}{% endif %}"  type="date" name="podatak4" step="2" />
+                </div>
+
+
+                <div>
+                    <label>Kraj lijecenja</label>
+                    <input required id="appt-time" value="{% if ImportData[4] %}{{ImportData[4].date()}}{% endif %}"  type="date" name="podatak5" step="2" />
+                </div>
+
+
+
+
+                <div>
+                    <label>Opis ozljede</label>
+                    <br>
+                    <select id="menu1" name="podatak6" style="margin: 5px 5px">
+                        <option value="Slabo ozljieđen"{% if ImportData[5]  == 'Slabo ozljieđen' %}  selected {% endif %}>Slabo ozljieđen</option>
+                        <option value="Srednje ozlijeđen"{% if ImportData[5]  == 'Srednje ozlijeđen' %}  selected {% endif %}>Srednje ozlijeđen</option>
+                        <option value="Ozbiljno ozlijeđen"{% if ImportData[5]  == 'Ozbiljno ozlijeđen' %}  selected {% endif %}>Ozbiljno ozlijeđen</option>
+
+                        
+
+
+                        
+
+                    </select>
+                </div>
+
+                <div>
+                    <label>Trošak Lijecenja</label>
+                    <input type="number" required value="{{ImportData[6]}}"   id="" type="text" name="podatak7" placeholder="Broj">
+                </div>
+
+
+                <br>
+               
+
+                {% endif %}
 
                   <br>
                 
