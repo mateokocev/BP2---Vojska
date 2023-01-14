@@ -444,7 +444,7 @@ def delete (tablica, ID):
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
-    ImportID = BP_DataAll("select id from osoblje;")
+    ImportID = BP_DataAll("SELECT id FROM " + tablica +";")
     ImpotData = BP_DataRow("select * from " + tablica + " where id = " + ID + ";")
     poljeID= []
     for x in range(len(ImportID)):
@@ -458,10 +458,11 @@ def delete (tablica, ID):
 
         unos = request.form["podatakid"]
         BP_Update("DELETE FROM " + tablica + " WHERE id = " + unos + ";")
+
     
     
     
-    return render_template('delete.html', ImpotData = ImpotData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    return render_template('delete.html', poljeID = poljeID ,ImpotData = ImpotData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 # Kraj MMK-a
 
 
