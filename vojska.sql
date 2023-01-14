@@ -12,8 +12,8 @@ CREATE TABLE sektor(
 );
  -- DROP TABLE sektor;
 ALTER TABLE sektor
-	ADD CONSTRAINT ck_proracun CHECK(ukupni_proracun>=0);
-
+	ADD CONSTRAINT ck_proracun CHECK(ukupni_proracun>=0),
+    ADD CONSTRAINT ck_naziv UNIQUE(naziv);
 
 CREATE TABLE lokacija(
     id INTEGER PRIMARY KEY,
@@ -21,13 +21,14 @@ CREATE TABLE lokacija(
     naziv VARCHAR(60) NOT NULL,
     zemljopisna_duzina DECIMAL(10, 7) NOT NULL,
     zemljopisna_sirina DECIMAL(10, 7) NOT NULL,
-    FOREIGN KEY (id_sektor) REFERENCES sektor(id) ON DELETE CASCADE
+    FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 -- DROP TABLE lokacija;
 ALTER TABLE lokacija
 	ADD CONSTRAINT ck_duzina UNIQUE(zemljopisna_duzina),
-    ADD CONSTRAINT ck_sirina UNIQUE( zemljopisna_sirina);
-
+    ADD CONSTRAINT ck_sirina UNIQUE(zemljopisna_sirina),
+    ADD CONSTRAINT ck_naziv UNIQUE(naziv);
+	
 
 CREATE TABLE osoblje(
     id INTEGER PRIMARY KEY,
@@ -40,11 +41,11 @@ CREATE TABLE osoblje(
     status_osoblja VARCHAR(50) NOT NULL,
     krvna_grupa CHAR(3) NOT NULL,
     ocjena INTEGER NOT NULL,
-    FOREIGN KEY (id_sektor) REFERENCES sektor(id) ON DELETE CASCADE
+    FOREIGN KEY (id_sektor) REFERENCES sektor(id)
 );
 -- DROP TABLE osoblje;
-
-
+ALTER TABLE osoblje 
+    ADD CONSTRAINT ck_ocijena CHECK(ocijena>=1 AND id<=5);
 
 CREATE TABLE tura(
     id INTEGER PRIMARY KEY,
@@ -54,8 +55,9 @@ CREATE TABLE tura(
     vrijeme_kraja DATETIME
 );
 -- DROP TABLE tura;
-
-
+ALTER TABLE tura
+	ADD CONSTRAINT ck_naziv UNIQUE(naziv),
+	ADD CONSTRAINT vrs_tr CHECK(vrsta_ture="Mirovna tura" AND vrsta_ture="Vojna tura");
 
 CREATE TABLE misija(
     id INTEGER PRIMARY KEY,
@@ -64,15 +66,16 @@ CREATE TABLE misija(
     vrijeme_kraja DATETIME,
     id_lokacija INTEGER NOT NULL,
     id_tura INTEGER NOT NULL,
-    ishod TEXT,   -- vratit NOT NULL
+    ishod TEXT,   
     trosak_misije NUMERIC(15, 2) NOT NULL,
-    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id) ON DELETE CASCADE, 
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
     FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE
 );
 -- DROP TABLE misija;
 
 ALTER TABLE misija
-	ADD CONSTRAINT ck_trosak CHECK(trosak_misije>=0);
+	ADD CONSTRAINT ck_trosak CHECK(trosak_misije>=0),
+    ADD CONSTRAINT naziv_misija_ck UNIQUE(naziv);
 
 
 CREATE TABLE osoblje_na_misiji(
@@ -132,7 +135,7 @@ CREATE TABLE vozilo_na_turi(
     kolicina INTEGER,
     FOREIGN KEY (id_vozilo) REFERENCES vozila(id) ON DELETE CASCADE,
     FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_odgovorni) REFERENCES osoblje_na_turi(id) ON DELETE CASCADE
+    FOREIGN KEY (id_odgovorni) REFERENCES osoblje_na_turi(id)
 );
 -- DROP TABLE vozilo_na_turi;
 ALTER TABLE vozilo_na_turi
@@ -169,9 +172,9 @@ CREATE TABLE izdana_oprema(
     id INTEGER PRIMARY KEY,
     id_oprema INTEGER NOT NULL,
     id_osoblje_na_misiji INTEGER NOT NULL,
-    izdana_kolicina INTEGER DEFAULT 1,          -- stavit konkretne vrijednost. ne default!!!
+    izdana_kolicina INTEGER NOT NULL,         
     FOREIGN KEY (id_oprema) REFERENCES oprema(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id) ON DELETE CASCADE
+    FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
 );
 -- DROP TABLE izdana_oprema;
 
@@ -183,7 +186,7 @@ CREATE TABLE trening(
     vrijeme_pocetka DATETIME NOT NULL,
     vrijeme_kraja DATETIME NOT NULL,
     id_lokacija INTEGER NOT NULL,
-    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id) ON DELETE CASCADE
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
 );
 -- DROP TABLE trening;
 
@@ -442,6 +445,7 @@ BEGIN
 END//
 DELIMITER ;
 
+
 -- MK
 
 -- Ovaj trigger provjerava ako vojnik nije na aktivnoj turi, te ako nije, postavlja njegov status na "Neaktivan"
@@ -449,9 +453,9 @@ DELIMITER //
 CREATE TRIGGER updtstatus_post_tura AFTER UPDATE ON tura
 FOR EACH ROW
 BEGIN
-	IF NEW.vrijeme_kraja != NULL THEN
+	IF tura.datum_kraja != NULL THEN
 		UPDATE osoblje
-			SET status_osoblja = "Neaktivan" WHERE id IN (SELECT id_osoblje FROM osoblje_na_turi WHERE id_tura = NEW.id AND NEW.vrijeme_kraja IS NULL);
+			SET status_osoblja = "Neaktivan" WHERE id IN (SELECT id_osoblje FROM osoblje_na_turi WHERE id_tura = tura.id AND datum_kraja IS NULL);
 	END IF;
 END//
 DELIMITER ;
@@ -462,14 +466,13 @@ DELIMITER //
 CREATE TRIGGER updtkraj_post_tura AFTER UPDATE ON tura
 FOR EACH ROW
 BEGIN
-	IF NEW.vrijeme_kraja != NULL THEN
+	IF tura.datum_kraja != NULL THEN
 		UPDATE osoblje_na_turi 
-			SET datum_kraja = NEW.vrijeme_kraja 
-				WHERE id_tura = NEW.id AND datum_kraja IS NULL;
+			SET datum_kraja = tura.datum_kraja 
+				WHERE id_tura = tura.id AND datum_kraja IS NULL;
 	END IF;
 END//
 DELIMITER ;
-
 
 
 -- kada vojnik ide na misiju poslužuje se tom osoblju na misiji osnovnu opremu, imamo funkciju koja provjerava dostupne id-eve te ih vraca u trigger kako bi mogli izvesti uspjesan insert. Također ima 
@@ -1647,7 +1650,7 @@ INSERT INTO misija VALUES
  ( 3001 , "Vitez" , STR_TO_DATE("16.10.2010.", "%d.%m.%Y.") , STR_TO_DATE("24.11.2010.", "%d.%m.%Y.") , 29 , 10 ,"Misija Vitez je bila vojna misija u Bosni i Hercegovini koja je imala za cilj da podrži implementaciju mirovnog sporazuma iz Dejtona i pomogne u obnovi mira i stabilnosti u zemlji nakon rata. Misija je trajala od 1995. do 2004. ", 5507101 ),
  ( 3002 , "Jugović" , STR_TO_DATE("27.11.2010.", "%d.%m.%Y.") , STR_TO_DATE("20.12.2010.", "%d.%m.%Y.") , 20 , 10 ," Operacija Jugović bila je vojna misija koja se odvijala u Bosni i Hercegovini. Cilj misije bio je osigurati sigurnost i stabilnost u regiji te pomoći u sprečavanju sukoba između različitih etničkih skupina. ", 6541048 ),
  ( 3003 , "Zmaj" , STR_TO_DATE("7.10.2013.", "%d.%m.%Y.") , STR_TO_DATE("17.10.2013.", "%d.%m.%Y.") , 36 , 7 , "Operacija Zmaj je bila vojna misija koja je sprovedena u Južnoj Africi u cilju očuvanja mira i stabilnosti u zemlji. Misija je vodila UN i uključivala je trupa iz različitih zemalja koji su pomagali u obezbjeđenju sigurnosti u regiji i sprečavanju oružanih sukoba. Cilj misije bio je da se pruži podrška mirovnom procesu i da se spriječe nasilne konfliktne situacije u Južnoj Africi.", 3855871 ),
- ( 3004 , "Sparta" , STR_TO_DATE("3.12.2010.", "%d.%m.%Y.") , STR_TO_DATE("8.12.2012.", "%d.%m.%Y.") , 19 , 3 ,"Trening vojne misije Sparta u modernoj Grčkoj je intenzivan program koji se bavi fizičkim i mentalnim treningom za vojnike. Cilj ovog treninga je da se pripreme vojnici za izazove koji ih očekuju u službi uključujući borbu preživljavanje i rad u teškim uvjetima. Trening uključuje različite vježbe od bazičnih fizičkih vježbi do taktičkih vježbi i simulacija. Vojnici se također obučavaju u korištenju različitih oružja i opreme kao i u komunikaciji i radu u timu. Ovaj trening je izuzetno zahtjevan i namijenjen je samo najspremnijim i najodlučnijim vojnicima.", 1680718 ),
+ ( 3004 , "Sparta" , STR_TO_DATE("3.12.2010.", "%d.%m.%Y.") , STR_TO_DATE("8.12.2012.", "%d.%m.%Y.") , 19 , 3 ," Vojna misija Sparta bila je ime za jednu od najpoznatijih vojnih misija u povijesti. To je bila misija koja je okupirala grad-državu Spartu u staroj Grčkoj. Cilj misije bio je osigurati red i mir u gradu te spriječiti bilo kakve pobune ili nerede. ", 1680718 ),
  ( 3005 , "Borac" , STR_TO_DATE("14.8.2008.", "%d.%m.%Y.") , STR_TO_DATE("11.3.2009.", "%d.%m.%Y.") , 38 , 1 ,"Vojna misija Borac bila je operacija koja se odvijala između Indije i Pakistana. Cilj operacije bio je osigurati sigurnost na granici između dviju zemalja te spriječiti daljnje sukobe između indijskih i pakistanskih snaga. ", 6079519 ),
  ( 3006 , "Odred" , STR_TO_DATE("9.5.2006.", "%d.%m.%Y.") , STR_TO_DATE("17.8.2006.", "%d.%m.%Y.") , 27 , 13 ,"Vojna misija Odred je bila izvršena u Švicarskoj tokom prošlog vijeka. Cilj misije bio je da se osigura sigurnost u zemlji i da se spriječe terorističke akcije. Misija je uspješno izvršena zahvaljujući sposobnostima i profesionalizmu vojnih jedinica", 3381107 ),
  ( 3007 , "Slavija" , STR_TO_DATE("9.6.2007.", "%d.%m.%Y.") , STR_TO_DATE("11.12.2008.", "%d.%m.%Y.") , 22 , 13 ,"Misija Slavija bila je vojna operacija koja se odnosila na obuku i treniranje vojnika za mirnovne misije u inozemstvu. Cilj misije bio je pomoći drugim zemljama u očuvanju mira i stabilnosti te promovirati demokraciju i ljudska prava.", 5970893 ),
@@ -1700,70 +1703,107 @@ INSERT INTO misija VALUES
 
 
 
-INSERT INTO oprema VALUES
-(1301, "HS Produkt HS", "Samokres", 40000),
-(1302, "HS Produkt SF", "Samokres", 20000),
-(1303, "Heckler & Koch USP", "Samokres", 10000),
-(1304, "Heckler & Koch MP7", "Strojnica", 80),
-(1305, "Heckler & Koch UMP", "Strojnica", 100),
-(1306, "Heckler & Koch MP5", "Strojnica", 100),
-(1307, "ERO", "Strojnica", 500),
-(1308, "HS Produkt VHS-2", "Jurišna strojnica", 20000),
-(1309, "HS Produkt VHS", "Jurišna strojnica", 7800),
-(1310, "Heckler & Koch G-36", "Jurišna strojnica", 750),
-(1311, "Heckler & Koch HK416", "Jurišna strojnica", 250),
-(1312, "FN F2000", "Jurišna strojnica", 100),
-(1313, "Zastava M70", "Jurišna strojnica", 88640),
-(1314, "PM md. 63/65", "Jurišna strojnica", 3420),
-(1315, "FN Minimi", "Puškostrojnica", 100),
-(1316, "FN MAG", "Puškostrojnica", 400),
-(1317, "Ultimax 100", "Puškostrojnica", 100),
-(1318, "Heckler & Koch HK21", "Puškostrojnica", 300),
-(1319, "Zastava M84", "Puškostrojnica", 1400),
-(1320, "Browning M2", "Puškostrojnica", 700),
-(1321, "Heckler & Koch HK417", "Snajperska puška", 250),
-(1322, "Remington M40", "Snajperska puška", 70),
-(1323, "SAKO TRG-42", "Snajperska puška", 240),
-(1324, "MACS M3", "Snajperska puška", 20),
-(1325, "Barrett M82", "Snajperska puška", 24),
-(1326, "RT-20", "Snajperska puška", 4),
-(1327, "Franchi SPAS-12", "Sačmarica", 100),
-(1328, "Benelli M4 Super 90", "Sačmarica", 250),
-(1329, "Heckler & Koch AG36", "Bacač granata", 300),
-(1330, "RBG-6", "Bacač granata", 124),
-(1331, "Mk 19 bacač granata", "Bacač granata", 92),
-(1332, "Spike LR2", "Protuoklopno naoružanje || ATGM", 16),
-(1333, "FGM-148 Javelin", "Protuoklopno naoružanje || ATGM", 5),
-(1334, "BGM-71 TOW-2", "Protuoklopno naoružanje || ATGM", 134),
-(1335, "9K115-2 Metis-M", "Protuoklopno naoružanje || ATGM", 54),
-(1336, "9M113 Konkurs", "Protuoklopno naoružanje || ATGM", 42),
-(1337, "9M111 Fagot", "Protuoklopno naoružanje || ATGM", 119),
-(1338, "9M14 Maljutka", "Protuoklopno naoružanje || ATGM", 216),
-(1339, "RPG-22", "Protuoklopno naoružanje || RPG", 300),
-(1340, "AT4", "Protuoklopno naoružanje || RPG", 55),
-(1341, "M57", "Minobacač", 69),
-(1342, "M96", "Minobacač", 69),
-(1343, "M75", "Minobacač", 43),
-(1344, "Thales SSARF", "Daljinometar", 20),
-(1345, "Safran Jim Compact", "Daljinometar", 30),
-(1346, "SAGEM Sigma 30", "Oprema za navigaciju", 20),
-(1347, "Kongsberg EriTac", "Oprema za komunikaciju", 10),
-(1348, "Saab Giraffe M85", "Oprema za komunikaciju", 2),
-(1349, "Aeronautics Orbiter", "UAV || Letjelica", 6),
-(1350, "Elbit Skylark", "UAV || Letjelica", 20),
-(1351, "DJI Matrice 600", "UAV || Dron", 15),
-(1352, "DJI Mavic 2", "UAV || Dron", 10),
-(1353, "Med-Eng EOD 9 Odjelo", "Protueksplozivna oprema", 5),
-(1354, "DOK-ING MV-4 Robot/Čistač mina", "Protueksplozivna oprema", 4),
-(1355, "Telerob tEODor Robot", "Protueksplozivna oprema", 2),
-(1356, "Alaska vojni šatori", "Prijenosna struktura", 50),
-(1357, "Role 2B / Vojna terenska bolnica", "Prijenosna struktura", 1),
-(1358, "ACH balistična kaciga", "Osobna zaštitna oprema", 5000),
-(1359, "Kroko vojna pancirka", "Osobna zaštitna oprema", 5000),
-(1360, "Standardna vojna uniforma", "Osobna zaštitna oprema", 2000),
-(1361, "Veliki vojni ruksak", "Ruksak", 1100),
-(1362, "Mali vojni ruksak", "Ruksak", 1920),
-(1363, "Vojne čizme Jelen", "Osobna zaštitna oprema", 2500);
+INSERT INTO izdana_oprema VALUES
+ ( 5001 , 1311 , 4002 , 1 ),
+ ( 5003 , 1303 , 4004 , 1 ),
+ ( 5005 , 1318 , 4006 , 1 ),
+ ( 5007 , 1358 , 4008 , 1 ),
+ ( 5009 , 1362 , 4010 , 1 ),
+ ( 5011 , 1315 , 4012 , 1 ),
+ ( 5013 , 1328 , 4014 , 1 ),
+ ( 5015 , 1348 , 4016 , 1 ),
+ ( 5017 , 1341 , 4018 , 1 ),
+ ( 5019 , 1310 , 4020 , 1 ),
+ ( 5021 , 1315 , 4022 , 1 ),
+ ( 5023 , 1320 , 4024 , 1 ),
+ ( 5025 , 1339 , 4026 , 1 ),
+ ( 5027 , 1325 , 4028 , 1 ),
+ ( 5029 , 1327 , 4030 , 1 ),
+ ( 5031 , 1324 , 4032 , 1 ),
+ ( 5033 , 1303 , 4034 , 1 ),
+ ( 5035 , 1325 , 4036 , 1 ),
+ ( 5037 , 1359 , 4038 , 1 ),
+ ( 5039 , 1305 , 4040 , 1 ),
+ ( 5041 , 1315 , 4042 , 1 ),
+ ( 5043 , 1353 , 4044 , 1 ),
+ ( 5045 , 1310 , 4046 , 1 ),
+ ( 5047 , 1311 , 4048 , 1 ),
+ ( 5049 , 1337 , 4050 , 1 ),
+ ( 5051 , 1325 , 4052 , 1 ),
+ ( 5053 , 1306 , 4054 , 1 ),
+ ( 5055 , 1346 , 4056 , 1 ),
+ ( 5057 , 1341 , 4058 , 1 ),
+ ( 5059 , 1363 , 4060 , 1 ),
+ ( 5061 , 1344 , 4062 , 1 ),
+ ( 5063 , 1345 , 4064 , 1 ),
+ ( 5065 , 1313 , 4066 , 1 ),
+ ( 5067 , 1342 , 4068 , 1 ),
+ ( 5069 , 1317 , 4070 , 1 ),
+ ( 5071 , 1360 , 4072 , 1 ),
+ ( 5073 , 1358 , 4074 , 1 ),
+ ( 5075 , 1356 , 4076 , 1 ),
+ ( 5077 , 1341 , 4078 , 1 ),
+ ( 5079 , 1326 , 4080 , 1 ),
+ ( 5081 , 1301 , 4082 , 1 ),
+ ( 5083 , 1325 , 4084 , 1 ),
+ ( 5085 , 1360 , 4086 , 1 ),
+ ( 5087 , 1323 , 4088 , 1 ),
+ ( 5089 , 1334 , 4090 , 1 ),
+ ( 5091 , 1312 , 4092 , 1 ),
+ ( 5093 , 1335 , 4094 , 1 ),
+ ( 5095 , 1327 , 4096 , 1 ),
+ ( 5097 , 1360 , 4098 , 1 ),
+ ( 5099 , 1315 , 4000 , 1 ),
+ ( 5101 , 1317 , 4002 , 1 ),
+ ( 5103 , 1363 , 4004 , 1 ),
+ ( 5105 , 1325 , 4006 , 1 ),
+ ( 5107 , 1312 , 4008 , 1 ),
+ ( 5109 , 1359 , 4010 , 1 ),
+ ( 5111 , 1322 , 4012 , 1 ),
+ ( 5113 , 1332 , 4014 , 1 ),
+ ( 5115 , 1351 , 4016 , 1 ),
+ ( 5117 , 1337 , 4018 , 1 ),
+ ( 5119 , 1362 , 4020 , 1 ),
+ ( 5121 , 1317 , 4022 , 1 ),
+ ( 5123 , 1323 , 4024 , 1 ),
+ ( 5125 , 1352 , 4026 , 1 ),
+ ( 5127 , 1344 , 4028 , 1 ),
+ ( 5129 , 1321 , 4030 , 1 ),
+ ( 5131 , 1301 , 4032 , 1 ),
+ ( 5133 , 1318 , 4034 , 1 ),
+ ( 5135 , 1315 , 4036 , 1 ),
+ ( 5137 , 1360 , 4038 , 1 ),
+ ( 5139 , 1309 , 4040 , 1 ),
+ ( 5141 , 1358 , 4042 , 1 ),
+ ( 5143 , 1337 , 4044 , 1 ),
+ ( 5145 , 1349 , 4046 , 1 ),
+ ( 5147 , 1305 , 4048 , 1 ),
+ ( 5149 , 1344 , 4050 , 1 ),
+ ( 5151 , 1350 , 4052 , 1 ),
+ ( 5153 , 1328 , 4054 , 1 ),
+ ( 5155 , 1351 , 4056 , 1 ),
+ ( 5157 , 1310 , 4058 , 1 ),
+ ( 5159 , 1332 , 4060 , 1 ),
+ ( 5161 , 1316 , 4062 , 1 ),
+ ( 5163 , 1326 , 4064 , 1 ),
+ ( 5165 , 1339 , 4066 , 1 ),
+ ( 5167 , 1314 , 4068 , 1 ),
+ ( 5169 , 1362 , 4070 , 1 ),
+ ( 5171 , 1312 , 4072 , 1 ),
+ ( 5173 , 1325 , 4074 , 1 ),
+ ( 5175 , 1349 , 4076 , 1 ),
+ ( 5177 , 1349 , 4078 , 1 ),
+ ( 5179 , 1323 , 4080 , 1 ),
+ ( 5181 , 1337 , 4082 , 1 ),
+ ( 5183 , 1328 , 4084 , 1 ),
+ ( 5185 , 1331 , 4086 , 1 ),
+ ( 5187 , 1311 , 4088 , 1 ),
+ ( 5189 , 1317 , 4090 , 1 ),
+ ( 5191 , 1354 , 4092 , 1 ),
+ ( 5193 , 1340 , 4094 , 1 ),
+ ( 5195 , 1358 , 4096 , 1 ),
+ ( 5197 , 1321 , 4098 , 1 ),
+ ( 5199 , 1324 , 4000 , 1 );
 
 
 INSERT INTO osoblje_na_misiji VALUES
@@ -3564,9 +3604,7 @@ SET AUTOCOMMIT = ON;
 
 -- Primjer serializable transakcije koja se mogla poboljsati sa dodatnom tablicom za pračenje dugova i try/catch funkcijom ali pošto se bliži kraj bilo bi greška ići dodavati viška tablice
 SET AUTOCOMMIT = OFF;
-SET @id_misija_za_naplatu = 3029;
-SET @naplata_sektoru = 1;
-SET @nekoristena = 1;
+SET @id_misija_za_naplatu = 3003;
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 START TRANSACTION;
 
