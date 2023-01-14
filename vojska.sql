@@ -3,6 +3,24 @@ CREATE DATABASE vojska;
 USE vojska;
 
 
+sektor(id, naziv, datum_osnivanja, opis, ukupni_proracun)
+lokacija(id, id_sektor, naziv, zemljopisna_duzina, zemljopisna_sirina)
+osoblje(id, id_sektor, ime, prezime, cin, datum_rodenja, datum_uclanjenja, status_osoblja, krvna_grupa, ocjena)
+tura(id, naziv, vrsta_ture, vrijeme_pocetka, vrijeme_kraja)
+misija(id, naziv, vrijeme_pocetka, vrijeme_kraja, id_lokacija, id_tura, ishod, trosak_misije)
+osoblje_na_misji(id, id_osoblje, id_misija)
+osoblje_na_turi(id, id_osoblje, id_tura, datum_pocetka, datum_kraja)
+vozila(id, naziv, vrsta, ukupna_kolicina, kapacitet)
+vozilo_na_misiji(id, id_vozilo, kolicina, id_misija)
+vozilo_na_turi(id, id_vozilo, id_tura, id_odgovorni, kolicina)
+popravak(id, id_vozilo_na_misiji, opis_stete, pocetak_popravka, kraj_popravka, trosak_popravka)
+oprema(id, naziv, vrsta, ukupna_kolicina)
+izdana_oprema(id, id_oprema, id_osoblje_na_misji, izdana_kolicina)
+trening(id, vrijeme_pocetka, vrijeme_kraja, id_lokacija, opis)
+osoblje_na_treningu(id, id_osoblje, id_trening, perforamns)
+lijecenje(id, id_osoblje, status_lijecenja, pocetak_lijecenja, kraj_lijecenja, opis_ozlijede, trosak_lijecenja)
+
+
 CREATE TABLE sektor(
     id INTEGER PRIMARY KEY,
     naziv VARCHAR(60) NOT NULL,
