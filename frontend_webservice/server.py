@@ -4,37 +4,39 @@ from graph import pie
 import sqlite3 as sql
 import mysql.connector
 
+    # all cinovi (Ranks)
 cinovi = ["Bojnik","Brigadir", "General","Narednik","Poručnik","Pozornik","Pukovnik","Razvodnik","Satnik","Skupnik"]
 app = Flask(__name__)
                                         # <--------MAIN-------->
 
 global name
-
+    #default account name (For errors)
 name = "Čovječe"
 
 
-# Get data
+    # Get data row
 def BP_DataRow(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
     return MainKursor.fetchone()
 
-
-def BP_Function(sql):
+    # get data ALL
+def BP_DataAll(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
-    
     return MainKursor.fetchall()
 
+    # Use Raw mysql commands
 def BP_Update(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
     vojska.commit()
     return "Done"
-
+  
+    # Update Table
 def BP_UpdateSql(tablename,data):
     sql = "UPDATE "+ tablename+" SET "
     tabela = BP_DataAll("Show COLUMNS from "+tablename+";")
@@ -48,7 +50,7 @@ def BP_UpdateSql(tablename,data):
     BP_Update(sql)
 
     return "Done"
-
+    # Insert Table
 def BP_Insert (array, tablica,maxId): # does not work with date
 
     sqlTxt="INSERT INTO "+ tablica+" VALUES("+ str(maxId)+","
@@ -66,12 +68,8 @@ def BP_Insert (array, tablica,maxId): # does not work with date
     BP_Update(sqlTxt)
     
 
-def BP_DataAll(sql):
-    vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
-    MainKursor = vojska.cursor()
-    MainKursor.execute(sql)
-    return MainKursor.fetchall()
 
+    # Random functions
 def RandomImageGenerator():
     x = str(randrange(5))
     return "/static/img/profPictures/"+x+".png"
@@ -89,10 +87,12 @@ def GetCin(cin,sektor):
 
     return cin
 
+
+
 # Route for handling the login page logic
 @app.route('/', methods = ['GET', 'POST'])
 def login():
-    
+  
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     krusor = vojska.cursor()
     error = ""
@@ -130,10 +130,10 @@ def login():
 @app.route('/profile', methods = ['GET', 'POST'])
 def profile():
     
-    osoblje=BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
+    osoblje= BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
     sektor = BP_DataRow("select sektor.naziv from login,osoblje,sektor where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"' and osoblje.prezime='"+UpisLozinka+"' and id_sektor = sektor.id;")
-
-
+  
+    
     cin= GetCin(osoblje[2],sektor[0])
 
     return render_template('profile.html', randimg = randimg, osoblje = osoblje, sektor = sektor, cin = cin)
@@ -253,14 +253,15 @@ def database(tablica):
 @app.route('/izmjena/update/<tablica>', methods = ['GET', 'POST'])
 def Update(tablica):
 
-    getData = BP_DataAll("Select * from "+ tablica+" ;")
-    getRowLen = len(getData[0])
+
     error=""
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
 
         # getting id 
+    getData = BP_DataAll("Select * from "+ tablica+" ;")
+    getRowLen = len(getData[0])
     ImportID = BP_DataAll("select id from "+tablica+";")
     ImpotData=[]
     poljeID= []
@@ -351,13 +352,13 @@ def UpdateFetchId(tablica,ID):
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
-    ImportID = BP_DataAll("select id from osoblje;")
+    ImportID = BP_DataAll("select id from "+tablica+";")
     ImpotData = BP_DataRow("select * from "+tablica+" where id = "+ID+";")
     poljeID= []
     for x in range(len(ImportID)):
         poljeID.append(ImportID[x][0])
 
-        
+    
 
     if request.method == 'POST':
         
@@ -671,5 +672,3 @@ def page_not_found(error):
 
 if __name__ == "__main__":
     app.run(debug = True)
-
-
