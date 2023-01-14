@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect
 from random import randrange
 from graph import pie
 import sqlite3 as sql
@@ -41,7 +41,8 @@ def BP_UpdateSql(tablename,data):
     sql = "UPDATE "+ tablename+" SET "
     tabela = BP_DataAll("Show COLUMNS from "+tablename+";")
 
-    for x in range(1,len(data)):
+
+    for x in range(2,len(data)):
         sql = sql+ str(tabela[x][0]) + " = '" + str(data[x]) +"',"
 
     sql = sql [ : -1]
@@ -51,6 +52,9 @@ def BP_UpdateSql(tablename,data):
 
     return "Done"
     # Insert Table
+
+
+
 def BP_Insert (array, tablica,maxId): # does not work with date
 
     sqlTxt="INSERT INTO "+ tablica+" VALUES("+ str(maxId)+","
@@ -64,7 +68,7 @@ def BP_Insert (array, tablica,maxId): # does not work with date
     sqlTxt =sqlTxt[:-1] 
     sqlTxt += ");"
 
-    print(sqlTxt)
+   
     BP_Update(sqlTxt)
     
 
@@ -155,17 +159,39 @@ def database(tablica):
     getData = BP_DataAll("Select * from "+ tablica+" ;")
     getRowLen = len(getData[0])
     error=""
-    popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
-    osobljeIme = BP_DataAll("Select id,ime from osoblje;")
+ 
     if request.method == 'POST':
         
-
+        
             
-            if tablica :
+            if tablica == "osoblje":
                         # stara metoda
+                maxid = BP_DataRow("select max(id) from osoblje limit 1")            #STR_TO_DATE("12.12.1991.", "%d.%m.%Y.")
+
+                datum1 = request.form["datum1"]
+                datum2 = request.form["datum2"]
+
+                datum1 = datum1.split("-")
+                datum2 = datum2.split("-")  
+                BP_Update("INSERT INTO osoblje VALUES ("+str(maxid[0]+1)+","+request.form["menu1"]+",'"+request.form["ime"]+"','"+request.form["prezime"]+"','"+request.form["cin"]+"', STR_TO_DATE('"+datum1[2]+"."+datum1[1]+"."+datum1[0]+"', '%d.%m.%Y.'), STR_TO_DATE('"+datum2[2]+"."+datum2[1]+"."+datum2[0]+"', '%d.%m.%Y.'),'"+request.form["status"]+"','"+request.form["krv"]+"',"+request.form["ocjena"]+");")
+
+            if tablica == "vozila":
+                    # nova laksa metoda
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+            
+            if tablica == "tura":
+
+                        
+
                 polje = []
 
                 for x in range(10):
@@ -174,7 +200,45 @@ def database(tablica):
 
                 BP_Insert(polje,tablica,maxid[0]+1)
 
-          
+            if tablica == "trening":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+
+            if tablica == "oprema":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+
+            if tablica == "misija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
+
+            if tablica == "lokacija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_Insert(polje,tablica,maxid[0]+1)
             
             
             if error != "":                     #dodati kasnije
@@ -185,8 +249,8 @@ def database(tablica):
                 
             except Exception as e:
                   error=e
-    
-    return render_template('izmjena.html',osobljeIme=osobljeIme,osobljeImeLen=len(osobljeIme),popravak = popravak,popravakLen = len(popravak),cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+     #flash('Thanks for submitting your name, {}!'.format(name))
+    return render_template('izmjena.html',cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
 
 
@@ -195,25 +259,22 @@ def Update(tablica):
 
 
     error=""
-   
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
-    popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
-    osobljeIme = BP_DataAll("Select id,ime from osoblje;")
+
         # getting id 
     getData = BP_DataAll("Select * from "+ tablica+" ;")
     getRowLen = len(getData[0])
     ImportID = BP_DataAll("select id from "+tablica+";")
-    
-    ImportData=[]
+    ImpotData=[]
     poljeID= []
     for x in range(len(ImportID)):
         poljeID.append(ImportID[x][0])
 
     if request.method == 'POST':
         
-            if tablica:
+            if tablica == "osoblje":
                         # nova laksa metoda
                 polje = []
                 for x in range(10):
@@ -221,10 +282,70 @@ def Update(tablica):
                         polje.append(request.form["podatak"+str(x)])
                 BP_UpdateSql(tablica,polje)
 
-           
+            if tablica == "vozila":
+                    # nova laksa metoda
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+            
+            if tablica == "tura":
+
+                        
+
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "trening":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "oprema":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "misija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "lokacija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
    
     
-    return render_template('update.html',osobljeIme=osobljeIme,osobljeImeLen=len(osobljeIme),popravak=popravak,popravakLen = len(popravak),ImportData= ImportData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    return render_template('update.html',ImpotData= ImpotData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
     
 
 @app.route('/izmjena/update/<tablica>/<ID>', methods = ['GET', 'POST'])
@@ -232,14 +353,12 @@ def UpdateFetchId(tablica,ID):
     getData = BP_DataAll("Select * from "+ tablica+" ;")
     getRowLen = len(getData[0])
     error=""
-    popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
     ImportID = BP_DataAll("select id from "+tablica+";")
-    ImportData = BP_DataRow("select * from "+tablica+" where id = "+ID+";")
+    ImpotData = BP_DataRow("select * from "+tablica+" where id = "+ID+";")
     poljeID= []
-    osobljeIme = BP_DataAll("Select id,ime from osoblje;")
     for x in range(len(ImportID)):
         poljeID.append(ImportID[x][0])
 
@@ -247,7 +366,7 @@ def UpdateFetchId(tablica,ID):
 
     if request.method == 'POST':
         
-            if tablica:
+            if tablica == "osoblje":
                         # nova laksa metoda
                 polje = []
                 for x in range(10):
@@ -255,49 +374,110 @@ def UpdateFetchId(tablica,ID):
                         polje.append(request.form["podatak"+str(x)])
                 BP_UpdateSql(tablica,polje)
 
-          
+            if tablica == "vozila":
+                    # nova laksa metoda
+                polje = []
 
-    return render_template('update.html',osobljeIme=osobljeIme,osobljeImeLen=len(osobljeIme),popravak=popravak,popravakLen = len(popravak),ImportData=ImportData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+            
+            if tablica == "tura":
+
+                        
+
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "trening":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "oprema":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "misija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+            if tablica == "lokacija":
+                
+                polje = []
+
+                for x in range(10):
+                    if "podatak"+str(x) in request.form:
+                        polje.append(request.form["podatak"+str(x)])
+
+                BP_UpdateSql(tablica,polje)
+
+    return render_template('update.html',ImpotData=ImpotData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
 
 # Mateov Mali Kutak [Ctrl+F: MMK]
 @app.route('/izmjena/delete/<tablica>/<ID>', methods = ['GET', 'POST'])
 def delete (tablica, ID):
-    getData = BP_DataAll("Select * from "+ tablica+" ;")
-    getRowLen = len(getData[0])
-    popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
+    getData =   BP_DataAll("Select * from "+ tablica+" ;")
+    try:
+     getRowLen = len(getData[0])
+    except:
+        getRowLen=0
+        print("empty")
     error=""
+    popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
-<<<<<<< Updated upstream
-    ImportID = BP_DataAll("SELECT id FROM " + tablica +";")
-    ImpotData = BP_DataRow("select * from " + tablica + " where id = " + ID + ";")
-=======
-    ImportID = BP_DataAll("select id from osoblje;")
-    ImportData = BP_DataRow("select * from " + tablica + " where id = " + ID + ";")
->>>>>>> Stashed changes
+    ImportID = BP_DataAll("select id from "+tablica+";")
+    #ImportData = BP_DataRow("select * from "+tablica+" where id = "+ID+";")
+    ImportData =""
     poljeID= []
+
+
+    osobljeIme = BP_DataAll("Select id,ime from osoblje;")
     for x in range(len(ImportID)):
         poljeID.append(ImportID[x][0])
 
-    
 
-
-    
     if request.method == 'POST':
+            polje = []
+            for x in range(len(getData)):
+                if "podatak"+str(x) in request.form:
+                    polje.append(request.form["podatak"+str(x)])
 
-        unos = request.form["podatakid"]
-        BP_Update("DELETE FROM " + tablica + " WHERE id = " + unos + ";")
+            print(polje)
 
+            for x in polje:
+                BP_Update("DELETE FROM " + tablica + " WHERE id = " + x + ";")
+            return redirect("/izmjena/delete/"+tablica+"/"+ID, code=302)
     
     
-    
-<<<<<<< Updated upstream
     return render_template('delete.html', poljeID = poljeID ,ImpotData = ImpotData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
-=======
-    return render_template('delete.html',popravak = popravak, popravakLen= len(popravak), ImportData = ImportData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
->>>>>>> Stashed changes
 # Kraj MMK-a
 
 
