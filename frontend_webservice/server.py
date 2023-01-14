@@ -1,48 +1,48 @@
 from flask import Flask, render_template, request,redirect
 from random import randrange
+from datetime import date
 from graph import pie
 import sqlite3 as sql
 import mysql.connector
 
+
+app = Flask(__name__)
+                                       
+#default variables and  account name (For errors)
+global name
+name = "Čovječe"
+CurrDate = date.today()
+
     # all cinovi (Ranks)
 cinovi = ["Bojnik","Brigadir", "General","Narednik","Poručnik","Pozornik","Pukovnik","Razvodnik","Satnik","Skupnik"]
-app = Flask(__name__)
-                                        # <--------MAIN-------->
-
-global name
-    #default account name (For errors)
-name = "Čovječe"
 
 
-    # Get data row
+    # Get data row from Database
 def BP_DataRow(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
     return MainKursor.fetchone()
 
-    # get data ALL
+    # get data ALL from Database
 def BP_DataAll(sql):
     vojska =  mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
-   
-   
     return  MainKursor.fetchall()
 
-    # Use Raw mysql commands
-def BP_Update(sql):
+    # Function for Using Raw mysql commands
+def BP_Command(sql):
     vojska = mysql.connector.connect(host = 'localhost', database = 'vojska', user = 'root', password = 'root')
     MainKursor = vojska.cursor()
     MainKursor.execute(sql)
     vojska.commit()
     return "Done"
   
-    # Update Table
+    # Function for Updating Tables
 def BP_UpdateSql(tablename,data):
     sql = "UPDATE "+ tablename+" SET "
     tabela = BP_DataAll("Show COLUMNS from "+tablename+";")
-
 
     for x in range(2,len(data)):
         sql = sql+ str(tabela[x][0]) + " = '" + str(data[x]) +"',"
@@ -50,15 +50,12 @@ def BP_UpdateSql(tablename,data):
     sql = sql [ : -1]
     sql = sql + " WHERE "+ str(tabela[0][0]) +" = "+ str(data[0])+";"
     print(sql)
-    BP_Update(sql)
-
+    BP_Command(sql)
     return "Done"
-    # Insert Table
-
-
-
-def BP_Insert (array, tablica,maxId): # does not work with date
-
+    
+    
+     # Function for Inserting Tables
+def BP_Insert (array, tablica,maxId):
     sqlTxt="INSERT INTO "+ tablica+" VALUES("+ str(maxId)+","
     for x in array:
         
@@ -69,20 +66,22 @@ def BP_Insert (array, tablica,maxId): # does not work with date
 
     sqlTxt =sqlTxt[:-1] 
     sqlTxt += ");"
-
    
-    BP_Update(sqlTxt)
+    BP_Command(sqlTxt)
     
 
+                # Random functions
 
-    # Random functions
+        #Generates random nummber for profile pictures
 def RandomImageGenerator():
     x = str(randrange(5))
     return "/static/img/profPictures/"+x+".png"
 
+        #Sort Two Dimensional Tuple
 def SortTwoDimensionalTuple(lst,reverseType):
     return sorted(lst, key=lambda x: x[-2],reverse= reverseType)
 
+        # Outputs Ranks with ther correct picture format
 def GetCin(cin,sektor):
 
     if sektor == "Hrvatska ratna mornarica":
@@ -95,7 +94,7 @@ def GetCin(cin,sektor):
 
 
 
-# Route for handling the login page logic
+# Route for handling the login page
 @app.route('/', methods = ['GET', 'POST'])
 def login():
   
@@ -107,7 +106,6 @@ def login():
 
         global name
         global UpisLozinka
-
 
         name = request.form['username']
         UpisLozinka = request.form['password']
@@ -132,136 +130,54 @@ def login():
     return render_template('Login.html',error = error)
 
 
-
+# Route for handling the Profile page
 @app.route('/profile', methods = ['GET', 'POST'])
 def profile():
     
     osoblje= BP_DataRow("select osoblje.ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna_grupa from login,osoblje where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"';")
     sektor = BP_DataRow("select sektor.naziv from login,osoblje,sektor where lozinka = md5(concat('"+name+"','"+UpisLozinka+"')) and osoblje.ime = '"+name+"' and osoblje.prezime='"+UpisLozinka+"' and id_sektor = sektor.id;")
-  
-    
     cin= GetCin(osoblje[2],sektor[0])
 
     return render_template('profile.html', randimg = randimg, osoblje = osoblje, sektor = sektor, cin = cin)
         
-
-
-@app.route('/kopnena', methods=['GET', 'POST'])
-def kopnenaVojska():
-    
-    data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
-    
-    return render_template('testnewdesign.html',data=data,len=len(data))
-
-
-
-
+# Route for handling the Edit -> Insert page
 @app.route('/izmjena/insert/<tablica>', methods = ['GET', 'POST'])
 def database(tablica):
+    
+            # Get Data
+    error=""
+    lokacija = BP_DataAll("select id, naziv from lokacija;")
+    tura = BP_DataAll("select id, naziv from tura;")
+    maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
     getData = BP_DataAll("Select * from "+ tablica+" ;")
     try:
      getRowLen = len(getData[0])
     except:
         getRowLen=0
         print("empty")
-    error=""
-    lokacija = BP_DataAll("select id, naziv from lokacija;")
-    tura = BP_DataAll("select id, naziv from tura;")
-    maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
  
-    osobljeIme = BP_DataAll("Select id,ime from osoblje;")
+    try:
+                
+        if request.method == 'POST':
+                if tablica :
 
-    if request.method == 'POST':
+                    polje = []
+                    for x in range(10):
+                        if "podatak"+str(x) in request.form:
+                            polje.append(request.form["podatak"+str(x)])
 
-            if tablica :
-                        # stara metoda
-                maxid = BP_DataRow("select max(id) from osoblje limit 1")            #STR_TO_DATE("12.12.1991.", "%d.%m.%Y.")
-
-                datum1 = request.form["datum1"]
-                datum2 = request.form["datum2"]
-
-                datum1 = datum1.split("-")
-                datum2 = datum2.split("-")  
-                BP_Update("INSERT INTO osoblje VALUES ("+str(maxid[0]+1)+","+request.form["menu1"]+",'"+request.form["ime"]+"','"+request.form["prezime"]+"','"+request.form["cin"]+"', STR_TO_DATE('"+datum1[2]+"."+datum1[1]+"."+datum1[0]+"', '%d.%m.%Y.'), STR_TO_DATE('"+datum2[2]+"."+datum2[1]+"."+datum2[0]+"', '%d.%m.%Y.'),'"+request.form["status"]+"','"+request.form["krv"]+"',"+request.form["ocjena"]+");")
-
-            if tablica == "vozila":
-                    # nova laksa metoda
-                polje = []
-
-                for x in range(10):
-                    if "podatak"+str(x) in request.form:
-                        polje.append(request.form["podatak"+str(x)])
-
-                BP_Insert(polje,tablica,maxid[0]+1)
+                    BP_Insert(polje,tablica,maxid[0]+1)
+                    print("Uspjesno dodano!")
+                    if error != "":                   
+                            error= "Uspjesno Dodano!"            
             
-            if tablica == "tura":
-
-                        
-
-                polje = []
-
-                for x in range(10):
-                    if "podatak"+str(x) in request.form:
-                        polje.append(request.form["podatak"+str(x)])
-
-                BP_Insert(polje,tablica,maxid[0]+1)
-
-            if tablica == "trening":
-                
-                polje = []
-
-                for x in range(10):
-                    if "podatak"+str(x) in request.form:
-                        polje.append(request.form["podatak"+str(x)])
-
-                BP_Insert(polje,tablica,maxid[0]+1)
-                return redirect("/izmjena/insert/"+str(tablica), code=302)
-
-            if tablica == "oprema":
-                
-                polje = []
-
-                for x in range(10):
-                    if "podatak"+str(x) in request.form:
-                        polje.append(request.form["podatak"+str(x)])
-
-                BP_Insert(polje,tablica,maxid[0]+1)
-                return redirect("/izmjena/insert/"+str(tablica), code=302)
-
-            if tablica == "misija":
-                
-                polje = []
-
-                for x in range(10):
-                    if "podatak"+str(x) in request.form:
-                        polje.append(request.form["podatak"+str(x)])
-
-                BP_Insert(polje,tablica,maxid[0]+1)
-
-            if tablica == "lokacija":
-                
-                polje = []
-
-                for x in range(10):
-                    if "podatak"+str(x) in request.form:
-                        polje.append(request.form["podatak"+str(x)])
-
-                BP_Insert(polje,tablica,maxid[0]+1)
-            
-            
-            if error != "":                     #dodati kasnije
-                error= "Uspjesno Dodano!"
-                
-            try:
-                print("Uspjesno dodano!")
-                
-            except Exception as e:
+    except Exception as e:
                   error=e
-     #flash('Thanks for submitting your name, {}!'.format(name))
+    
     return render_template('izmjena.html',cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
 
-
+# Route for handling the Edit -> Update page
 @app.route('/izmjena/update/<tablica>', methods = ['GET', 'POST'])
 def Update(tablica):
     error=""
@@ -297,10 +213,11 @@ def Update(tablica):
     
     return render_template('update.html',ImportData= ImportData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
     
-
+# Route for handling the Edit -> Update -> ID page
 @app.route('/izmjena/update/<tablica>/<ID>', methods = ['GET', 'POST'])
 def UpdateFetchId(tablica,ID):
     getData =   BP_DataAll("Select * from "+ tablica+" ;")
+    popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
    
     try:
      getRowLen = len(getData[0])
@@ -337,7 +254,7 @@ def UpdateFetchId(tablica,ID):
     return render_template('update.html',osobljeIme=osobljeIme,osobljeImeLen=len(osobljeIme),popravak=popravak,popravakLen = len(popravak),ImportData=ImportData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
 
-# Mateov Mali Kutak [Ctrl+F: MMK]
+# Mateov Mali Kutak [Ctrl+F: MMK] Adds Delete Function to Database
 @app.route('/izmjena/delete/<tablica>/<ID>', methods = ['GET', 'POST'])
 def delete (tablica, ID):
     
@@ -374,14 +291,14 @@ def delete (tablica, ID):
             print(polje)
 
             for x in polje:
-                BP_Update("DELETE FROM " + tablica + " WHERE id = " + x + ";")
+                BP_Command("DELETE FROM " + tablica + " WHERE id = " + x + ";")
             return redirect("/izmjena/delete/"+tablica+"/"+ID, code=302)
     
     
     return render_template('delete.html', poljeID = poljeID ,ImportData = ImportData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 # Kraj MMK-a
 
-
+# Route for handling informacije (Info) page
 @app.route('/informacije/<sektor>/<data>')  #Exception
 def informacije (data,sektor):
 
@@ -417,7 +334,7 @@ def informacije (data,sektor):
     return render_template('informacije.html',Vozila = Vozila ,Troskovi = Troskovi, Osoblje = Osoblje, sektor=sektor,data=str(data),Svozila="vozila.svg",Sosoblje="osoblje.svg",Stroskovi="troskovi.svg",osoblje=osoblje,vozila=vozila, len2=len(osoblje),lenVozila = len(vozila),)
 
 
-
+# Route for handling Mission page
 @app.route('/<sektor>/<misija>') 
 def PrikazTura (misija,sektor):
     
@@ -433,9 +350,10 @@ def PrikazTura (misija,sektor):
     data = BP_DataAll('select naziv,vrsta_ture,date(vrijeme_pocetka),date(vrijeme_kraja) from tura;')
     MisijenaTuri= BP_DataAll("select * from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     MisijenaTuriDatumi= BP_DataAll("select date(misija.vrijeme_pocetka), date(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
-    return render_template('testnewdesign.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
+    return render_template('misija.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
 
 
+# Fillipo
 @app.route("/oprema", methods = ['GET', 'POST'])
 def oprema():
     oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema")
@@ -494,7 +412,7 @@ def bolnica():
 
 
 
-
+# Route for handling Statistics page
 @app.route("/statistika", methods = ['GET', 'POST'])
 def statistika():
 
@@ -518,13 +436,9 @@ def statistika():
     statusosoblja = BP_DataAll("SELECT status_osoblja, COUNT(*) AS broj_pojedinaca_u_statusu FROM osoblje GROUP BY status_osoblja;")
     cinosoblje = BP_DataAll("SELECT cin, COUNT(*) AS broj_pojedinaca_u_statusu FROM osoblje GROUP BY cin;")
 
-    
-        
-
-    
     return render_template('statistika.html',cinosoblje=cinosoblje,cinosobljeLen=len(cinosoblje),statusosoblja=statusosoblja,statusosobljaLen = len(statusosoblja),godineLen= len(godine),godine=godine,kopnenaBroj = kopnenaBroj, mornaricaBroj= mornaricaBroj, zrakoplovnaBroj = zrakoplovnaBroj, policijaBroj= policijaBroj,trosak=trosak,trosak_svega=trosak_svega,trosak_ljecenje=trosak_ljecenje,trosak_ljecenjeLen=len(trosak_ljecenje),trosak_popravak=trosak_popravak,trosak_popravakLen=len(trosak_popravak),trosak_misije=trosak_misije,trosak_misijeLen=len(trosak_misije),euri=euri,kuna=kuna,visak= visak,tura_informacije=tura_informacije,tura_informacijeLen = len(tura_informacije))
 
-
+# Route for handling Rating (Ocijenjivanje) page
 @app.route("/ocjenjivanje/<Stype>", methods = ['GET', 'POST'])  #Exception
 def ocjenjivanje(Stype):  
 
@@ -571,19 +485,16 @@ def ocjenjivanje(Stype):
 
 
 
-                            # Errors
+                        # Error if you are lost
 @app.errorhandler(505)
 def page_not_found(error):
     return render_template('404.html', err = "4o4 error ", note = "programur profesional", desc = "What are you looking for here silly?", ime = name,)
 
 
 
-@app.errorhandler(505)  #Exception
+@app.errorhandler(505)  #Exception error if anything goes wrong
 def page_not_found(error):  
     return render_template('404.html', err = "PlEaSe ReFrEsH eVeRyThInG", note = error, desc = "brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",ime=name,)    
-
-
-
 
 
 

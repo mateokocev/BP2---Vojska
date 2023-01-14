@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/izmjeni.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <script src="{{url_for('static', filename='toast.js')}}"></script>
     <title>Ocjenjivanje</title>
     <script src="https://kit.fontawesome.com/342c3b803b.js" crossorigin="anonymous"></script>
+
+
 </head>
 <body>
 <div class="center">
@@ -45,9 +48,10 @@
    </div>
    <hr>
    <h3 style="font-size: 60px; color: wheat;">Dodaj {{tablica}}</h3>
+ 
     
-      
-       
+
+
                    
             <form method="POST" margin="10px 0px">
                 {% if tablica == "osoblje" %}
@@ -358,7 +362,7 @@
 
                 <div>
                     <label>zemljopisna Dužina</label>
-                    <input type="number" required   id="" type="text" name="podatak3" placeholder="Broj">
+                    <input type="number" required   id="" name="podatak3" placeholder="Broj">
                 </div>
 
 
@@ -443,10 +447,12 @@
 
 
                   <br>
-                <a href="/izmjena/insert/vozila"><button  type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> </a>
+                <a href="/izmjena/insert/vozila"><button type="submit" onclick="myFunction()" style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> </a>
                
             </form>
-          
+            <button onclick="myFunction()">Show Snackbar</button>
+
+            <div id="snackbar">Some text some message..</div>
             
 
        
@@ -471,11 +477,6 @@
               </div>
       
 
-              <div>
-                <canvas id="myChart"></canvas>
-              </div>
-              
-              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
         <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
@@ -492,3 +493,12 @@
 
 
 
+
+
+<script>
+    function myFunction() {
+      var x = document.getElementById("snackbar");
+      x.className = "show";
+      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    }
+    </script>
