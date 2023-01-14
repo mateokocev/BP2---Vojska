@@ -38,6 +38,15 @@
          <a href="/izmjena/delete/tura/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
          <a href="/izmjena/delete/vozila/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
          <a href="/izmjena/delete/lokacija/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">lokacija</button></a>  
+         <a href="/izmjena/delete/lijecenje/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">lijecenje</button></a>
+         <a href="/izmjena/delete/misija/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">misija</button></a>
+         <a href="/izmjena/delete/oprema/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">oprema</button></a>
+         <a href="/izmjena/delete/osoblje/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">osoblje</button></a>
+         <a href="/izmjena/delete/popravak/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">popravak</button></a>
+         <a href="/izmjena/delete/trening/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">trening</button></a>
+         <a href="/izmjena/delete/tura/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">tura</button></a>
+         <a href="/izmjena/delete/vozila/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">vozila</button></a>  
+         <a href="/izmjena/delete/lokacija/0"><button style=" margin-bottom: 10px;" class="newButton" role="button">lokacija</button></a>  
        
             
         </div>
@@ -50,6 +59,7 @@
                 <form method="POST" margin="10px 0px">
                     <div>
                         <label>ID</label>
+                        <input required type="number" id="osoblje_id" name="podatakid" value="{{ImportData[0]}}" placeholder="ID">
                         <input required type="number" id="osoblje_id" name="podatakid" value="{{ImportData[0]}}" placeholder="ID">
                     </div>
 
@@ -73,8 +83,14 @@
             <hr>    
 
            
+
+           
                   <h1>Podatci</h1>
                   <hr>
+                  
+                <form method="POST" >
+                  <div style="grid-template-columns: {{ getRowLen * 'auto '}}  ;" class="gridauto">
+                   
                   
                 <form method="POST" >
                   <div style="grid-template-columns: {{ getRowLen * 'auto '}}  ;" class="gridauto">
@@ -86,8 +102,11 @@
                                 {% if getData[i][x] in poljeID %}
                                 <input type="checkbox" value="{{getData[i][x]}}" id="scales" name="podatak{{i}}" >
                              
+                                <input type="checkbox" value="{{getData[i][x]}}" id="scales" name="podatak{{i}}" >
+                             
                                 {% else %}
                                 <p>{{getData[i][x]}}</p>
+                                
                                 
                                 {% endif %}
                             {% endif %}
@@ -100,8 +119,17 @@
                 
                  
               
+                    <button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button">delete</button>
+                </form>
+                   
+            </div>
+                
+                 
+              
                   
                   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+         
+        
          
         
             <a href="/"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-house"></i></button></a> 
@@ -113,6 +141,8 @@
     
            
         </div>
+       
+    
        
     
     </div>

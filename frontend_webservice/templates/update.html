@@ -46,7 +46,7 @@
       
        
                    
-            <form method="POST" margin="10px 0px">
+            <form method="POST"  margin="10px 0px">
                 {% if tablica == "osoblje" %}
                 <div>
                     <label>Id</label>
@@ -472,13 +472,13 @@
                   <br>
                 
            
-                  <a href="/izmjena/update/{{tablica}}"><button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> </a>
+                 <button type="submit"    style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button>
                   
             
               
                 </form>
-
-            
+                <a href="/izmjena/update/{{tablica}}"><img  src=""><button style="margin-top: 20px;" class="button-24"  role="button"><i class="fa-solid fa-arrows-rotate"></i></button></a> 
+           
 
        
         <hr>    
@@ -496,7 +496,7 @@
                             <a href="/izmjena/update/{{tablica}}/{{getData[i][x]}}"><button  style=" margin-bottom: 10px; height: 50%; width: fit-content;" class="newButton" role="button"><i class="fa-solid fa-key"></i> {{getData[i][x]}}</button> </a>
                             
                             {% else %}
-                            <p>{{getData[i][x]}}</p>
+                            <p  style="scr" >{{getData[i][x]}}</p>
                             {% endif %}
                         {% endif %}
                        

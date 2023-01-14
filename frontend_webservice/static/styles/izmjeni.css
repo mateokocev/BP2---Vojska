@@ -19,7 +19,7 @@ body
     
     border-radius: 5px;
     width: 1000px;
-    height: fit-content;
+    height: 100%;
     backdrop-filter: blur(50px);
     border: 2px solid rgba(255,255,255,0.1);
     box-shadow: 0 0 40px rgba(8,7,16,0.6);
@@ -240,6 +240,7 @@ label
 
 }
 
+
 input{
     display: block;
     height: 40px;
@@ -293,3 +294,8 @@ input{
       input::-webkit-inner-spin-button {
         display: none;
       }
+
+
+
+
+      
