@@ -1,6 +1,7 @@
 *
 {
     font-family: 'Poppins',sans-serif;
+ 
 }
 body
 {
@@ -17,7 +18,8 @@ body
 {   
    
     background-color: rgba(255,255,255,0.13);
-    transform: translate(-50%,-50%);
+ 
+
     border-radius: 5px;
     width: 1000px;
     height: 800px;
@@ -29,7 +31,7 @@ body
 }
 .center
 {
-    margin-left: 50%;
+  margin-left: 50%;
   
 }
 

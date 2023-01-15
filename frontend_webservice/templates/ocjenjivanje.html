@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/styles/ocjenjivanje.css">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/ocjenjivanje.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <title>Ocjenjivanje</title>
 </head>
@@ -17,7 +17,7 @@
         <h3>{{accountRating[0] * '⭐'}}</h3>
 
 
-        <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">{{err}}</h1>
+        <h1 style="margin-top: 10%; font-size: 100px; color: wheat;">Ocijene</h1>
     
    <div class="sort">
         <a href="/ocjenjivanje/asc"><button style="margin-right: 100%; margin-bottom: 10px;" class="button-24" role="button">Asc</button></a>  

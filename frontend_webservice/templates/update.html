@@ -101,17 +101,17 @@
                         </div>
                     <div>
                         <label>Status Osoblja</label>
-                        <input required id="" name="podatak8" value="{{ImportData[7]}}" placeholder="test">
+                        <input required id="" name="podatak8" value="{{ImportData[7]}}" placeholder="Aktivan/Neaktivan/Umirovljen/Mrtav">
                     </div>
 
                     <div>
                         <label>Krvna Grupa</label>
-                        <input required id="" name="podatak9" value="{{ImportData[8]}}" placeholder="test">
+                        <input required id="" name="podatak9" value="{{ImportData[8]}}" placeholder="Krvna Grupa">
                     </div>
 
                 <div>
                     <label>Ocjena</label>
-                    <input required  type="number" id="" name="podatak10"  value="{{ImportData[9]}}" placeholder="test">
+                    <input required  type="number" id="" name="podatak10"  value="{{ImportData[9]}}" placeholder="Ocjena od 1 do 5">
                 </div>
 
      
@@ -156,7 +156,7 @@
                 </div>
                 <div>
                     <label>Naziv</label>
-                    <input required id="" value="{{ImportData[1]}}" name="podatak2" placeholder="test">
+                    <input required id="" value="{{ImportData[1]}}" name="podatak2" placeholder="Naziv">
                 </div>
                   
 
@@ -245,7 +245,7 @@
 
                 <div>
                     <label>Opis Štete</label>
-                    <input required id="" value="{{ImportData[2]}}"  name="podatak3" placeholder="id">
+                    <input required id="" value="{{ImportData[2]}}"  name="podatak3" placeholder="Opis">
                 </div>
 
 
@@ -261,7 +261,7 @@
 
                 <div>
                     <label>Trosak popravka</label>
-                    <input required id="appt-date" value="{{ImportData[5]}}" type="number" name="podatak6" step="2" />
+                    <input required id="appt-date" placeholder="Trosak popravka" value="{{ImportData[5]}}" type="number" name="podatak6" step="2" />
                 </div>
 
 
@@ -472,7 +472,7 @@
                   <br>
                 
            
-                 <button type="submit"    style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button>
+                  <a href="/izmjena/insert/vozila"><button type="submit" onclick="myFunction()" style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> </a>
                   
             
               
@@ -481,7 +481,7 @@
            
 
        
-        <hr>    
+        <hr>        
               <h1>Podatci </h1>
               <hr>
               <div style="grid-template-columns: {{ getRowLen * 'auto '}} ;" class="gridauto">

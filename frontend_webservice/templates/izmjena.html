@@ -55,7 +55,8 @@
                    
             <form method="POST" margin="10px 0px">
                 {% if tablica == "osoblje" %}
-
+                <h1>ID</h1>
+                <h1>{{maxid[0]+1}}</h1>
                 <div>
                     <label>Sektor</label>
                     <br>
@@ -69,12 +70,12 @@
 
                 <div>
                     <label>Ime</label>
-                    <input required  id="ime" name="podatak2" placeholder="test" >
+                    <input required  id="ime" name="podatak2" placeholder="Ime" >
                 </div>
 
                 <div>
                     <label>Prezime</label>
-                    <input required  id="" name="podatak3" placeholder="test">
+                    <input required  id="" name="podatak3" placeholder="Prezime">
                 </div>
 
               
@@ -103,17 +104,17 @@
                         </div>
                     <div>
                         <label>Status Osoblja</label>
-                        <input required  id="" name="podatak7" placeholder="test">
+                        <input required  id="" name="podatak7" placeholder="Status">
                     </div>
 
                     <div>
                         <label>Krvna Grupa</label>
-                        <input required  id="" name="podatak8" placeholder="test">
+                        <input required  id="" name="podatak8" placeholder="Krvna grupa">
                     </div>
 
                 <div>
                     <label>Ocjena</label>
-                    <input required  type="number" id="" name="podatak9" placeholder="test">
+                    <input required  type="number" id="" name="podatak9" placeholder="ocjiena od 0 do 5">
                 </div>
 
                 
@@ -122,6 +123,8 @@
 
 
                 {% if tablica == "vozila" %}
+                <h1>ID</h1>
+                <h1>{{maxid[0]+1}}</h1>
                 <div>
                     <label>Naziv</label>
                     <input required  id="" name="podatak1" placeholder="Naziv">
@@ -147,7 +150,7 @@
                 <h1>{{maxid[0]+1}}</h1>
                 <div>
                     <label>Naziv</label>
-                    <input required  id="" name="podatak1" placeholder="test">
+                    <input required  id="" name="podatak1" placeholder="Naziv">
                 </div>
 
 
@@ -241,7 +244,7 @@
 
                 <div>
                     <label>Trosak popravka</label>
-                    <input required id="appt-date"  type="number" name="podatak5" step="2" />
+                    <input required id="appt-date" placeholder="Trosak popravka"  type="number" name="podatak5" step="2" />
                 </div>
 
 
@@ -450,9 +453,9 @@
                 <a href="/izmjena/insert/vozila"><button type="submit" onclick="myFunction()" style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-plus"></i></button> </a>
                
             </form>
-            <button onclick="myFunction()">Show Snackbar</button>
+           
 
-            <div id="snackbar">Some text some message..</div>
+           
             
 
        
@@ -494,11 +497,3 @@
 
 
 
-
-<script>
-    function myFunction() {
-      var x = document.getElementById("snackbar");
-      x.className = "show";
-      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-    }
-    </script>
