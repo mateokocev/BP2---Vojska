@@ -22,7 +22,7 @@ id,id_sektor,ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna
 10021,4,Emberli,Filipović,Pukovnik,1970-09-16,2017-03-08,Umirovljen,A+,4
 10022,2,Desa,Jovanović,Satnik,1956-09-20,1997-02-26,Neaktivan,A-,2
 10023,2,Kalen,Katić,Skupnik,1963-01-21,2014-03-22,Umirovljen,AB+,3
-10024,4,Alijah,Šimunić,Pozornik,1954-10-06,1996-06-28,Umirovljen,AB+,4
+10024,4,Alijah,Šimunić,Pozornik,1954-10-06,1996-06-28,Mrtav,AB+,4
 10025,4,Iva,Lončar,Poručnik,1952-04-30,1993-09-08,Aktivan,B+,4
 10026,1,Siri,Kovačić,Bojnik,1962-06-24,2013-02-23,Neaktivan,AB-,3
 10027,3,Ilko,Novak,Razvodnik,1968-05-12,2007-11-25,Neaktivan,0+,3
@@ -997,4 +997,4 @@ id,id_sektor,ime,prezime,cin,datum_rodenja,datum_uclanjenja,status_osoblja,krvna
 10996,3,Marina,Marjanović,Skupnik,1952-03-27,2003-06-19,Neaktivan,AB+,5
 10997,1,Felicija,Herceg,Pozornik,1958-01-10,2007-04-29,Umirovljen,B+,4
 10998,3,Božana,Galić,Narednik,1968-06-01,1995-10-19,Mrtav,AB-,1
-10999,3,admin,admin,General,1955-09-04,1995-11-24,"Pokojan u duši",A+,30
+10999,3,admin,admin,General,1955-09-04,1995-11-24,"Pokojan u duši",A+,3
