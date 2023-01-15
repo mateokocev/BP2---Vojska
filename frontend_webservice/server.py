@@ -2,7 +2,6 @@ from flask import Flask, render_template, request,redirect
 from random import randrange
 from datetime import date
 from graph import pie
-import sqlite3 as sql
 import mysql.connector
 
 
@@ -507,7 +506,7 @@ def page_not_found(error):
 
 
 
-@app.errorhandler(505)  #Exception error if anything goes wrong
+@app.errorhandler(Exception)  #Exception error if anything goes wrong
 def page_not_found(error):  
     return render_template('404.html', err = "PlEaSe ReFrEsH eVeRyThInG", note = error, desc = "brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",ime=name,)    
 

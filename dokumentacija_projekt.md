@@ -2621,7 +2621,7 @@ def database(tablica):
     return render_template('izmjena.html',cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 ```
 
-![alt text](slike spa/image-16738173475086.png)
+![alt text](https://cdn.discordapp.com/attachments/913822778988331009/1064313054956900472/image.png)
 
 # Update
 
@@ -2763,6 +2763,10 @@ def informacije (data,sektor):
     return render_template('informacije.html',Vozila = Vozila ,Troskovi = Troskovi, Osoblje = Osoblje, sektor=sektor,data=str(data),Svozila="vozila.svg",Sosoblje="osoblje.svg",Stroskovi="troskovi.svg",osoblje=osoblje,vozila=vozila, len2=len(osoblje),lenVozila = len(vozila),)
 ```
 
+<img src="https://cdn.discordapp.com/attachments/913822778988331009/1064311935971115089/image.png"/>
+
+
+
 ## [Graph.py](http://graph.py/)
 
 Ovaj kod koristi matplotlib i mysql.connector biblioteke za generiranje i spremanje dijagrama pie podataka iz baze podataka. Funkcija prima naslov dijagrama, SQL upit za dohvaćanje podataka iz baze podataka, naziv datoteke za spremanje, boju dijagrama, vrstu datoteke i veličinu fonta. Funkcija dohvaća podatke iz baze podataka pomoću SQL upita i pohranjuje ih u varijable. Dohvaćene vrijednosti se koriste za generiranje kružnog dijagrama pomoću matplotlib biblioteke. Dijagram se nakon toga sprema kao slika u određenu mapu i prikazuje na html stranici.
@@ -2839,6 +2843,10 @@ def PrikazTura (misija,sektor):
     MisijenaTuriDatumi= BP_DataAll("select date(misija.vrijeme_pocetka), date(misija.vrijeme_kraja) from tura,misija where tura.id = misija.id_tura and tura.naziv ='"+misija.replace('%20'," ")+"';")
     return render_template('misija.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
 ```
+
+<img src="https://cdn.discordapp.com/attachments/913822778988331009/1064312038538616852/image.png"/>
+
+
 
 # Statistika
 
@@ -2952,6 +2960,44 @@ def page_not_found(error):
 <img src="https://cdn.discordapp.com/attachments/913822778988331009/1064183730186502214/image.png"/>
 
 <img src="https://cdn.discordapp.com/attachments/913822778988331009/1064184421302947841/image.png"/>
+
+# HTML
+
+> Također imam puno flask koda unutar samih html datoteka, ali smatram da bi to oduzelo puno mjesta
+>
+> primjer koda:
+
+```html
+        {% for i in range(0, lenosoblje) %}
+        <div class="ocjena">
+                <h3>#{{i+1}}</h3>
+               
+                <h3>ime: {{osoblje[i][0]}}</h3>
+                <h3>Prezime: {{osoblje[i][1]}}</h3>
+                <h3>Čin: {{osoblje[i][2]}}</h3>
+
+                {% if osoblje [i][4] == "Hrvatska ratna mornarica" %}
+                <h3> <img src="/static/img/cin/{{osoblje[i][2]}}_p.png"></h3>
+                
+                {% elif osoblje [i][4] == "Hrvatsko ratno zrakoplovstvo" %}
+                <h3> <img src="/static/img/cin/{{osoblje[i][2]}}_z.png"></h3>
+
+                {% else %}
+                <h3> <img src="/static/img/cin/{{osoblje[i][2]}}.png"></h3>
+
+                {% endif %}
+                
+                <h3>{{osoblje[i][3] * '⭐'}}</h3>
+                <h3>Ocijena: {{osoblje[i][3]}}</h3>
+                <h3>{{osoblje[i][4]}}</h3>
+        </div>
+        <hr>
+        {%endfor%}
+```
+
+
+
+
 
 ## Filippo Bubić
 
