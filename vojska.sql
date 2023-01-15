@@ -2720,14 +2720,14 @@ inner join sektor as s
 on s.id=o.id_sektor
 where s.naziv= "Hrvatska ratna mornarica" and op.vrsta="Samokres";
 
--- nabroji sva vozila na popravku koja su ujedno i na misiji "UNOCI" te ih nabroji koliko ih je
+-- nabroji sva vozila na popravku koja su ujedno i na misiji "Vitez" te ih nabroji koliko ih je
 select sum(ukupna_kolicina) as totalni_br
 from vozila as v
 inner join vozilo_na_misiji as vnm
 on v.id=vnm.id_vozilo
 inner join misija as m
 on m.id=vnm.id_misija
-where m.naziv="UNOCI";
+where m.naziv="Vitez";
 
 -- svo osoblje koje je na misiji u ohiu
 Select * 
