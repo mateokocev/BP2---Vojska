@@ -44,18 +44,14 @@
         <hr>
         <h3 style="font-size: 60px; color: wheat;">Obriši {{tablica}}</h3>
         
-          
-           
+
+   
                        
                 <form method="POST" margin="10px 0px">
                     <div>
                         <label>ID</label>
                         <input required type="number" id="osoblje_id" name="podatakid" value="{{ImportData[0]}}" placeholder="ID">
                     </div>
-
-
-
-
 
 
                     <br>
@@ -76,15 +72,22 @@
                   <h1>Podatci</h1>
                   <hr>
                   
-                <form method="POST" >
-                  <div style="grid-template-columns: {{ getRowLen * 'auto '}}  ;" class="gridauto">
-                   
+              
+                 
+                   <form method="POST" style="grid-template-columns: {{ getRowLen * 'auto '}}  ;"  class="gridauto" >
+            
                     {% for i in range(0, getDatalen) %}
                         {% for x in range(0, 10) %}
                             {% if getData[i][x] or getData[i][x] == None or getData[i][x] == "" %}
     
                                 {% if getData[i][x] in poljeID %}
-                                <input type="checkbox" value="{{getData[i][x]}}" id="scales" name="podatak{{i}}" >
+                                
+                                    <input type="checkbox" value="{{getData[i][x]}}" id="scales" name="podatak{{i}}" >
+                               
+                                
+                                    
+                               
+                                
                              
                                 {% else %}
                                 <p>{{getData[i][x]}}</p>
@@ -93,10 +96,10 @@
                             {% endif %}
                         {%endfor%}
                     {%endfor%}
-                    <button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button">delete</button>
+
+                    <button type="submit"  style=" margin-bottom: 10px; height: 50%; width: 50%;" class="newButton" role="button"><i class="fa-solid fa-trash"></i> Izbriši</button>
                 </form>
-                   
-            </div>
+            
                 
                  
               

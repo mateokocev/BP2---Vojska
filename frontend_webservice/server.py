@@ -383,14 +383,17 @@ def garaza():
 
     if request.method == 'POST':
         Search = request.form['search']    
-        
-        if Search.lower() in garaza:     
-            garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where naziv = '"+Search+"';")
-            return render_template('garaza.html', garaza = garaza, garazaLen = garazaLen)    
 
-        else:
-            garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where vrsta = '"+Search+"';")
-            return render_template('garaza.html', garaza = garaza, garazaLen = garazaLen)
+             
+        print(Search)
+        garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where naziv = '"+Search+"';")
+        garazaLen = len(garaza)
+            
+
+     
+        print(Search)
+            #garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where vrsta = '"+Search+"';")
+            
 
     return render_template('garaza.html', garaza = garaza, garazaLen = garazaLen)
 
@@ -468,7 +471,7 @@ def ocjenjivanje(Stype,ime,prezime):
             else:
                 osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje,sektor where prezime = '"+Search+"' and id_sektor = sektor.id;")
                
-                return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+                return render_template('ocjenjivanje.html',ime=ime,prezime=prezime,accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",osoblje = osoblje, lenosoblje = len(osoblje))    
 
 
     if Stype == 'asc': 
@@ -481,7 +484,7 @@ def ocjenjivanje(Stype,ime,prezime):
     
 
 
-    return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+    return render_template('ocjenjivanje.html',ime=ime,prezime=prezime,accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",osoblje = osoblje, lenosoblje = len(osoblje))    
 
 
 
