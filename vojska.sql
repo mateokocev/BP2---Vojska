@@ -2503,7 +2503,7 @@ INSERT INTO lijecenje VALUES
 /*
 Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje 
 na listi je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu.
-*/																																			*/
+*/	
 
 SELECT os.id, ime, prezime
 FROM osoblje_na_treningu AS o
