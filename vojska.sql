@@ -222,10 +222,11 @@ ALTER TABLE lijecenje
 -- OKIDAČI:
 	
  -- DK   
-    /*
-Datum početka ture ne može biti veći ili jednak od datuma kraja ture.
-Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
-U slučaju da je kraj NULL to znači da je tura još uvijek u tijeku. Riječ je o UPDATE-u.                                                              */
+
+/*
+Datum početka ture ne može biti veći ili jednak od datuma kraja ture. U slučaju da je kraj NULL to 
+znači da je tura još uvijek u tijeku. Riječ je o UPDATE-u. 
+*/
 
 DROP TRIGGER IF EXISTS u_tura_vrijeme;
 
@@ -234,18 +235,19 @@ CREATE TRIGGER u_tura_vrijeme
     BEFORE UPDATE ON tura
     FOR EACH ROW
 BEGIN
-    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND new.vrijeme_kraja != NULL THEN
-	SIGNAL SQLSTATE '40000'
-        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja misije';
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND ISNULL(new.vrijeme_kraja) = 0 THEN
+	    SIGNAL SQLSTATE '40000'
+        SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja ture';
     END IF;
 END//
 DELIMITER ;
 
-		
-                                                                                                                                  /*
-Datum početka misije ne može biti veći ili jednak od datuma kraja misije.
-Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
-U slučaju da je kraj NULL to znači da je misija još uvijek u tijeku. Riječ je o UPDATE-u.                                                             */
+
+
+/*
+Datum početka misije ne može biti veći ili jednak od datuma kraja misije. U slučaju da je kraj NULL to 
+znači da je misija još uvijek u tijeku. Riječ je o UPDATE-u.    
+*/
 
 DROP TRIGGER IF EXISTS u_mis_vrijeme;
 
@@ -254,8 +256,8 @@ CREATE TRIGGER u_mis_vrijeme
     BEFORE UPDATE ON misija
     FOR EACH ROW
 BEGIN
-    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND new.vrijeme_kraja != NULL THEN
-	SIGNAL SQLSTATE '40000'
+    IF new.vrijeme_pocetka >= new.vrijeme_kraja AND ISNULL(new.vrijeme_kraja) = 0 THEN
+		SIGNAL SQLSTATE '40000'
         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja misije';
     END IF;
 END//
@@ -263,10 +265,11 @@ DELIMITER ;
 
 
 
-																																	  /*
-Datum početka sudjelovanja osoblja na turi ne može biti veći ili jednak od datuma kraja sudjelovanja.
-Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
-U slučaju da je kraj NULL to znači da osoba još uvijek sudjeluje u turi. Riječ je o UPDATE-u.                                                              */
+
+/*
+Datum početka sudjelovanja osoblja na turi ne može biti veći ili jednak od datuma kraja sudjelovanja. U slučaju 
+da je kraj NULL to znači da osoba još uvijek sudjeluje u turi. Riječ je o UPDATE-u.  
+*/
 
 DROP TRIGGER IF EXISTS u_ont_vrijeme;
 
@@ -275,19 +278,20 @@ CREATE TRIGGER u_ont_vrijeme
     BEFORE UPDATE ON osoblje_na_turi
     FOR EACH ROW
 BEGIN
-	IF new.datum_pocetka >= new.datum_kraja AND new.datum_kraja != NULL THEN
+	IF new.datum_pocetka >= new.datum_kraja AND ISNULL(new.datum_kraja) = 0 THEN
 		SIGNAL SQLSTATE '40000'
-                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja sudjelovanja osoblja na turi!';
-        END IF;
+		SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja sudjelovanja osoblja na turi!';
+	END IF;
 END//
 DELIMITER ;
 
 
 
-																																	/*
-Datum početka popravka ne može biti veći ili jednak od datuma kraja popravka.
-Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.              
-U slučaju da je kraj NULL to znači da je popravak još uvijek u tijeku. Riječ je o INSERT-u.                                                            */
+
+/*
+Datum početka popravka ne može biti veći ili jednak od datuma kraja popravka. U slučaju da je kraj NULL to 
+znači da je popravak još uvijek u tijeku. Riječ je o INSERT-u. 
+*/
 
 DROP TRIGGER IF EXISTS i_po_vrijeme;
 
@@ -296,48 +300,49 @@ CREATE TRIGGER i_po_vrijeme
     BEFORE INSERT ON popravak
     FOR EACH ROW
 BEGIN
-	IF new.pocetak_popravka >= new.kraj_popravka AND new.kraj_popravka != NULL THEN
+	IF new.pocetak_popravka >= new.kraj_popravka AND ISNULL(new.kraj_popravka) = 0 THEN
 		SIGNAL SQLSTATE '40000'
-                SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
-        END IF;
+		SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja popravka!';
+	END IF;
 END//
 DELIMITER ;
 
 
 
-																																 /*
-Datum početka treninga ne može biti veći ili jednak od datuma kraja treninga te trening bi najmanje trebao trajat 20 min.
-Riječ o INSERT-u.                                                                                                                */
 /*
+Datum početka treninga ne može biti veći ili jednak od datuma kraja treninga te trening bi najmanje
+trebao trajat 20 minuta. Riječ je o INSERT-u.  
+*/
+
 DROP TRIGGER IF EXISTS i_tr_vrijeme;
+
 DELIMITER //
 CREATE TRIGGER i_tr_vrijeme
     BEFORE INSERT ON trening
     FOR EACH ROW
 BEGIN
     IF new.vrijeme_pocetka >= new.vrijeme_kraja OR TIMESTAMPDIFF(MINUTE, new.vrijeme_pocetka, new.vrijeme_kraja) < 20 THEN
-	SIGNAL SQLSTATE '40000'
+	    SIGNAL SQLSTATE '40000'
         SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja treninga!';
     END IF;
 END//
 DELIMITER ;
+
+
+/*
+Datum početka liječenja ne može biti veći ili jednak od datuma kraja liječenja kada je 
+riječ o INSERT-u. U slučaju je datum kraja liječenja NULL to znači da je liječenje još uvijek u tijeku.    
 */
-
-
-                                                                                                                                    /*
-Datum početka lijecenja ne može biti veći ili jednak od datuma kraja liječenja kada je riječ o INSERT-u. 
-Idemo ih uspoređivat samo uz uvjet da kraj nije NULL.
-U slučaju je datum kraja liječenja NULL to znači da je liječenje još uvijek u tijeku.                                                */
 
 DROP TRIGGER IF EXISTS i_li_vrijeme;                                                                                                      
 
 DELIMITER //
-CREATE TRIGGER li_vrijeme
+CREATE TRIGGER i_li_vrijeme
     BEFORE INSERT ON lijecenje
     FOR EACH ROW
 BEGIN
-    IF new.pocetak_lijecenja >= new.kraj_lijecenja AND new.kraj_lijecenja != NULL THEN
-	 SIGNAL SQLSTATE '40000'
+    IF new.pocetak_lijecenja >= new.kraj_lijecenja AND ISNULL(new.kraj_lijecenja) = 0 THEN
+		 SIGNAL SQLSTATE '40000'
          SET MESSAGE_TEXT = 'Neispravno je uneseno vrijeme pocetka ili/i kraja lijecenja!';
     END IF;
 END//
@@ -345,36 +350,11 @@ DELIMITER ;
 
 
 
-																																	/*
-Napraviti okidač koji će u slučaju da korisnik unese opremu koja je već unešena zbrojit količinu opreme.
-Npr u skladištu već postoji (1330, "RBG-6", "Bacač granata", 124) te korisnik unosi (1370, "RBG-6", "Bacač granata", 6).
-To je "nepotrebno" te stoga okidač pridodaje dodatnu količinu onoj već postojećoj tj (1330, "RBG-6", "Bacač granata", 130).         */
 
-DROP TRIGGER IF EXISTS postoji;
-
-DELIMITER //
-CREATE TRIGGER postoji
-    AFTER INSERT ON oprema
-    FOR EACH ROW
-BEGIN
-    DECLARE br INTEGER;
-
-    SELECT COUNT(*) INTO br
-    FROM oprema
-    WHERE naziv = new.naziv;
-
-    IF br > 1 THEN
-        UPDATE oprema SET ukupna_kolicina = ukupna_kolicina + new.ukupna_kolicina WHERE naziv = new.naziv;
-        DELETE FROM oprema WHERE id = new.id;
-    END IF;
-END//
-DELIMITER ;
-
-
-
-																																	/*
-Prati se da zbroj količine željene izdane opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a.
-Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno. 																			*/
+/*
+Prati se da zbroj količine željene izdane opreme ne bude veći od sveukupne moguće količine opreme tijekom INSERT-a. 
+Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno. 
+*/
 
 DROP TRIGGER IF EXISTS i_kol_op;
 
@@ -410,9 +390,10 @@ DELIMITER ;
 
 
 
-																																	/*
-Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a
-Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno.																*/
+/*
+Prati se da zbroj izdane količine ne bude veći od sveukupne moguće količine opreme tijekom UPDATE-a. 
+Prati se da u određenom razdoblju tj. misiji to ne bude prekoračeno.
+*/
 
 DROP TRIGGER IF EXISTS u_kol_op;
 
@@ -450,27 +431,32 @@ DELIMITER ;
 -- MK
 
 -- Ovaj trigger provjerava ako vojnik nije na aktivnoj turi, te ako nije, postavlja njegov status na "Neaktivan"
+
+
 DELIMITER //
 CREATE TRIGGER updtstatus_post_tura AFTER UPDATE ON tura
 FOR EACH ROW
 BEGIN
-	IF tura.datum_kraja != NULL THEN
+	IF NEW.vrijeme_kraja != NULL THEN
 		UPDATE osoblje
-			SET status_osoblja = "Neaktivan" WHERE id IN (SELECT id_osoblje FROM osoblje_na_turi WHERE id_tura = tura.id AND datum_kraja IS NULL);
+			SET status_osoblja = "Neaktivan" WHERE id IN (SELECT id_osoblje FROM osoblje_na_turi WHERE id_tura = NEW.id AND datum_kraja IS NULL);
 	END IF;
 END//
 DELIMITER ;
 
 
+
 -- Ovaj trigger postavlja datum_kraja osoblja na turi na isti datum kraja ko i tura koja je završila samo ako to osoblje na turi ima datum_kraja NULL tj. nije se povuklo prije kraja ture i ostalo je tijekom cijele ture
+DROP TRIGGER IF EXISTS updtkraj_post_tura;
+
 DELIMITER //
 CREATE TRIGGER updtkraj_post_tura AFTER UPDATE ON tura
 FOR EACH ROW
 BEGIN
-	IF tura.datum_kraja != NULL THEN
+	IF NEW.vrijeme_kraja != NULL THEN
 		UPDATE osoblje_na_turi 
-			SET datum_kraja = tura.datum_kraja 
-				WHERE id_tura = tura.id AND datum_kraja IS NULL;
+			SET datum_kraja = NEW.vrijeme_kraja 
+				WHERE id_tura = NEW.id AND datum_kraja IS NULL;
 	END IF;
 END//
 DELIMITER ;
@@ -559,9 +545,6 @@ BEGIN
 	END IF;
 END//
 DELIMITER ;
--- DROP TRIGGER dostupnost_osoblja;
--- DELETE FROM izdana_oprema WHERE id_osoblje_na_misiji = 4100;
--- DELETE FROM osoblje_na_misiji WHERE id = 4100;
 
 
 -- BACKEND:
@@ -2546,31 +2529,25 @@ INSERT INTO lijecenje VALUES
 
 -- DK
 
-/*
-Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje na listi
-je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu.   */
-
+Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje 
+na listi je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu.
+																																			*/
 
 SELECT os.id, ime, prezime
 FROM osoblje_na_treningu AS o
-INNER JOIN trening AS t
-	ON o.id_trening = t.id
 INNER JOIN osoblje AS os
 	ON os.id = o.id_osoblje
 INNER JOIN osoblje_na_misiji AS om
 	ON om.id_osoblje = os.id
-INNER JOIN misija AS m
+INNER JOIN (SELECT id FROM misija WHERE 12 - MONTH(vrijeme_pocetka) <= TIMESTAMPDIFF(MONTH, vrijeme_pocetka, vrijeme_kraja)) AS m
 	ON om.id_misija = m.id
-WHERE 12 - MONTH(m.vrijeme_pocetka) <= TIMESTAMPDIFF(MONTH, m.vrijeme_pocetka, m.vrijeme_kraja)
 ORDER BY performans DESC
 LIMIT 10;
 
 
-
-/*
-Prikaži id, ime, prezime i cin osobe koja je bila odgovorna za vozilo vrste "Helikopteri"
-koje je bilo na najviše popravaka.             */
-
+																																	/*
+Prikaži id, ime, prezime i čin osobe koja je bila odgovorna za vozilo vrste "Helikopteri" koje je bilo na najviše popravaka.
+																																			*/
 
 SELECT ime, prezime, cin
 FROM
@@ -2578,7 +2555,7 @@ FROM
 	FROM popravak AS p
 	INNER JOIN vozilo_na_misiji AS vm
 		ON p.id_vozilo_na_misiji = vm.id
-	INNER JOIN vozila AS v
+	INNER JOIN (SELECT * FROM vozila WHERE vrsta = "Helikopteri") AS v
 		ON v.id = vm.id_vozilo
 	INNER JOIN vozilo_na_turi AS vt
 		ON vt.id_vozilo = v.id
@@ -2586,14 +2563,15 @@ FROM
 		ON ot.id = vt.id_odgovorni
 	INNER JOIN osoblje AS o
 		ON o.id = ot.id_osoblje
-	WHERE v.vrsta = "Helikopteri"
 	GROUP BY v.id) AS l
 	ORDER BY broj_popravka DESC
     LIMIT 1;
 
 
 
--- Prikazi naziv ture kod koje je izdano najmanje opreme
+																													/*
+Prikaži naziv ture kod koje je izdano najmanje opreme.
+																														*/
 
 SELECT naziv
 FROM
@@ -2610,14 +2588,15 @@ FROM
     LIMIT 1;
 
 
-/*
-Prikaži ukupni proracun sektora koji ima drugi najveci broj osoblja koji nisu bili na lijecenju niti jedanput te koji su sudjelovali
-na najmanje jednom treningu ciji datum pocetka nije bio prije 23 godinu dana od sada.      */
 
+																															/*
+Prikaži ukupni proračun sektora koji ima drugi najveći broj osoblja koji nisu bili na liječenju niti jedanput 
+te koji su sudjelovali na najmanje jednom treningu čiji datum početka nije bio prije 23 godinu dana od sada.
+																															*/
 
 SELECT ukupni_proracun
 FROM
-	(SELECT ukupni_proracun, COUNT(*) AS br_osoblja_uvjeti
+	(SELECT ukupni_proracun, COUNT(DISTINCT o.id) AS br_osoblja_uvjeti
 	FROM osoblje AS o
 	INNER JOIN sektor AS s
 		ON o.id_sektor = s.id
@@ -2632,9 +2611,10 @@ FROM
 
 
 
-/*
- Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije
- od 31 godinu i koje je bilo odgovorno za najmanje jedno vozilo u nekoj turi.   */
+																																/*
+Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije od 31 godinu 
+i koje je bilo odgovorno za najmanje jedno vozilo u nekoj turi.
+																																	*/
 
 SELECT m.naziv AS naziv_misije, l.naziv AS naziv_lokacije
 FROM lokacija AS l
@@ -2648,91 +2628,99 @@ WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN
 (SELECT id_osoblje FROM vozilo_na_turi AS vt INNER JOIN osoblje_na_turi AS ot ON vt.id_odgovorni = ot.id);
 
 
-/*
-Treba se napraviti pogled koji će prikazat dodatne podatke vezane uz turu. Treba se prikazat od koliko se misija ta tura sastoji,
-koliki je trosak ture, broj osoblja koji je sudjelovao, broj opreme koji je određen za tu turu te broj vozila koji je određen 
-za tu turu.                                                                                                                */
+
+																																		/*
+Treba se napraviti pogled koji će prikazat dodatne podatke vezane uz turu. Treba se prikazat od koliko se misija 
+ta tura sastoji, koliki je trošak ture, broj osoblja koji je sudjelovao, broj opreme koji je određen za tu turu 
+te broj vozila koji je određen za tu turu. Ovi dodatni prikazi će biti za ture koje sadrže barem jedan od navedenih podataka.
+																																			*/
 
 DROP VIEW IF EXISTS tura_informacije;
 
 CREATE VIEW tura_informacije AS
-SELECT t_id AS tura_id, t_naziv AS tura_naziv, broj_misija, trosak_ture, broj_osoblja_na_turi, COUNT(*) AS broj_vozila_na_turi
+SELECT t_naziv AS tura_naziv, broj_misija, trosak_ture, broj_osoblja_na_turi, COUNT(*) AS broj_vozila_na_turi
 FROM 
-(SELECT t_id, t_naziv, broj_misija, trosak_ture, COUNT(*) AS broj_osoblja_na_turi
-FROM 
-(SELECT tura.id AS t_id, tura.naziv AS t_naziv, COUNT(*) AS broj_misija, SUM(trosak_misije) AS trosak_ture
-FROM tura
-INNER JOIN misija ON misija.id_tura = tura.id
-GROUP BY tura.id) AS l
-INNER JOIN osoblje_na_turi ON osoblje_na_turi.id_tura = l.t_id
-GROUP BY id_tura) AS k
-INNER JOIN vozilo_na_turi ON vozilo_na_turi.id_tura = k.t_id
-GROUP BY id_tura;
+	(SELECT t_id, t_naziv, broj_misija, trosak_ture, COUNT(*) AS broj_osoblja_na_turi
+	FROM 
+	(SELECT tura.id AS t_id, tura.naziv AS t_naziv, COUNT(*) AS broj_misija, SUM(trosak_misije) AS trosak_ture
+	FROM tura
+	INNER JOIN misija ON misija.id_tura = tura.id
+	GROUP BY tura.id) AS l
+	INNER JOIN osoblje_na_turi ON osoblje_na_turi.id_tura = l.t_id
+	GROUP BY id_tura) AS k
+	INNER JOIN vozilo_na_turi ON vozilo_na_turi.id_tura = k.t_id
+	GROUP BY id_tura;
 
 SELECT * FROM tura_informacije;
 
 
-/*
-Treba se napraviti pogled koji će prikazat dodatne podatke vezane uz misiju. Treba se prikazat koliki je trosak misije,
-broj osoblja koji je sudjelovao, broj opreme koji je određen za tu misiju te broj vozila koji je određen za tu misiju.  */
+
+																																																		/*
+Treba se napraviti pogled koji će prikazat dodatne podatke vezane uz misiju. Treba se prikazat koliki 
+je trošak misije, broj osoblja koji je sudjelovao, broj opreme koji je određen za tu misiju te broj 
+vozila koji je određen za tu misiju. Ovi dodatni prikazi će biti za misije koje sadrže barem jedan od navedenih podataka.
+																																																		*/
 
 DROP VIEW IF EXISTS misija_informacije;
 
 CREATE VIEW misija_informacije AS
-SELECT m_id AS misija_id, m_naziv AS misija_naziv, trosak_misije, broj_osoblja_na_misiji, broj_opreme_na_misiji, COUNT(*) AS broj_vozila_na_misiji
+SELECT m_naziv AS misija_naziv, trosak_misije, broj_osoblja_na_misiji, broj_opreme_na_misiji, COUNT(*) AS broj_vozila_na_misiji
 FROM
-(SELECT misija.id AS m_id, misija.naziv AS m_naziv, trosak_misije, COUNT(*) AS broj_osoblja_na_misiji, SUM(izdana_kolicina) AS broj_opreme_na_misiji
-FROM misija
-INNER JOIN osoblje_na_misiji ON osoblje_na_misiji.id_misija = misija.id
-INNER JOIN izdana_oprema ON izdana_oprema.id_osoblje_na_misiji = osoblje_na_misiji.id
-GROUP BY id_misija) AS p
-INNER JOIN vozilo_na_misiji ON vozilo_na_misiji.id_misija = p.m_id
-GROUP BY id_misija;
+	(SELECT misija.id AS m_id, misija.naziv AS m_naziv, trosak_misije, COUNT(*) AS broj_osoblja_na_misiji, SUM(izdana_kolicina) AS broj_opreme_na_misiji
+	FROM misija
+	INNER JOIN osoblje_na_misiji ON osoblje_na_misiji.id_misija = misija.id
+	INNER JOIN izdana_oprema ON izdana_oprema.id_osoblje_na_misiji = osoblje_na_misiji.id
+	GROUP BY id_misija) AS p
+	INNER JOIN vozilo_na_misiji ON vozilo_na_misiji.id_misija = p.m_id
+	GROUP BY id_misija;
 
 SELECT * FROM misija_informacije;
 
 
--- Treba se napraviti pogled koji će prikazat koliko je puta pojedina osoba bila na treningu, misiji i lijecenju.
+
+																																									/*
+Treba se napraviti pogled koji će prikazat koliko je puta pojedina osoba bila na treningu, misiji i liječenju.
+																																									*/
 
 DROP VIEW IF EXISTS osoblje_informacije;
 
 CREATE VIEW osoblje_informacije AS
 SELECT o_id AS osoblje_id, o_ime AS osoblje_ime, o_p AS osoblje_prezime, broj_sudjelovanja_na_treningu, broj_lijecenja, broj_sudjelovanja_na_misiji
 FROM 
-((SELECT l.o_id, l.o_ime, l.o_p, broj_sudjelovanja_na_treningu, broj_lijecenja, broj_sudjelovanja_na_misiji
-FROM
-(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_sudjelovanja_na_treningu
-FROM osoblje
-INNER JOIN osoblje_na_treningu ON osoblje.id = osoblje_na_treningu.id_osoblje
-GROUP BY id_osoblje
-UNION
-SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(osoblje_na_treningu.id, 0) AS broj_sudjelovanja_na_treningu
-FROM osoblje
-LEFT JOIN osoblje_na_treningu ON osoblje.id = osoblje_na_treningu.id_osoblje
-WHERE ISNULL(osoblje_na_treningu.id) = 1) AS l
+		((SELECT l.o_id, l.o_ime, l.o_p, broj_sudjelovanja_na_treningu, broj_lijecenja, broj_sudjelovanja_na_misiji
+		FROM
+		(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_sudjelovanja_na_treningu
+		FROM osoblje
+		INNER JOIN osoblje_na_treningu ON osoblje.id = osoblje_na_treningu.id_osoblje
+		GROUP BY id_osoblje
+	UNION
+		SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(osoblje_na_treningu.id, 0) AS broj_sudjelovanja_na_treningu
+		FROM osoblje
+		LEFT JOIN osoblje_na_treningu ON osoblje.id = osoblje_na_treningu.id_osoblje
+		WHERE ISNULL(osoblje_na_treningu.id) = 1) AS l
 INNER JOIN
-(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_lijecenja
-FROM osoblje
-INNER JOIN lijecenje ON osoblje.id = lijecenje.id_osoblje
-GROUP BY id_osoblje
-UNION
-SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(lijecenje.id, 0) AS  broj_lijecenja
-FROM osoblje
-LEFT JOIN lijecenje ON osoblje.id = lijecenje.id_osoblje
-WHERE ISNULL(lijecenje.id) = 1) AS k
-ON l.o_id = k.o_id
+		(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_lijecenja
+		FROM osoblje
+		INNER JOIN lijecenje ON osoblje.id = lijecenje.id_osoblje
+		GROUP BY id_osoblje
+	UNION
+		SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(lijecenje.id, 0) AS  broj_lijecenja
+		FROM osoblje
+		LEFT JOIN lijecenje ON osoblje.id = lijecenje.id_osoblje
+		WHERE ISNULL(lijecenje.id) = 1) AS k
+		ON l.o_id = k.o_id
 INNER JOIN
-(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_sudjelovanja_na_misiji
-FROM osoblje
-INNER JOIN osoblje_na_misiji ON osoblje.id = osoblje_na_misiji.id_osoblje
-GROUP BY id_osoblje
-UNION
-SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(osoblje_na_misiji.id, 0) AS broj_sudjelovanja_na_misiji
-FROM osoblje
-LEFT JOIN osoblje_na_misiji ON osoblje.id = osoblje_na_misiji.id_osoblje
-WHERE ISNULL(osoblje_na_misiji.id) = 1) AS z
-ON l.o_id = z.o_id)) AS r
-ORDER BY o_id;
+		(SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, COUNT(*) AS broj_sudjelovanja_na_misiji
+		FROM osoblje
+		INNER JOIN osoblje_na_misiji ON osoblje.id = osoblje_na_misiji.id_osoblje
+		GROUP BY id_osoblje
+	UNION
+		SELECT osoblje.id AS o_id, osoblje.ime AS o_ime, osoblje.prezime AS o_p, IFNULL(osoblje_na_misiji.id, 0) AS broj_sudjelovanja_na_misiji
+		FROM osoblje
+		LEFT JOIN osoblje_na_misiji ON osoblje.id = osoblje_na_misiji.id_osoblje
+		WHERE ISNULL(osoblje_na_misiji.id) = 1) AS z
+		ON l.o_id = z.o_id)) AS r
+ORDER BY o_id ASC;
 
 SELECT * FROM osoblje_informacije;
 
@@ -2799,7 +2787,9 @@ where o.krvna_grupa="0+" and s.naziv="Hrvatska kopnena vojska";
 -- FUNKCIJE:
 
 -- DK
--- Funkcija vraca ukupni trosak
+/*
+Treba napraviti funkciju koja računa ukupan trošak.
+*/
 
 DROP FUNCTION IF EXISTS trosak;
 
@@ -2825,8 +2815,9 @@ DELIMITER ;
 SELECT trosak() AS ukupni_trosak FROM DUAL;
 
 
-
--- Funkcija racuna koliko je novca ostalo "viska" iz proracuna:
+/*
+Treba napraviti funkciju koja računa koliko je novca ostalo "viška" iz proračuna.
+*/
 
 DROP FUNCTION IF EXISTS visak;
 
@@ -2847,7 +2838,9 @@ SELECT visak() AS visak FROM DUAL;
 
 
 
--- Funkcija koja vraća broj osoblja koje je imalo uvijek perofrmans na treningu viši od 6 te da nikad nisu bili na liječenju.
+/*
+Funkcija koja vraća broj osoblja koje je imalo uvijek perofrmans na treningu viši od 6 te da nikad nisu bili na liječenju.
+*/
 
 DROP FUNCTION IF EXISTS br_os_tr_i_li;
 
@@ -2889,13 +2882,12 @@ SELECT br_os_tr_i_li() AS br_osoblja_dobar_performans_nikad_na_lijecenju FROM DU
 
 
 /*
-Za određeni id osoblja treba se dati tekstualni odgovor u čemu je sve osoba sujelovala. 
-Npr. "Arabela Herceg je sudjelovala u najmanje jednoj/m: treningu i lijecenju."
-Moguće je više kombinacija, a najduža je npr "Arabela Herceg je sudjelovao/la u najmanje 
-jednoj: turi, misiji,treningu i lijecenju." U slučaju da osoba nije sudjelovala još uvijek u ničemu bit će ispisano npr 
-"Arabela Herceg nije sudjelovao/la ni u jednoj: turi, misiji,treningu ili lijecenju."
+Za određeni id osoblja treba se dati tekstualni odgovor u čemu je sve osoba sujelovala.  Npr. "Arabela Herceg 
+je sudjelovala u najmanje jednoj/m: treningu i lijecenju." Moguće je više kombinacija, a najduža je 
+npr "Arabela Herceg je sudjelovao/la u najmanje jednoj: turi, misiji,treningu i lijecenju." U slučaju da osoba 
+nije sudjelovala još uvijek u ničemu bit će ispisano npr "Arabela Herceg nije sudjelovao/la ni u jednoj: turi, 
+misiji,treningu ili lijecenju."
 */
-
 
 DROP FUNCTION IF EXISTS os_sudjelovanje;
 
@@ -2959,14 +2951,11 @@ DELIMITER ;
 SELECT os_sudjelovanje(10009) AS os_sudjelovanje FROM DUAL;
 
 
-
-
-
 /*
-Performans na treningu može bit od 1 do 10 ([1,10]). Želi se pratiti koliki je bio broj osoblja po određenom činu s pojedinom
-ocijenom performansa. Ne treba prikazat čin čije osoblje uopće nije dio tog performansa.
-Format treba izgledat kao:
-performans   cinovi_i_br_pojavljivanja
+Performans na treningu može bit od 1 do 10 ([1,10]). Želi se pratiti za pojedini performans 
+koliko je puta osoblje po određenim činom imalo taj performans. Ne treba prikazat čin čije 
+osoblje nikad nije bilo dio te skupine performansa. Format treba izgledat kao:
+performans   cinovi_i_br_zadanog_performansa
 10            skupnik: 3 , brigadir: 3 , bojnik: 1 , pukovnik: 1 , poručnik: 2 , narednik: 2 
 9             pozornik: 1 , narednik: 2 , bojnik: 3 , satnik: 1 , brigadir: 2 , poručnik: 2 , skupnik: 1 , razvodnik: 1 
 ...           ...
@@ -3017,9 +3006,12 @@ ORDER BY performans DESC;
 
 
 
+
 -- MK
 
 -- Jednostavna funkcija koja vraća broj osoblja u određenom sektoru
+DROP FUNCTION IF EXISTS broj_osoblja_u_sektoru;
+
 DELIMITER //
 CREATE FUNCTION broj_osoblja_u_sektoru( p_id_sektor INTEGER) RETURNS INTEGER
 DETERMINISTIC
@@ -3037,7 +3029,7 @@ DELIMITER ;
 SELECT broj_osoblja_u_sektoru(1) AS broj_osoblja_u_sektoru;
 
 -- Primjer funkcije koja koristi while loop, imamo varijable u koje cemo spremati potrebne podatke i imamo veliki varchar u koji će ići rezultat, sa jednostavnim while loopom smo prosli kroz sve id-eve sektora te u svakoj iteraciji vezali rezultat sa concatom
-
+DROP FUNCTION IF EXISTS prosjecna_ocjena_po_sektoru;
 
 DELIMITER //
 CREATE FUNCTION prosjecna_ocjena_po_sektoru() RETURNS VARCHAR(1000)
@@ -3070,18 +3062,21 @@ BEGIN
 		IF p_id_sektor = (SELECT MAX(id) FROM sektor) THEN
 			LEAVE myloop;
 		END IF;
-		
+
 		SELECT id INTO p_id_sektor
 			FROM sektor WHERE id > p_id_sektor 
 				ORDER BY id ASC
                 LIMIT 1;
+                
 	END WHILE myloop;
     
     RETURN rezultat;
 END//
 DELIMITER ;
 SELECT prosjecna_ocjena_po_sektoru() AS rezultat;
-DROP FUNCTION IF EXISTS prosjecna_ocjena_po_sektoru;
+
+
+
 
 
 -- varijacija prijašnje funkcije samo što sam koristio kursor i repeat čisto za promjenu :) masu vremena su mi potrošila ova dva
@@ -3122,6 +3117,9 @@ BEGIN
 END//
 DELIMITER ;
 
+SELECT trosak_misija_po_sektoru();
+
+
 
 -- primjer funkcije koja poziva drugu funkciju, jedna provjerava je li ta osoba na misiji tj. gleda postoji li ongoing misija gdje je ta osoba te vraca true or false
 -- onda sa tom informacijom i provjerom dobi sa selekcijom u glavnoj funkciji odlućujemo je li dobar odabir za misiju :)
@@ -3156,13 +3154,14 @@ BEGIN
 
 	SELECT osoblje_na_misiji_mod(p_id_osoblje) INTO jeilinije;
 
-    IF jeilinije IS FALSE AND trenutna_dob <= p_dob_misija THEN
+    IF NOT jeilinije AND trenutna_dob <= p_dob_misija THEN
         RETURN 'Dostupan';
     ELSE
         RETURN 'Nedostupan';
     END IF;
 END//
 DELIMITER ;
+
 SELECT dostupnost_za_misiju(10360, 100) AS dostupnost_za_misiju;
 
 
@@ -3170,7 +3169,9 @@ SELECT dostupnost_za_misiju(10360, 100) AS dostupnost_za_misiju;
 -- PROCEDURE:
 	
 -- DK
--- Za određeni id_osoblja treba vratit koliko je sati proveo/la na misiji, na treningu a koliko na liječenju.
+/*
+Za određeni id_osoblja treba vratit koliko je sati proveo/la na misiji, na treningu a koliko na liječenju.
+*/
 
 DROP PROCEDURE IF EXISTS sati_provedeno_osoblje;
 
@@ -3179,7 +3180,7 @@ CREATE PROCEDURE sati_provedeno_osoblje(IN id_os INTEGER, OUT misija_h INTEGER, 
 DETERMINISTIC
 BEGIN
 
-	SELECT SUM(TIMESTAMPDIFF(DAY, vrijeme_pocetka, vrijeme_kraja)) INTO misija_h
+	SELECT SUM(TIMESTAMPDIFF(HOUR, vrijeme_pocetka, vrijeme_kraja)) INTO misija_h
     FROM misija
     INNER JOIN osoblje_na_misiji
     ON misija.id = osoblje_na_misiji.id_misija
@@ -3187,7 +3188,7 @@ BEGIN
     
     SELECT IFNULL(misija_h, 0) INTO misija_h;
     
-    SELECT SUM(TIMESTAMPDIFF(DAY, vrijeme_pocetka, vrijeme_kraja)) INTO trening_h
+    SELECT SUM(TIMESTAMPDIFF(HOUR, vrijeme_pocetka, vrijeme_kraja)) INTO trening_h
     FROM trening
     INNER JOIN osoblje_na_treningu
     ON trening.id = osoblje_na_treningu.id_trening
@@ -3195,7 +3196,7 @@ BEGIN
     
     SELECT IFNULL(trening_h, 0) INTO trening_h;
     
-    SELECT SUM(TIMESTAMPDIFF(DAY, pocetak_lijecenja, kraj_lijecenja)) INTO lijecenje_h
+    SELECT SUM(TIMESTAMPDIFF(HOUR, pocetak_lijecenja, kraj_lijecenja)) INTO lijecenje_h
     FROM lijecenje
     WHERE id_osoblje = id_os;
 
@@ -3205,15 +3206,15 @@ END//
 DELIMITER ;
 
 CALL sati_provedeno_osoblje(10322, @h_m, @h_t, @h_l);
-SELECT @h_m AS sati_provedeni_na_misiji, @h_t AS sati_provedeni_na_treningu, @h_l AS sati_provedeni_na_lijecenju FROM DUAL;  
-     
-     
-     
-  /*
-  Za određeni iznos novca se gleda da li bi taj novac mogao pokriti troškove najmanje pola misija te vraća odgovor
-  'DA' ili 'NE'
-  */
-     
+SELECT @h_m AS sati_provedeni_na_misiji, @h_t AS sati_provedeni_na_treningu, @h_l AS sati_provedeni_na_lijecenju FROM DUAL; 
+
+
+
+
+/*
+Za određeni iznos novca se gleda da li bi taj novac mogao pokriti troškove najmanje pola misija te vraća odgovor 'DA' ili 'NE'
+*/
+
 DROP PROCEDURE IF EXISTS novac_misije;
 
 DELIMITER //
@@ -3240,14 +3241,15 @@ END//
 DELIMITER ;
 
 CALL novac_misije(30000000, @odg);
-SELECT @odg AS Da_li_iznos_pokriva_troskove_pola_misija FROM DUAL;      
-     
-     
+SELECT @odg AS Da_li_iznos_pokriva_troskove_pola_misija FROM DUAL; 
 
-            
-            /*
-Ispisati koliki je broj osoblja, vozila, opreme trenutačno dostupno(3 vrijednosti) u danom intervalu (dva datuma
-koje korisnik izabere kao ulazne argumente          																				*/
+
+
+
+/*
+Treba ispisati koliki je broj osoblja, vozila, opreme trenutačno dostupno (3 vrijednosti) u danom 
+intervalu (dva datuma koje korisnik izabere kao ulazne argumente.
+*/
 
 DROP PROCEDURE IF EXISTS br_dostupnog_os_vo_op;
 
@@ -3322,21 +3324,19 @@ SELECT  @a AS br_dostupnog_osoblja, @b AS br_dostupnih_vozila, @c AS br_dostupne
 
 
 
-
-
 /*
-Za dva vremenski intervala (pojedini će biti određen s dvije datumske vrijednosti) se mora odrediti  pojedinačni 
-ukupni trošak za misije, ukupni trošak za popravak, ukupni trošak za liječenje te usporedit. 
-Ispis treba biti u obliku:
-	Vremensko razdoblje od 1.10.1991. do 11.07.1998. ima manji trošak kada je riječ o misijama u usporedbi s razdobljem od 23.04.1997. do 2.12.2001..
-    Vremensko razdoblje od 23.04.1997. do 2.12.2001. ima manji trošak kada je riječ o popravcima u usporedbi s razdobljem od 1.10.1991. do 11.07.1998..
-    Vremensko razdoblje od 1.10.1991. do  11.07.1998. ima manji trošak kada je riječ liječenju u usporedbi s razdobljem od 23.04.1997. do 2.12.2001..
+Za dva vremenski intervala (pojedini će biti određen s dvije datumske vrijednosti) se mora odrediti pojedinačni ukupni trošak za misije, 
+ukupni trošak za popravak, ukupni trošak za liječenje te usporedit. Ispis treba biti u obliku:
+	Vremensko razdoblje od 1.10.1991. do 11.07.1998. ima manji trošak kada je riječ o misijama u usporedbi s razdobljem od 23.04.1997. do 2.12.2001.
+    Vremensko razdoblje od 23.04.1997. do 2.12.2001. ima manji trošak kada je riječ o popravcima u usporedbi s razdobljem od 1.10.1991. do 11.07.1998.
+    Vremensko razdoblje od 1.10.1991. do  11.07.1998. ima manji trošak kada je riječ liječenju u usporedbi s razdobljem od 23.04.1997. do 2.12.2001.
 */
 
 DROP PROCEDURE IF EXISTS usporedba;
 
 DELIMITER //
-CREATE PROCEDURE usporedba(IN prvi_datum_p DATETIME, IN prvi_datum_k DATETIME, IN drugi_datum_p DATETIME, IN drugi_datum_k DATETIME, OUT txt_mi VARCHAR(200), OUT txt_po VARCHAR(200), OUT txt_li VARCHAR(200))
+CREATE PROCEDURE usporedba(IN prvi_datum_p DATETIME, IN prvi_datum_k DATETIME, IN drugi_datum_p DATETIME, 
+IN drugi_datum_k DATETIME, OUT txt_mi VARCHAR(200), OUT txt_po VARCHAR(200), OUT txt_li VARCHAR(200))
 BEGIN
 	DECLARE prvo_misija NUMERIC(15, 2);
     DECLARE prvo_popravak NUMERIC(15, 2);
@@ -3355,11 +3355,14 @@ BEGIN
     WHERE vrijeme_pocetka >= drugi_datum_p AND vrijeme_kraja <= drugi_datum_k;
     
     IF prvo_misija = drugo_misija THEN
-		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o misijama u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o misijama u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	ELSEIF prvo_misija > drugo_misija THEN
-		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o misijama u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o misijama u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	ELSE
-		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o misijama u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_mi = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o misijama u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	END IF;
     
     
@@ -3372,11 +3375,14 @@ BEGIN
     WHERE pocetak_popravka >= drugi_datum_p AND kraj_popravka <= drugi_datum_k;
     
     IF prvo_popravak = drugo_popravak THEN
-		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o popravcima u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o popravcima u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	ELSEIF prvo_popravak > drugo_popravak THEN
-		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o popravcima u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o popravcima u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	ELSE
-		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o popravcima u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_po = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o popravcima u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	END IF;
     
     
@@ -3389,11 +3395,14 @@ BEGIN
     WHERE pocetak_lijecenja >= drugi_datum_p AND kraj_lijecenja <= drugi_datum_k;
 
 	IF prvo_lijecenje = drugo_lijecenje THEN
-		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o lijecenju u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima isti trošak kada je riječ o lijecenju u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	ELSEIF prvo_lijecenje > drugo_lijecenje THEN
-		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o lijecenju u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima veći trošak kada je riječ o lijecenju u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	ELSE
-		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o lijecenju u usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
+		SET txt_li = CONCAT("Vremensko razdoblje od ", prvi_datum_p," do ", prvi_datum_k, " ima manji trošak kada je riječ o lijecenju u 
+        usporedbi s razdobljem od ",  drugi_datum_p, " do ", drugi_datum_k);
 	END IF;
 
 END //
@@ -3401,14 +3410,15 @@ DELIMITER ;
 
 CALL usporedba(STR_TO_DATE("1.10.1991.  12:37:13", "%d.%m.%Y. %H:%i:%s"), STR_TO_DATE("1.10.2013.  12:37:13", "%d.%m.%Y. %H:%i:%s"), 
 			   STR_TO_DATE("1.10.1995.  10:45:10", "%d.%m.%Y. %H:%i:%s"), STR_TO_DATE("1.10.2011.  19:37:16", "%d.%m.%Y. %H:%i:%s"),
-@usp_mi, @usp_po, @usp_li);
+               @usp_mi, @usp_po, @usp_li);
 SELECT  @usp_mi AS rez_usporedbe_misija, @usp_po AS rez_usporedbe_popravci, @usp_li AS rez_usporedbe_lijecenje FROM DUAL;
 
 
 
+
 /*
-Treba odrediti koje misije su održane na području sjeverne polutke, a koje na području južne polutke. Prilikom 
-navoda se koristi naziv misije. Format mora bit sličan: 
+Treba odrediti koje misije su održane na području sjeverne polutke, a koje na području južne polutke. Prilikom navoda 
+se koristi naziv misije. Format mora bit sličan: 
   Misije održane na sjevernoj polutci: naziv1, naziv2, ...
   Misije održane na južnoj polutci: naziv1, naziv2, ...
   Misije održane na ekvatoru: naziv1, naziv2, ...
@@ -3472,6 +3482,8 @@ SELECT @ekv_naziv FROM DUAL;
 
 
 
+
+
 -- MK
 
 -- jednostavna procedura za promjenu statusa osoblja. Ima 2 IN parametra jedan za ID i jedan za status te koristi jednostavnu update komandu da promjeni status
@@ -3483,16 +3495,16 @@ BEGIN
 			WHERE id = p_id_osoblje;
 END//
 DELIMITER ;
-
+CALL promjena_statusa_osoblja(10024, "Mrtav");
 
 
 -- procedura za pogledati svo aktivno osoblje koje se trenutno nalazi na misiji preko jednostavnog upita koji spaja nekoliko tablica sa inner joinom
-DROP PROCEDURE IF EXISTS svo_osoblje_na_misiji;
+
 
 DELIMITER //
 CREATE PROCEDURE svo_osoblje_na_misiji()
 BEGIN
-	SELECT o.*, m.naziv, l.naziv
+	SELECT o.*, m.naziv AS naziv_misije, l.naziv AS naziv_lokacije
 		FROM osoblje AS o
         INNER JOIN osoblje_na_misiji AS onm ON o.id = onm.id_osoblje
         INNER JOIN misija AS m ON onm.id_misija = m.id
@@ -3511,38 +3523,36 @@ BEGIN
     DECLARE p_ocjena INT;
     DECLARE p_performans INT;
 
-    SELECT ocjena INTO p_ocjena
-		FROM osoblje
-			WHERE id = p_id_osoblje;
+    SELECT ocjena INTO p_ocjena FROM osoblje WHERE id = p_id_osoblje;
 	
 	SELECT performans INTO p_performans
         FROM osoblje_na_treningu AS ont
-			INNER JOIN trening AS t ON t.id = ont.id_trening
-			WHERE ont.id_osoblje = p_id_osoblje AND t.vrijeme_kraja IS NOT NULL
+        INNER JOIN trening AS t ON t.id = ont.id_trening
+			WHERE id_osoblje = p_id_osoblje AND vrijeme_kraja IS NOT NULL
 			ORDER BY vrijeme_pocetka DESC
 			LIMIT 1;
 
     IF p_performans < 4 THEN
-        SET p_ocjena = ocjena - 5;
+        SET p_ocjena = ( SELECT ocjena FROM osoblje WHERE id = p_id_osoblje ) - 5;
     ELSEIF p_performans < 5 THEN
-        SET p_ocjena = ocjena - 3;
+        SET p_ocjena = ( SELECT ocjena FROM osoblje WHERE id = p_id_osoblje ) - 3;
     ELSEIF p_performans < 6 THEN
-        SET p_ocjena = ocjena - 1;
+        SET p_ocjena = ( SELECT ocjena FROM osoblje WHERE id = p_id_osoblje ) - 1;
     ELSEIF p_performans >= 9 THEN
-        SET p_ocjena = ocjena + 5;
+        SET p_ocjena = ( SELECT ocjena FROM osoblje WHERE id = p_id_osoblje ) + 5;
     ELSEIF p_performans >= 8 THEN
-        SET p_ocjena = ocjena + 3;
+        SET p_ocjena = ( SELECT ocjena FROM osoblje WHERE id = p_id_osoblje ) + 3;
     ELSEIF p_performans >= 7 THEN
-        SET p_ocjena = ocjena + 1;
+        SET p_ocjena = ( SELECT ocjena FROM osoblje WHERE id = p_id_osoblje ) + 1;
     END IF;
 
 	IF p_ocjena < 1 THEN
 		SET p_ocjena = 1;
-		SIGNAL SQLSTATE '40000'
+		SIGNAL SQLSTATE '45000'
 			SET MESSAGE_TEXT = 'Ocjena je prešla najniže prihvatljive razine te se preporućuje sniženje čina';
 	ELSEIF p_ocjena > 5 THEN
 		SET p_ocjena = 5;
-		SIGNAL SQLSTATE '40000'
+		SIGNAL SQLSTATE '45000'
 			SET MESSAGE_TEXT = 'Ocjena je prešla najvišu razinu te se preporućuje povečanje čina';
 	ELSE
 		UPDATE osoblje
@@ -3551,15 +3561,16 @@ BEGIN
 	END IF;
 END//
 DELIMITER ;
-CALL provjera_promocija_sniženje_cin(10033);
+CALL provjera_promocija_sniženje_cin(10893);
 
 -- promjeni status osoblja ako nije bio na treningu ili na turi u zadnjih godinu dana
+
 DELIMITER //
 CREATE PROCEDURE promjena_statusa_na_neaktivan()
 BEGIN
     UPDATE osoblje
-    SET status_osoblja = 'Umirovljen'
-    WHERE status_osoblja = 'Aktivan' OR status_osoblja = 'Neaktivan' AND id NOT IN (SELECT id_osoblje FROM osoblje_na_turi WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR)) AND id NOT IN (SELECT id_osoblje FROM osoblje_na_treningu AS ont INNER JOIN trening AS t ON t.id = ont.id_trening WHERE t.vrijeme_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR));
+    SET status_osoblja = 'neaktivan'
+    WHERE status_osoblja = 'aktivan' AND id NOT IN (SELECT id_osoblje FROM osoblje_na_turi WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR)) AND id NOT IN (SELECT id_osoblje FROM osoblje_na_treningu AS ont INNER JOIN trening AS t ON t.id = ont.id_trening WHERE vrijeme_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR));
 END //
 DELIMITER ;
 CALL promjena_statusa_na_neaktivan();
@@ -3570,11 +3581,14 @@ CREATE PROCEDURE ukupno_osoblje_u_sektoru(IN p_id_sektor INT)
 BEGIN
     SELECT COUNT(*)
     FROM osoblje
-    WHERE id_sektor = p_id_sektor AND status_osoblja != 'Mrtav';
+    WHERE id_sektor = p_id_sektor;
 END//
 DELIMITER ;
 
 CALL ukupno_osoblje_u_sektoru(1);
+
+
+
 
 -- --------------------------------------
 -- TRANSAKCIJE --------------------------
@@ -3585,12 +3599,13 @@ SET AUTOCOMMIT = ON;
 -- MK
 
 -- Osnovna transakcija koja će updateati količinu ukupnog proračuna za određenu količinu koju će odrediti korisnik, select smo ubacili kako bi se korisnici mogli osigurati 
+
 SET AUTOCOMMIT = OFF;
 SET @isplata_sektoru = 50000;
 SET @id_sektor_transakcija1 = 2;
 SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
 START TRANSACTION;
-
+	
     SELECT id, naziv, ukupni_proracun FROM sektor WHERE id = @id_sektor_transakcija1;
     
     UPDATE sektor
@@ -3602,10 +3617,11 @@ START TRANSACTION;
 COMMIT;
 SET AUTOCOMMIT = ON;
 
-
 -- Primjer serializable transakcije koja se mogla poboljsati sa dodatnom tablicom za pračenje dugova i try/catch funkcijom ali pošto se bliži kraj bilo bi greška ići dodavati viška tablice
-SET AUTOCOMMIT = OFF;
+
 SET @id_misija_za_naplatu = 3003;
+SET @naplata_sektoru = 1;
+SET @nekoristena = 1;
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 START TRANSACTION;
 
