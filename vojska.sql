@@ -2753,8 +2753,20 @@ on s.id=o.id_sektor
 where o.krvna_grupa="0+" and s.naziv="Hrvatska kopnena vojska";
 
 
+-- pogled koji nam prikazuje sve ture koje imaju kolicinu vozila vecu od 10
 
+CREATE VIEW puno_vozila AS
+SELECT t.naziv, vnt.kolicina
+FROM tura as t
+JOIN vozilo_na_turi as vnt ON t.id = vnt.id_tura
+HAVING vnt.kolicina > 10;
 
+-- svo osoblje na misiji cija je ocjena 5
+
+SELECT ime,prezime,ocjena
+FROM osoblje AS o
+JOIN osoblje_na_misiji AS onm ON o.id = onm.id_osoblje
+HAVING ocjena = 5;
 
 -- FUNKCIJE:
 
