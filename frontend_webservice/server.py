@@ -356,7 +356,6 @@ def PrikazTura (misija,sektor):
     return render_template('misija.html',SektorId=SektorId,sektor = sektor,MisijenaTuri=MisijenaTuri,data=data,misija=misija,MisijenaTuriDatumi=MisijenaTuriDatumi,len=len(data),len2=len(MisijenaTuri))
 
 
-# Fillipo
 @app.route("/oprema", methods = ['GET', 'POST'])
 def oprema():
     oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema")
@@ -365,13 +364,13 @@ def oprema():
     if request.method == 'POST':
         Search = request.form['search']    
         
-        if Search.lower() in oprema:     
-            oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema where naziv = '"+Search+"';")
-            return render_template('oprema.html', oprema = oprema, opremaLen = opremaLen)    
+        #Pretraga po nazivu oružja
+        oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema where naziv = '%"+Search+"%';")
+        opremaLen = len(oprema)
 
-        else:
-            oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema where vrsta = '"+Search+"';")
-            return render_template('oprema.html', oprema = oprema, opremaLen = opremaLen)
+        #Pretraga po vrsti oružja
+        oprema = BP_DataAll("select naziv, vrsta, ukupna_kolicina from oprema where vrsta = '%"+Search+"%';")
+        opremaLen = len(oprema)
 
     return render_template('oprema.html', oprema = oprema, opremaLen = opremaLen)
 
@@ -382,18 +381,16 @@ def garaza():
     garazaLen = len(garaza)
 
     if request.method == 'POST':
-        Search = request.form['search']    
+        Search = request.form['search']
 
-             
-        print(Search)
-        garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where naziv = '"+Search+"';")
-        garazaLen = len(garaza)
-            
+        garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where naziv like '%"+Search+"%';")
+        garazaLen = len(garaza) #Pretraga po nazivu vozila
 
-     
-        print(Search)
-            #garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where vrsta = '"+Search+"';")
-            
+        garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where vrsta like '%"+Search+"%';")
+        garazaLen = len(garaza) #Pretraga po vrsti vozila
+
+        garaza = BP_DataAll("select naziv, vrsta, ukupna_kolicina, kapacitet from vozila where kapacitet like '%"+Search+"%';")
+        garazaLen = len(garaza) #Pretraga po kapacitetu vozila
 
     return render_template('garaza.html', garaza = garaza, garazaLen = garazaLen)
 
@@ -406,13 +403,25 @@ def bolnica():
     if request.method == 'POST':
         Search = request.form['search']    
         
-        if Search.lower() in bolnica:     
-            bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and ime = '"+Search+"';")
-            return render_template('bolnica.html', bolnica = bolnica, bolnicaLen = bolnicaLen)    
+        #Pretraga po imenu
+        bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and ime like '%"+Search+"%';")
+        bolnicaLen = len(bolnica)
 
-        else:
-            bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and prezime = '"+Search+"';")
-            return render_template('bolnica.html', bolnica = bolnica, bolnicaLen = bolnicaLen)
+        #Pretraga po prezimenu
+        bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and prezime like '%"+Search+"%';")
+        bolnicaLen = len(bolnica)
+
+        #Pretraga po ozljedi
+        bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and opis_ozljede like '%"+Search+"%';")
+        bolnicaLen = len(bolnica)
+
+        #Pretraga po činu
+        bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and cin like '%"+Search+"%';")
+        bolnicaLen = len(bolnica)
+
+        #Pretraga po početku liječenja
+        bolnica = BP_DataAll("select ime, prezime, cin, pocetak_lijecenja, opis_ozljede, trosak_lijecenja from osoblje inner join lijecenje on osoblje.id = lijecenje.id_osoblje where isnull(kraj_lijecenja) = 1 and pocetak_lijecenja like '%"+Search+"%';")
+        bolnicaLen = len(bolnica)
 
     return render_template('bolnica.html', bolnica = bolnica, bolnicaLen = bolnicaLen)
 
