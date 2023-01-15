@@ -2761,7 +2761,7 @@ FROM tura as t
 JOIN vozilo_na_turi as vnt ON t.id = vnt.id_tura
 HAVING vnt.kolicina > 10;
 
--- svo osoblje na misiji cija je ocjena 5
+-- pogle koji ima svo osoblje na misiji cija je ocjena 5
 
 SELECT ime,prezime,ocjena
 FROM osoblje AS o
