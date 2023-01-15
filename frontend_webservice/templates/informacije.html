@@ -25,15 +25,17 @@
        
     <div class="cards">
         <img src="/static/img/kopnena_back.png" >
-        <h1>{{vozila[i][0]}}</h1>
-        <h3>Vrsta: {{vozila[i][1]}}</h3>
-        <h3>Ukupna kolicina: {{vozila[i][2]}}</h3>
-        <h3>Kapacitet: {{vozila[i][3]}}</h3>
+        <div style="text-align: center;">
+            <h1>{{vozila[i][0]}}</h1>
+            <h3>Vrsta: {{vozila[i][1]}}</h3>
+            <h3>Ukupna kolicina: {{vozila[i][2]}}</h3>
+            <h3>Kapacitet: {{vozila[i][3]}}</h3>
+        </div>
+
         
-        <div class="bottomText">
-            <p>{{vozila[i][2]}}</p>
-            <p>{{vozila[i][4]}}</p>
-            <p>{{vozila[i][3]}}</p>
+        <div style="text-align: center;" class="bottomText" >
+            <p >{{sektor}}</p>
+            
 
           
         </div>
@@ -57,6 +59,7 @@
                 <p>{{osoblje[i][2]}}</p>
                 <p>{{osoblje[i][4]}}</p>
                 <p>{{osoblje[i][3]}}</p>
+              
 
               
             </div>

@@ -38,13 +38,13 @@ def BP_Command(sql):
     MainKursor.execute(sql)
     vojska.commit()
     return "Done"
-  
+
     # Function for Updating Tables
 def BP_UpdateSql(tablename,data):
     sql = "UPDATE "+ tablename+" SET "
     tabela = BP_DataAll("Show COLUMNS from "+tablename+";")
 
-    for x in range(2,len(data)):
+    for x in range(1,len(data)):
         sql = sql+ str(tabela[x][0]) + " = '" + str(data[x]) +"',"
 
     sql = sql [ : -1]
@@ -83,13 +83,11 @@ def SortTwoDimensionalTuple(lst,reverseType):
 
         # Outputs Ranks with ther correct picture format
 def GetCin(cin,sektor):
-
     if sektor == "Hrvatska ratna mornarica":
         cin = str(cin) +"_p"
 
     elif sektor == "Hrvatsko ratno zrakoplovstvo":
         cin = str(cin) +"_z"
-
     return cin
 
 
@@ -109,6 +107,7 @@ def login():
 
         name = request.form['username']
         UpisLozinka = request.form['password']
+        prezime = UpisLozinka
         
         krusor.execute("select * from login where md5(concat('"+name+"','"+UpisLozinka+"')) = lozinka;")
                         
@@ -123,9 +122,8 @@ def login():
            
             global randimg
             randimg = RandomImageGenerator()
-            
-            
-            return render_template('index.html', randimg = randimg , ime = name, VojskaText = VojskaText, cin = osoblje[2])
+
+            return render_template('index.html',prezime = prezime, randimg = randimg , ime = name, VojskaText = VojskaText, cin = osoblje[2])
     
     return render_template('Login.html',error = error)
 
@@ -148,8 +146,10 @@ def database(tablica):
     error=""
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
+    popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
     getData = BP_DataAll("Select * from "+ tablica+" ;")
+    osobljeIme = BP_DataAll("Select id,ime from osoblje;")
     try:
      getRowLen = len(getData[0])
     except:
@@ -167,6 +167,7 @@ def database(tablica):
                             polje.append(request.form["podatak"+str(x)])
 
                     BP_Insert(polje,tablica,maxid[0]+1)
+                    return redirect("/izmjena/update/"+tablica, code=302)
                     print("Uspjesno dodano!")
                     if error != "":                   
                             error= "Uspjesno Dodano!"            
@@ -174,7 +175,7 @@ def database(tablica):
     except Exception as e:
                   error=e
     
-    return render_template('izmjena.html',cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    return render_template('izmjena.html',osobljeIme =osobljeIme,osobljeImeLen=len(osobljeIme), popravak=popravak,popravakLen=len(popravak),cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 
 
 # Route for handling the Edit -> Update page
@@ -184,6 +185,8 @@ def Update(tablica):
     lokacija = BP_DataAll("select id, naziv from lokacija;")
     tura = BP_DataAll("select id, naziv from tura;")
     maxid = BP_DataRow("select max(id) from "+tablica+" limit 1") 
+    popravak = BP_DataAll("select id_vozilo_na_misiji,misija.naziv from popravak,vozilo_na_misiji,misija where id_vozilo_na_misiji = vozilo_na_misiji.id and vozilo_na_misiji.id_misija = misija.id;")
+    osobljeIme = BP_DataAll("Select id,ime from osoblje;")
 
         # getting id 
     getData = BP_DataAll("Select * from "+ tablica+" ;")
@@ -200,18 +203,19 @@ def Update(tablica):
 
     if request.method == 'POST':
         
-            if tablica == "osoblje":
+            if tablica:
                         # nova laksa metoda
                 polje = []
                 for x in range(10):
                     if "podatak"+str(x) in request.form:
                         polje.append(request.form["podatak"+str(x)])
                 BP_UpdateSql(tablica,polje)
+                return redirect("/izmjena/update/"+tablica, code=302)
 
            
    
     
-    return render_template('update.html',ImportData= ImportData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    return render_template('update.html',popravak=popravak,osobljeIme=osobljeIme,osobljeImeLen=len(osobljeIme),popravakLen=len(popravak),ImportData= ImportData,poljeID = poljeID,ImportID=ImportID,cinovi=cinovi,cinLen= len(cinovi),tablica= tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
     
 # Route for handling the Edit -> Update -> ID page
 @app.route('/izmjena/update/<tablica>/<ID>', methods = ['GET', 'POST'])
@@ -241,13 +245,12 @@ def UpdateFetchId(tablica,ID):
     if request.method == 'POST':
             getData =   BP_DataAll("Select * from "+ tablica+" ;")
             if tablica:
-                        # nova laksa metoda
                 polje = []
                 for x in range(10):
                     if "podatak"+str(x) in request.form:
                         polje.append(request.form["podatak"+str(x)])
                 BP_UpdateSql(tablica,polje)
-                return redirect("/izmjena/update/tura/"+ str(ID), code=302)
+                return redirect("/izmjena/update/"+tablica+"/"+str(ID), code=302)
             
 
 
@@ -295,7 +298,7 @@ def delete (tablica, ID):
             return redirect("/izmjena/delete/"+tablica+"/"+ID, code=302)
     
     
-    return render_template('delete.html', poljeID = poljeID ,ImportData = ImportData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
+    return render_template('delete.html',popravak=popravak,popravakLen= len(popravak), poljeID = poljeID ,ImportData = ImportData,cinovi=cinovi,cinLen= len(cinovi),tablica = tablica,tura = tura,turaLen = len(tura),lokacija=lokacija,lokacijaLen = len(lokacija),getData=getData, getDatalen = len(getData),getRowLen=getRowLen,error=error,maxid=maxid)
 # Kraj MMK-a
 
 # Route for handling informacije (Info) page
@@ -439,24 +442,23 @@ def statistika():
     return render_template('statistika.html',cinosoblje=cinosoblje,cinosobljeLen=len(cinosoblje),statusosoblja=statusosoblja,statusosobljaLen = len(statusosoblja),godineLen= len(godine),godine=godine,kopnenaBroj = kopnenaBroj, mornaricaBroj= mornaricaBroj, zrakoplovnaBroj = zrakoplovnaBroj, policijaBroj= policijaBroj,trosak=trosak,trosak_svega=trosak_svega,trosak_ljecenje=trosak_ljecenje,trosak_ljecenjeLen=len(trosak_ljecenje),trosak_popravak=trosak_popravak,trosak_popravakLen=len(trosak_popravak),trosak_misije=trosak_misije,trosak_misijeLen=len(trosak_misije),euri=euri,kuna=kuna,visak= visak,tura_informacije=tura_informacije,tura_informacijeLen = len(tura_informacije))
 
 # Route for handling Rating (Ocijenjivanje) page
-@app.route("/ocjenjivanje/<Stype>", methods = ['GET', 'POST'])  #Exception
-def ocjenjivanje(Stype):  
-
+@app.route("/ocjenjivanje/<Stype>/<ime>/<prezime>", methods = ['GET', 'POST'])  #Exception
+def ocjenjivanje(Stype,ime,prezime):  
     osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv from osoblje,sektor where osoblje.id_sektor = sektor.id;")
-    accountRating = BP_DataRow("select ocjena from osoblje where ime = '"+name+"' and prezime = '"+ UpisLozinka+"';")
+    accountRating = BP_DataRow("select ocjena from osoblje where ime = '"+ime+"' and prezime = '"+prezime+"';")
     
     if request.method == 'POST':
         Search = request.form['search']
         
         
-        if Search.lower() in cinovi:
+        if Search in cinovi:
             
-            osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje,sektor where cin = '"+Search+"';")
-            return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
+            osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje,sektor where cin = '"+Search+"' and id_sektor = sektor.id;")
+            return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))
         
 
         else:
-            osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje,sektor where ime = '"+Search+"';")
+            osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje,sektor where ime = '"+Search+"' and id_sektor = sektor.id;")
             
           
             if osoblje != []:
@@ -464,7 +466,8 @@ def ocjenjivanje(Stype):
             
             
             else:
-                osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje where prezime = '"+Search+"';")
+                osoblje = BP_DataAll("select ime, prezime,cin,ocjena,sektor.naziv  from osoblje,sektor where prezime = '"+Search+"' and id_sektor = sektor.id;")
+               
                 return render_template('ocjenjivanje.html',accountRating=accountRating,name=name,err = "Ocijenjivanje",Stype=Stype, note = "error", desc = "ocjena",ime=name,osoblje = osoblje, lenosoblje = len(osoblje))    
 
 
@@ -486,7 +489,7 @@ def ocjenjivanje(Stype):
 
 
                         # Error if you are lost
-@app.errorhandler(505)
+@app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html', err = "4o4 error ", note = "programur profesional", desc = "What are you looking for here silly?", ime = name,)
 
