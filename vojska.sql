@@ -25,9 +25,8 @@ CREATE TABLE lokacija(
 );
 -- DROP TABLE lokacija;
 ALTER TABLE lokacija
-	ADD CONSTRAINT ck_duzina UNIQUE(zemljopisna_duzina),
-    ADD CONSTRAINT ck_sirina UNIQUE(zemljopisna_sirina),
-    ADD CONSTRAINT ck_naziv UNIQUE(naziv);
+	ADD CONSTRAINT ck_duzsir UNIQUE(zemljopisna_duzina, zemljopisna_sirina),
+        ADD CONSTRAINT ck_naziv UNIQUE(naziv);
 	
 
 CREATE TABLE osoblje(
@@ -567,7 +566,6 @@ END//
 DELIMITER ;
 -- drop trigger kriptiranje;
 
--- OGRANIČENJA
 
 
 
@@ -2700,7 +2698,7 @@ SELECT * FROM osoblje_informacije;
 
 -- JB
 
--- navedi sva imena i prezimena ozlijedenih vojnika na misiji kojima lijecenje kosta vise od 500 i manje od 5000
+-- navedi sva imena i prezimena ozlijedenih vojnika na misiji kojima lijecenje kosta vise od 10000
 select o.id,o.ime,o.prezime
 from osoblje_na_misiji as onm
 inner join osoblje as o 
@@ -2722,8 +2720,7 @@ inner join sektor as s
 on s.id=o.id_sektor
 where s.naziv= "Hrvatska ratna mornarica" and op.vrsta="Samokres";
 
--- Hrvatska ratna mornarica
--- nabroji sva vozila na popravku koja su ujedno i na misiji te ih nabroji koliko ih je
+-- nabroji sva vozila na popravku koja su ujedno i na misiji "UNOCI" te ih nabroji koliko ih je
 select sum(ukupna_kolicina) as totalni_br
 from vozila as v
 inner join vozilo_na_misiji as vnm
@@ -2762,11 +2759,14 @@ JOIN vozilo_na_turi as vnt ON t.id = vnt.id_tura
 HAVING vnt.kolicina > 10;
 
 -- pogled koji ima svo osoblje na misiji cija je ocjena 5
-
+CREATE VIEW visoke_ocjene	 AS
 SELECT ime,prezime,ocjena
 FROM osoblje AS o
 JOIN osoblje_na_misiji AS onm ON o.id = onm.id_osoblje
 HAVING ocjena = 5;
+
+
+
 
 -- FUNKCIJE:
 
@@ -3531,11 +3531,23 @@ BEGIN
     END IF;
 
 	IF p_ocjena < 1 THEN
+    
 		SET p_ocjena = 1;
+        
+		UPDATE osoblje
+			SET ocjena = p_ocjena
+				WHERE id = p_id_osoblje;
+                
 		SIGNAL SQLSTATE '45000'
 			SET MESSAGE_TEXT = 'Ocjena je prešla najniže prihvatljive razine te se preporućuje sniženje čina';
 	ELSEIF p_ocjena > 5 THEN
+    
 		SET p_ocjena = 5;
+			
+		UPDATE osoblje
+			SET ocjena = p_ocjena
+				WHERE id = p_id_osoblje;
+                    
 		SIGNAL SQLSTATE '45000'
 			SET MESSAGE_TEXT = 'Ocjena je prešla najvišu razinu te se preporućuje povečanje čina';
 	ELSE
@@ -3547,17 +3559,23 @@ END//
 DELIMITER ;
 CALL provjera_promocija_sniženje_cin(10893);
 
+
+
 -- promjeni status osoblja ako nije bio na treningu ili na turi u zadnjih godinu dana
 
 DELIMITER //
 CREATE PROCEDURE promjena_statusa_na_neaktivan()
 BEGIN
     UPDATE osoblje
-    SET status_osoblja = 'neaktivan'
-    WHERE status_osoblja = 'aktivan' AND id NOT IN (SELECT id_osoblje FROM osoblje_na_turi WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR)) AND id NOT IN (SELECT id_osoblje FROM osoblje_na_treningu AS ont INNER JOIN trening AS t ON t.id = ont.id_trening WHERE vrijeme_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR));
+    SET status_osoblja = 'Umirovljen'
+    WHERE status_osoblja = 'Aktivan' 
+    AND id NOT IN (SELECT id_osoblje FROM osoblje_na_turi WHERE datum_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR)) 
+    AND id NOT IN (SELECT id_osoblje FROM osoblje_na_treningu AS ont INNER JOIN trening AS t ON t.id = ont.id_trening WHERE vrijeme_kraja > DATE_SUB(NOW(), INTERVAL 1 YEAR));
 END //
 DELIMITER ;
 CALL promjena_statusa_na_neaktivan();
+
+
 
 -- Svo osoblje u određenom sektoru koje nije mrtvo 
 DELIMITER //
@@ -3565,7 +3583,7 @@ CREATE PROCEDURE ukupno_osoblje_u_sektoru(IN p_id_sektor INT)
 BEGIN
     SELECT COUNT(*)
     FROM osoblje
-    WHERE id_sektor = p_id_sektor;
+    WHERE id_sektor = p_id_sektor AND status_osoblja != 'Mrtav' OR status_osoblja != 'Umirovljen';
 END//
 DELIMITER ;
 
