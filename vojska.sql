@@ -1688,6 +1688,8 @@ INSERT INTO misija VALUES
  ( 3054 , "UNOGIL" , STR_TO_DATE("25.6.2017.", "%d.%m.%Y.") , STR_TO_DATE("10.2.2007.", "%d.%m.%Y.") , 40 , 11 , null, 8713394 ),
  ( 3055 , "UNAMSIL" , STR_TO_DATE("6.2.2017.", "%d.%m.%Y.") , STR_TO_DATE("22.7.2033.", "%d.%m.%Y.") , 31 , 5 , null, 7138853 );
 
+
+
 INSERT INTO osoblje_na_misiji VALUES
  ( 4000 , 10631 , 3029 ),
  ( 4001 , 10709 , 3005 ),
@@ -1701,14 +1703,14 @@ INSERT INTO osoblje_na_misiji VALUES
  ( 4009 , 10661 , 3028 ),
  ( 4010 , 10921 , 3018 ),
  ( 4011 , 10298 , 3023 ),
- ( 4012 , 10463 , 3051 ),
+ ( 4012 , 10463 , 3050 ),
  ( 4013 , 10879 , 3003 ),
  ( 4014 , 10839 , 3042 ),
  ( 4015 , 10586 , 3026 ),
- ( 4016 , 10247 , 3053 ),
+ ( 4016 , 10247 , 3047 ),
  ( 4017 , 10244 , 3038 ),
  ( 4018 , 10009 , 3047 ),
- ( 4019 , 10476 , 3055 ),
+ ( 4019 , 10476 , 3048 ),
  ( 4020 , 10686 , 3043 ),
  ( 4021 , 10354 , 3047 ),
  ( 4022 , 10655 , 3023 ),
@@ -1740,12 +1742,12 @@ INSERT INTO osoblje_na_misiji VALUES
  ( 4048 , 10392 , 3019 ),
  ( 4049 , 10808 , 3010 ),
  ( 4050 , 10250 , 3046 ),
- ( 4051 , 10202 , 3054 ),
+ ( 4051 , 10202 , 3050 ),
  ( 4052 , 10359 , 3022 ),
  ( 4053 , 10046 , 3035 ),
  ( 4054 , 10496 , 3001 ),
  ( 4055 , 10608 , 3028 ),
- ( 4056 , 10137 , 3054 ),
+ ( 4056 , 10137 , 3049 ),
  ( 4057 , 10389 , 3005 ),
  ( 4058 , 10287 , 3015 ),
  ( 4059 , 10285 , 3017 ),
@@ -1774,7 +1776,7 @@ INSERT INTO osoblje_na_misiji VALUES
  ( 4082 , 10501 , 3008 ),
  ( 4083 , 10348 , 3030 ),
  ( 4084 , 10655 , 3008 ),
- ( 4085 , 10830 , 3055 ),
+ ( 4085 , 10830 , 3047 ),
  ( 4086 , 10890 , 3013 ),
  ( 4087 , 10516 , 3010 ),
  ( 4088 , 10205 , 3008 ),
@@ -1789,6 +1791,8 @@ INSERT INTO osoblje_na_misiji VALUES
  ( 4097 , 10632 , 3049 ),
  ( 4098 , 10070 , 3006 ),
  ( 4099 , 10757 , 3043 );
+
+
 
 INSERT INTO osoblje_na_turi VALUES
  ( 8001 , 10916 , 5 , STR_TO_DATE("24.6.2024.", "%d.%m.%Y.") , STR_TO_DATE("8.11.2011.", "%d.%m.%Y.") ),
@@ -1922,6 +1926,8 @@ INSERT INTO vozila VALUES
 (2019,"Sikorsky UH-60 Black Hawk","Helikopteri",2,5),
 (2020,"Bell OH-58 Kiowa Warrior","Helikopteri",15,6);
 
+
+
 INSERT INTO vozilo_na_misiji VALUES
  ( 9000 , 2020 , 6 , 3019 ),
  ( 9001 , 2016 , 6 , 3005 ),
@@ -1935,7 +1941,7 @@ INSERT INTO vozilo_na_misiji VALUES
  ( 9009 , 2005 , 5 , 3012 ),
  ( 9010 , 2014 , 2 , 3048 ),
  ( 9011 , 2013 , 2 , 3027 ),
- ( 9012 , 2006 , 2 , 3051 ),
+ ( 9012 , 2006 , 2 , 3050 ),
  ( 9013 , 2018 , 1 , 3018 ),
  ( 9014 , 2013 , 3 , 3003 ),
  ( 9015 , 2020 , 3 , 3045 ),
@@ -1943,7 +1949,7 @@ INSERT INTO vozilo_na_misiji VALUES
  ( 9017 , 2004 , 6 , 3029 ),
  ( 9018 , 2004 , 7 , 3045 ),
  ( 9019 , 2000 , 2 , 3013 ),
- ( 9020 , 2011 , 6 , 3052 ),
+ ( 9020 , 2011 , 6 , 3049 ),
  ( 9021 , 2001 , 2 , 3016 ),
  ( 9022 , 2010 , 6 , 3007 ),
  ( 9023 , 2007 , 3 , 3049 ),
@@ -1953,6 +1959,7 @@ INSERT INTO vozilo_na_misiji VALUES
  ( 9027 , 2006 , 6 , 3015 ),
  ( 9028 , 2002 , 7 , 3020 ),
  ( 9029 , 2019 , 4 , 3023 );
+
 
 INSERT INTO vozilo_na_turi VALUES
  ( 7001 , 2007 , 10 , 8052 , 1 ),
@@ -2498,10 +2505,10 @@ INSERT INTO lijecenje VALUES
 -- UPITI (& POGLEDI):
 
 -- DK
-
+/*
 Prikaži id, ime i prezime 10 osoba koje su imale najveći performans na treningu, a preduvjet za njihovo pojavljivanje 
 na listi je da su bile na barem jednoj misiji koja u svom intervalu održavanja ima najmanje jedan dan u 12. mjesecu.
-																																			*/
+*/																																			*/
 
 SELECT os.id, ime, prezime
 FROM osoblje_na_treningu AS o
@@ -2515,9 +2522,9 @@ ORDER BY performans DESC
 LIMIT 10;
 
 
-																																	/*
+/*
 Prikaži id, ime, prezime i čin osobe koja je bila odgovorna za vozilo vrste "Helikopteri" koje je bilo na najviše popravaka.
-																																			*/
+*/
 
 SELECT ime, prezime, cin
 FROM
@@ -2539,9 +2546,9 @@ FROM
 
 
 
-																													/*
+/*
 Prikaži naziv ture kod koje je izdano najmanje opreme.
-																														*/
+*/
 
 SELECT naziv
 FROM
@@ -2559,10 +2566,10 @@ FROM
 
 
 
-																															/*
+/*
 Prikaži ukupni proračun sektora koji ima drugi najveći broj osoblja koji nisu bili na liječenju niti jedanput 
 te koji su sudjelovali na najmanje jednom treningu čiji datum početka nije bio prije 23 godinu dana od sada.
-																															*/
+*/
 
 SELECT ukupni_proracun
 FROM
@@ -2581,10 +2588,10 @@ FROM
 
 
 
-																																/*
+/*
 Prikaži nazive misija i njene lokacije, ali samo za misije u kojima je sudjelovalo osoblje starije od 31 godinu 
 i koje je bilo odgovorno za najmanje jedno vozilo u nekoj turi.
-																																	*/
+*/
 
 SELECT m.naziv AS naziv_misije, l.naziv AS naziv_lokacije
 FROM lokacija AS l
@@ -2599,11 +2606,11 @@ WHERE TIMESTAMPDIFF(YEAR, datum_rodenja, vrijeme_pocetka) > 31 AND o.id IN
 
 
 
-																																		/*
+/*
 Treba se napraviti pogled koji će prikazat dodatne podatke vezane uz turu. Treba se prikazat od koliko se misija 
 ta tura sastoji, koliki je trošak ture, broj osoblja koji je sudjelovao, broj opreme koji je određen za tu turu 
 te broj vozila koji je određen za tu turu. Ovi dodatni prikazi će biti za ture koje sadrže barem jedan od navedenih podataka.
-																																			*/
+*/
 
 DROP VIEW IF EXISTS tura_informacije;
 
@@ -2625,11 +2632,11 @@ SELECT * FROM tura_informacije;
 
 
 
-																																																		/*
+/*
 Treba se napraviti pogled koji će prikazat dodatne podatke vezane uz misiju. Treba se prikazat koliki 
 je trošak misije, broj osoblja koji je sudjelovao, broj opreme koji je određen za tu misiju te broj 
 vozila koji je određen za tu misiju. Ovi dodatni prikazi će biti za misije koje sadrže barem jedan od navedenih podataka.
-																																																		*/
+*/
 
 DROP VIEW IF EXISTS misija_informacije;
 
@@ -2648,9 +2655,9 @@ SELECT * FROM misija_informacije;
 
 
 
-																																									/*
+/*
 Treba se napraviti pogled koji će prikazat koliko je puta pojedina osoba bila na treningu, misiji i liječenju.
-																																									*/
+*/
 
 DROP VIEW IF EXISTS osoblje_informacije;
 
