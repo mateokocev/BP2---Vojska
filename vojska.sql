@@ -41,7 +41,7 @@ CREATE TABLE osoblje(
     status_osoblja VARCHAR(50) NOT NULL,
     krvna_grupa CHAR(3) NOT NULL,
     ocjena INTEGER NOT NULL,
-    FOREIGN KEY (id_sektor) REFERENCES sektor(id)
+    FOREIGN KEY (id_sektor) REFERENCES sektor(id) ON DELETE CASCADE
 );
 -- DROP TABLE osoblje;
 ALTER TABLE osoblje 
@@ -69,7 +69,7 @@ CREATE TABLE misija(
     id_tura INTEGER NOT NULL,
     ishod TEXT,   
     trosak_misije NUMERIC(15, 2) NOT NULL,
-    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id),
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id) ON DELETE CASCADE,
     FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE
 );
 -- DROP TABLE misija;
@@ -136,7 +136,7 @@ CREATE TABLE vozilo_na_turi(
     kolicina INTEGER,
     FOREIGN KEY (id_vozilo) REFERENCES vozila(id) ON DELETE CASCADE,
     FOREIGN KEY (id_tura) REFERENCES tura(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_odgovorni) REFERENCES osoblje_na_turi(id)
+    FOREIGN KEY (id_odgovorni) REFERENCES osoblje_na_turi(id) ON DELETE CASCADE
 );
 -- DROP TABLE vozilo_na_turi;
 ALTER TABLE vozilo_na_turi
@@ -175,7 +175,7 @@ CREATE TABLE izdana_oprema(
     id_osoblje_na_misiji INTEGER NOT NULL,
     izdana_kolicina INTEGER NOT NULL,         
     FOREIGN KEY (id_oprema) REFERENCES oprema(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id)
+    FOREIGN KEY (id_osoblje_na_misiji) REFERENCES osoblje_na_misiji(id) ON DELETE CASCADE
 );
 -- DROP TABLE izdana_oprema;
 
@@ -187,7 +187,7 @@ CREATE TABLE trening(
     vrijeme_pocetka DATETIME NOT NULL,
     vrijeme_kraja DATETIME NOT NULL,
     id_lokacija INTEGER NOT NULL,
-    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id)
+    FOREIGN KEY (id_lokacija) REFERENCES lokacija(id) ON DELETE CASCADE
 );
 -- DROP TABLE trening;
 
